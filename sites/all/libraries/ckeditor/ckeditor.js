@@ -1,7 +1,6 @@
 ﻿/*
 Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
-version:'4.3',revision:'d2184ac'
 */
 (function(){if(window.CKEDITOR&&window.CKEDITOR.dom)return;window.CKEDITOR||(window.CKEDITOR=function(){var a={timestamp:"DAED",version:"4.3",revision:"d2184ac",rnd:Math.floor(900*Math.random())+100,_:{pending:[]},status:"unloaded",basePath:function(){var b=window.CKEDITOR_BASEPATH||"";if(!b)for(var e=document.getElementsByTagName("script"),a=0;a<e.length;a++){var d=e[a].src.match(/(^|.*[\\\/])ckeditor(?:_basic)?(?:_source)?.js(?:\?.*)?$/i);if(d){b=d[1];break}}-1==b.indexOf(":/")&&(b=0===b.indexOf("/")?location.href.match(/^.*?:\/\/[^\/]*/)[0]+b:location.href.match(/^[^\?]*\/(?:)/)[0]+
 b);if(!b)throw'The CKEditor installation path could not be automatically detected. Please set the global variable "CKEDITOR_BASEPATH" before creating editor instances.';return b}(),getUrl:function(b){-1==b.indexOf(":/")&&0!==b.indexOf("/")&&(b=this.basePath+b);this.timestamp&&("/"!=b.charAt(b.length-1)&&!/[&?]t=/.test(b))&&(b+=(0<=b.indexOf("?")?"&":"?")+"t="+this.timestamp);return b},domReady:function(){function b(){try{document.addEventListener?(document.removeEventListener("DOMContentLoaded",b,
