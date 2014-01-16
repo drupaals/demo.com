@@ -1,0 +1,3 @@
+name = Ace Default
+description = Use this Module as an initial module when no other Modules / Blocks are defined or deployed.
+core = 7.x
