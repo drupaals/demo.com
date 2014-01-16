@@ -1,0 +1,67 @@
+name = ACE
+description = A Light Weight Scripting Theme.
+package = Ace
+version = VERSION
+core = 7.x
+
+;Stylesheets
+stylesheets[all][] =         style.css
+stylesheets[all][] =        'assets/css/bootstrap.min.css'
+stylesheets[all][] =        'assets/css/font-awesome.min.css'
+stylesheets[all][] =        'assets/css/ace.min.css'
+stylesheets[all][] =        'assets/css/ace-rtl.min.css'
+stylesheets[all][] =        'assets/css/ace-skins.min.css'
+stylesheets[lt IE 7][all][]='assets/css/font-awesome-ie7.min.css'
+stylesheets[lt IE 8][]=     'assets/css/ace-ie.min.css'
+
+;JAVASCRIPT / JS
+;scripts[] =         'assets/js/custom-chart.js'
+scripts[] =         'assets/js/custom_script.js'
+scripts[] =         'assets/js/ace-extra.min.js'
+scripts[lt IE 8][all][] =         'assets/js/html5shiv.js'
+scripts[] =         'assets/js/respond.min.js'
+;Basic to run js on !(IE)
+scripts[] =         'assets/js/ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'
+;Basic to run js on IE
+scripts[lt IE][] =    'assets/js/ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'
+scripts[] =         'assets/js/jquery-2.0.3.min.js'
+scripts[] =         'assets/js/jquery-1.10.2.min.js'
+scripts[] =         'assets/js/bootstrap.min.js'
+scripts[] =         'assets/js/typeahead-bs2.min.js'
+scripts[] =         'assets/js/excanvas.min.js'
+scripts[] =         'assets/js/jquery-ui-1.10.3.custom.min.js'
+scripts[] =         'assets/js/jquery.ui.touch-punch.min.js'
+scripts[] =         'assets/js/jquery.slimscroll.min.js'
+;scripts[] =         'assets/js/jquery.easy-pie-chart.min.js'
+scripts[] =         'assets/js/jquery.sparkline.min.js'
+;scripts[] =         'assets/js/flot/jquery.flot.min.js'
+;scripts[] =         'assets/js/flot/jquery.flot.pie.min.js'
+;scripts[] =         'assets/js/flot/jquery.flot.resize.min.js'
+scripts[] =         'assets/js/ace-elements.min.js'
+scripts[] =         'assets/js/ace.min.js'
+
+;default setting parameter from garland
+settings[ace_width] = fluid
+
+regions[alert]               = Alert
+regions[search]              = Search
+regions[breadcrumb]          = BreadCrumb
+regions[header]              = Header
+regions[highlight]           = Highlight
+regions[content]             = Content
+regions[left_sidebar]        = Left Side Bar
+regions[script_first]        = Script First
+regions[script_second]       = Script Second
+regions[script_third]        = Script Third
+regions[script_fourth]       = Script Fourth
+regions[script_fifth]        = Script Fifth
+regions[script_sixth]        = Script Sixth
+
+regions[footer] = Footer
+
+
+; Information added by drupal.org packaging script on 2013-08-08
+version = "7.23"
+project = "drupal"
+datestamp = "1375928238"
+
