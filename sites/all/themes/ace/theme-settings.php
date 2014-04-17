@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Theme setting callbacks for the ace theme.
+ * Theme setting callbacks for the garland theme.
  */
 
 /**

@@ -3,7 +3,8 @@
   <div class="navbar-header pull-left">
       <a href="<?php print $base_path ?>" class="navbar-brand" title="<?php print $site_name_and_slogan  ?>">
         <small>
-          <?php if ($site_name || $site_slogan) print $site_name_and_slogan;  ?>
+          <i class="icon-leaf"></i>
+          <?php if ($site_name || $site_slogan) print $site_name;  ?>
 	</small>
       </a>
       <!-- /.brand -->
@@ -62,8 +63,7 @@
 	  <ul class="breadcrumb">
 	    <li class="active">
 		<i class="icon-home home-icon"></i>
-		<?php if ($breadcrumb):  print $breadcrumb; ?>
-		<?php else: print '<a href="#">Home</a>'; endif; ?>
+		<?php print $breadcrumb; ?>
 	    </li>
 	  </ul>
     </div>
@@ -146,49 +146,6 @@
 	 </div><!-- /.row -->
     </div><!-- /.page-content -->
 </div><!-- /.main-content -->
-
-<div class="ace-settings-container" id="ace-settings-container">
-	<div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
-		<i class="icon-cog bigger-150"></i>
-	</div>
-	<!--Page display Setting-->
-	<div class="ace-settings-box" id="ace-settings-box">
-	    <div>
-		<div class="pull-left">
-		  <select id="skin-colorpicker" class="hide">
-			  <option data-skin="default" value="#438EB9">#438EB9</option>
-			  <option data-skin="skin-1" value="#222A2D">#222A2D</option>
-			  <option data-skin="skin-2" value="#C6487E">#C6487E</option>
-			  <option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
-		  </select>
-		</div>
-		    <span>&nbsp; Choose Skin</span>
-	    </div>
-		<div>
-			<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-navbar" />
-			<label class="lbl" for="ace-settings-navbar"> Fixed Navbar</label>
-		</div>
-		<div>
-			<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-sidebar" />
-			<label class="lbl" for="ace-settings-sidebar"> Fixed Sidebar</label>
-		</div>
-		<div>
-			<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-breadcrumbs" />
-			<label class="lbl" for="ace-settings-breadcrumbs"> Fixed Breadcrumbs</label>
-		</div>
-		<div>
-			<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl" />
-			<label class="lbl" for="ace-settings-rtl"> Right To Left (rtl)</label>
-		</div>
-		<div>
-			<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-add-container" />
-			<label class="lbl" for="ace-settings-add-container">Inside
-			    <b>.container</b>
-			</label>
-		</div>
-	</div>
-	<!--Ends Page display Setting-->
-</div><!-- /#ace-settings-container -->
       </div><!-- /.main-container-inner -->
 
       <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">

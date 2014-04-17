@@ -5,14 +5,11 @@
  */
 function ace_breadcrumb($variables) {
   $breadcrumb = $variables['breadcrumb'];
-  if (!empty($breadcrumb)) {
-    // Provide a navigational heading to give context for breadcrumb links to
-    // screen-reader users. Make the heading invisible with .element-invisible.
-    //$output = '<h2 class="element-invisible">' . t('You are here') . '</h2>';
-    $breadcrumb[] = drupal_get_title();
-    $output =  implode(' > ', $breadcrumb);
-    return $output;
-  }
+
+   if (!empty($breadcrumb)) {
+        $breadcrumb[] = drupal_get_title();
+        return '<div class="breadcrumb">'. implode(' / ', $breadcrumb) .'</div>';
+    }
 }
 
 /**
@@ -37,8 +34,6 @@ function ace_preprocess_html(&$vars) {
   }
   // Add conditional CSS for IE6.
   drupal_add_css(path_to_theme() . '/fix-ie.css', array('group' => CSS_THEME, 'browsers' => array('IE' => 'lt IE 7', '!IE' => FALSE), 'preprocess' => FALSE));
-  //add ace external fonts css
-  drupal_add_css("http://fonts.googleapis.com/css?family=Open+Sans:400,300","external");
 }
 
 /**
@@ -143,7 +138,7 @@ function ace_preprocess_block(&$vars) {
 function ace_process_page(&$vars) {
   // Hook into color.module
   if (module_exists('color')) {
-    _color_page_alter($vars);    
+    _color_page_alter($vars);
   }
 }
 
@@ -155,22 +150,3 @@ function ace_preprocess_region(&$vars) {
     $vars['classes_array'][] = 'clearfix';
   }
 }
-
-
-function ace_menu_local_tasks(&$variables) {
-  $output = '';
-  if (!empty($variables['primary'])) {
-    $variables['primary']['#prefix'] = '<h2 class="element-invisible">' . t('Primary tabs') . '</h2>';
-    $variables['primary']['#prefix'] .= '<ul class="tabs primary clearfix">';
-    $variables['primary']['#suffix'] = '</ul>';
-    $output .= drupal_render($variables['primary']);
-  }
-  if (!empty($variables['secondary'])) {
-    $variables['secondary']['#prefix'] = '<h2 class="element-invisible">' . t('Secondary tabs') . '</h2>';
-    $variables['secondary']['#prefix'] .= '<ul class="tabs secondary clearfix">';
-    $variables['secondary']['#suffix'] = '</ul>';
-    $output .= drupal_render($variables['secondary']);
-  }
-  return $output;
-}
-
