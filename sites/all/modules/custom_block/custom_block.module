@@ -6,6 +6,9 @@ function custom_block_block_info(){
      $blocks['Left-side-taxo-menu'] = array(
         'info' => t('Taxonomy menu'),
      );
+      $blocks['user-profile'] = array(
+        'info' => t('User profile'),
+     );
 return $blocks;
 }
 /*
@@ -17,6 +20,11 @@ function custom_block_block_view($delta = ''){
                case 'Left-side-taxo-menu':
                   $block['subject'] = t('Taxonomy menu');
                   $block['content'] =  taxonomy_menu_block();
+               break;
+	       
+	       case 'user-profile':
+                  $block['subject'] = t('User profile');
+                  $block['content'] =  user_profile_block();
                break;
           }
      return $block;
@@ -58,4 +66,44 @@ function taxonomy_menu_block(){
      }					
      $taxo.='</ul>';
      return $taxo;
+}
+//user profile block for top side
+function user_profile_block(){
+     global $user;
+     if ($user->uid){
+	  $user_profile=user_load($user->uid);
+	  if(!empty($user_profile->picture)){
+	       $user_img=theme_image_style(array('style_name'=>'36x36', 'path'=>$user_profile->picture->uri, 'width'=>'', 'height'=>'', 'alt'=>$user_profile->name, 'title'=>$user_profile->name, 'attributes' => array('class' => 'nav-user-photo')));
+	  }else{
+	       $user_img=theme("image", array('path' => path_to_theme().'/images/user.png',  'alt'=>$user_profile->name, 'title'=>$user_profile->name,  'width' => 36,    'height' => 36, 'attributes' => array('class' => 'nav-user-photo')));
+	  }
+	 $output='<li class="light-blue">
+			 <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+				 '.$user_img.'
+				 <span class="user-info">
+					 <small>Welcome,</small>
+					 '.ucfirst($user_profile->name).'
+				 </span>
+     
+				 <i class="icon-caret-down"></i>
+			 </a>
+			 <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">';
+			      
+		    foreach(menu_get_names() as $menus){
+			 if($menus=='main-menu'){
+			      $menus_item=menu_load_links($menus);
+			      foreach($menus_item as $menus_items){
+				   $linktitle=$menus_items['link_title'];
+				   $link_path=$menus_items['link_path'];
+					      
+				  $output.='<li>'.l($linktitle, $link_path, array('html' => TRUE)).' </li>';
+				       
+			      }
+			 }
+			       
+		    }
+		    $output.='</ul></li>';
+	  return $output;
+     }
+     
 }
