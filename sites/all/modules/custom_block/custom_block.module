@@ -18,6 +18,9 @@ function custom_block_block_info(){
      $blocks['Recent-comments'] = array(
         'info' => t('Recent comments'),
      );
+     $blocks['members'] = array(
+        'info' => t('Our members'),
+     );
 return $blocks;
 }
 /*
@@ -49,6 +52,11 @@ function custom_block_block_view($delta = ''){
 	       case 'Recent-comments':
                   $block['subject'] = t('Popular Modules');
                   $block['content'] =  recent_comments_block();
+               break;
+	  
+	        case 'members':
+                  $block['subject'] = t('Our members');
+                  $block['content'] =  members_block();
                break;
           }
      return $block;
@@ -436,4 +444,51 @@ function humanTiming ($time){
         return $numberOfUnits.' '.$text.(($numberOfUnits>1)?'s':'');
     }
 
+}
+//member Block
+function members_block(){
+     global $base_url; $themepath = $base_url.'/'.path_to_theme();
+      $query = db_select('users', 'u');
+     $query->fields('u');
+      $query->condition('u.uid',0,'>');
+     $query->range(0, 9);
+     $result = $query->execute();
+     $member='<div class="clearfix">';
+     foreach($result as $output){
+	 $user_profile=user_load($output->uid);
+	  if(!empty($user_profile->picture)){
+	       $user_img=theme_image_style(array('style_name'=>'48x48', 'path'=>$user_profile->picture->uri, 'width'=>'', 'height'=>'', 'alt'=>$user_profile->name, 'title'=>$user_profile->name));
+	  }else{
+	       $user_img=theme("image", array('path' => path_to_theme().'/images/user.png',  'alt'=>$user_profile->name, 'title'=>$user_profile->name,  'width' => 48,    'height' => 48));
+	  }
+	  
+	  if($user_profile->status == 1){
+	       $status='<span class="label label-success label-sm arrowed-in">approved</span>';
+	  }else{
+	       $status='<span class="label label-danger label-sm">blocked</span>';
+	  }
+	  $member.='<div class="itemdiv memberdiv">
+			 <div class="user">
+			      '.$user_img.'
+			 </div>
+		    
+			 <div class="body">
+				 <div class="name">
+				   '.ucfirst($user_profile->name).'
+				 </div>
+		    
+				 <div class="time">
+					 <i class="ace-icon fa fa-clock-o"></i>
+					 <span class="green">'.humanTiming($user_profile->created).'  ago</span>
+				 </div>
+		    
+				 <div>
+					'.$status.'
+				 </div>
+			 </div>
+		    </div>';
+     }
+     
+     $member.='</div>';
+return $member;
 }

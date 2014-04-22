@@ -5,4 +5,7 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .dropdown-toggle:hover{text-decoration: none;background-color: #579EC8;}
 .icon-caret-down{color:#fff;}
 .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {background-color: none; border-color: none;}
+#quicktabs-container-recent{border-top: 1px solid #DCE8F1;}
+#recent-box .widget-header{ border: medium none; float: left;}
+
 

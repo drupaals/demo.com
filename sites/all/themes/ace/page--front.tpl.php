@@ -228,7 +228,7 @@
 											<div class="widget-body">
 												<div class="widget-main padding-4">
 													<div class="tab-content padding-8 overflow-visible">
-													<?php print render($page['script_sixth']); ?>
+													<?php print render($page['script_fifth']); ?>
 													</div>
 												</div><!-- /widget-main -->
 											</div><!-- /widget-body -->
