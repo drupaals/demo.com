@@ -1,0 +1,34 @@
+<?php
+
+function custom_block_schema() {
+
+    $schema['popular_pages'] = array(
+        'description' => t('The statistics page count'),
+        'fields' => array(
+            'nid' => array(
+                    'description' => 'The main_node.nid for these statistics.',
+                     'type' => 'int',
+                     'unsigned' => TRUE,
+                     'not null' => TRUE,
+                     'default' => 0,
+                ),
+                'lastday_count' => array(
+                    'description' => 'The total number of times the main_node has been viewed.',
+                     'type' => 'int',
+                     'unsigned' => TRUE,
+                     'not null' => TRUE,
+                     'default' => 0,
+                ),
+                'date' => array(
+                    'description' => 'The most recent time the main_node has been viewed.',
+                     'type' => 'int',
+                     'unsigned' => TRUE,
+                     'not null' => TRUE,
+                     'default' => 0,
+                ),
+          
+        ),
+    );
+    
+    return $schema;
+}
