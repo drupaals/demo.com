@@ -15,6 +15,9 @@ function custom_block_block_info(){
      $blocks['popular-modules'] = array(
         'info' => t('Popular Modules'),
      );
+     $blocks['Recent-comments'] = array(
+        'info' => t('Recent comments'),
+     );
 return $blocks;
 }
 /*
@@ -41,6 +44,11 @@ function custom_block_block_view($delta = ''){
 	       case 'popular-modules':
                   $block['subject'] = t('Popular Modules');
                   $block['content'] =  popular_modules_block();
+               break;
+	  
+	       case 'Recent-comments':
+                  $block['subject'] = t('Popular Modules');
+                  $block['content'] =  recent_comments_block();
                break;
           }
      return $block;
@@ -342,6 +350,90 @@ function custom_block_cron(){
 	  foreach($result as $output){
 	       db_query("INSERT INTO main_popular_pages(nid,lastday_count,date) VALUES(".$output->nid.",".$output->totalcount.",".$output->timestamp.")");
 	  }
+    }
+
+}
+//show recent comments
+function recent_comments_block(){
+     global $base_url; $themepath = $base_url.'/'.path_to_theme();
+     $query = db_select('comment', 'c');
+     $query->fields('c');
+     $query->orderBy('c.created' , 'ASC');
+     $query->range(0, 4);
+     $result = $query->execute();
+     $comments='<div class="col-sm-6">
+		    <div class="widget-box ">
+			    <div class="widget-header">
+				    <h4 class="lighter smaller">
+					    <i class="icon-comment blue"></i>
+					    Recent comments
+				    </h4>
+			    </div>
+     
+			 <div class="widget-body">
+			      <div class="widget-main no-padding">
+				   <div style="position: relative; overflow: hidden; width: auto;" class="slimScrollDiv"><div style="overflow: hidden; width: auto;" class="dialogs">';
+     foreach($result as $output){
+	  $comment_load=comment_load($output->cid);
+	  $user_profile=user_load($output->uid);
+	  //$created_date=date('j F Y h:i:s',$comment_load->created);
+	  //echo time_elapsed_string($created_date);
+	  if(!empty($user_profile->picture)){
+	       $user_img=theme_image_style(array('style_name'=>'48x48', 'path'=>$user_profile->picture->uri, 'width'=>'', 'height'=>'', 'alt'=>$user_profile->name, 'title'=>$user_profile->name));
+	  }else{
+	       $user_img=theme("image", array('path' => path_to_theme().'/images/user.png',  'alt'=>$user_profile->name, 'title'=>$user_profile->name,  'width' => 48,    'height' => 48));
+	  }
+	  $comments.='<div class="itemdiv dialogdiv">
+		    <div class="user">
+			 '.$user_img.'
+		    </div>
+     
+		    <div class="body">
+			    <div class="time">
+				    <i class="icon-time"></i>
+				    <span class="green">'.humanTiming($comment_load->created).'  ago</span>
+			    </div>
+     
+			    <div class="name">
+				   '.ucfirst($output->name).'
+			    </div>
+			    <div class="text">'.$comment_load->comment_body['und'][0]['value'].'</div>
+		    </div>
+	    </div>';
+     }			    
+	  $comments.='</div><div style="background: none repeat scroll 0% 0% rgb(0, 0, 0); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 225.564px;" class="slimScrollBar ui-draggable"></div><div style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: none repeat scroll 0% 0% rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;" class="slimScrollRail"></div></div>	  
+		    <div class="center" style="text-align: right ! important; margin-right: 15px;">
+			 <i class="icon-comments-alt icon-2x green"></i>
+			 <a href="'.$base_url.'/comments">
+			     See all comments
+			     <i class="icon-arrow-right"></i>
+			 </a>
+		     </div>
+	       	    </div><!-- /widget-main -->
+		  </div><!-- /widget-body -->
+		  </div><!-- /widget-box -->
+		  </div><!-- /span -->';
+     return $comments;
+}
+//Converting timestamp to time ago in PHP e.g 1 day ago, 2 days ago…
+function humanTiming ($time){
+
+    $time = time() - $time; // to get the time since that moment
+
+    $tokens = array (
+        31536000 => 'year',
+        2592000 => 'month',
+        604800 => 'week',
+        86400 => 'day',
+        3600 => 'hour',
+        60 => 'minute',
+        1 => 'second'
+    );
+
+    foreach ($tokens as $unit => $text) {
+        if ($time < $unit) continue;
+        $numberOfUnits = floor($time / $unit);
+        return $numberOfUnits.' '.$text.(($numberOfUnits>1)?'s':'');
     }
 
 }

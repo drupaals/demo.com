@@ -12,7 +12,9 @@
   </div>
    <!-- /.navbar-header right -->
           <div class="navbar-header pull-right" role="navigation">
-            <?php if ($page['alert']): print render($page['alert']);  endif; ?>
+            <ul class="nav ace-nav">
+	      <?php if ($page['alert']): print render($page['alert']);  endif; ?>
+	    </ul><!-- /.ace-nav -->
           </div>
 
   <!-- /.navbar-header left-->
@@ -49,9 +51,7 @@
       </div>
     </div>
     <!-- #sidebar-shortcuts -->
-    <?php if($page['left_sidebar']): ?>
-       <?php print render($page['left_sidebar']); ?>
-    <?php endif; ?>  
+    <?php if ($page['left_sidebar']): print render($page['left_sidebar']);  endif; ?> 
       <div class="sidebar-collapse" id="sidebar-collapse">
 	<i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
       </div>
@@ -79,6 +79,7 @@
 	<?php endif; ?>
 	 <div class="row">
 	    <div class="col-xs-12">
+	      <?php print $messages; ?>
 		<?php if($page['highlight']): ?>
 		    <div class="alert alert-block alert-success">
 			<button type="button" class="close" data-dismiss="alert">
