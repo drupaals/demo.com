@@ -1,3 +1,5 @@
+
+
 <table <?php if ($classes) { print 'class="'. $classes . ' tablesorter " ' ; } ?><?php print $attributes; ?>>
    <?php if (!empty($title) || !empty($caption)) : ?>
      <caption><?php print $caption . $title; ?></caption>
