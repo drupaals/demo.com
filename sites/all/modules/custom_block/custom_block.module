@@ -356,9 +356,17 @@ function custom_block_cron(){
 	  $query->fields('n', array('nid','totalcount','timestamp'));
 	  $result = $query->execute();
 	  foreach($result as $output){
-	       db_query("INSERT INTO main_popular_pages(nid,lastday_count,date) VALUES(".$output->nid.",".$output->totalcount.",".$output->timestamp.")");
+	      // db_query("INSERT INTO main_popular_pages(nid,lastday_count,date) VALUES(".$output->nid.",".$output->totalcount.",".$output->timestamp.")");
+	  $id = db_insert('popular_pages')
+	       ->fields(array(
+		   'nid' => $output->nid,
+		   'lastday_count' => $output->totalcount,
+		   'date' => $output->timestamp,
+		    ))
+	       ->execute();
+	  
 	  }
-    //}//
+   // }
 
 }
 //show recent comments
