@@ -251,7 +251,6 @@
 				<i class="icon-double-angle-up icon-only bigger-110"></i>
 			</a>
 		</div><!-- /.main-container -->
-
 		<!-- basic scripts -->
 
 <!--[if !IE]> -->
