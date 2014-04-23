@@ -348,7 +348,7 @@ $result = $q->execute();
 function custom_block_cron(){
     $cron_lastdate=date('h A',variable_get('cron_last'));
     
-    if($cron_lastdate == '11 PM'){
+    //if($cron_lastdate == '11 PM'){
 	  db_delete('popular_pages') 
 	  ->execute();
 	  
@@ -358,7 +358,7 @@ function custom_block_cron(){
 	  foreach($result as $output){
 	       db_query("INSERT INTO main_popular_pages(nid,lastday_count,date) VALUES(".$output->nid.",".$output->totalcount.",".$output->timestamp.")");
 	  }
-    }
+    //}//
 
 }
 //show recent comments
