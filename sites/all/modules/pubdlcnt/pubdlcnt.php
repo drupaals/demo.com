@@ -45,7 +45,7 @@ else {
   // using an absolute path.
   // First, please delete the line below and then edit the next line
   print "Error: Public Download Count module failed to work. The file pubdlcnt.php requires manual editing.\n";
-  chdir('/www/server/html/drupal/'); // <---- edit this line!
+  chdir('/absolute-path-to-drupal-root/'); // <---- edit this line!
 
   if (!file_exists('./includes/bootstrap.inc')) {
     // We can not locate the bootstrap.inc file, let's give up using the
