@@ -1,0 +1,68 @@
+<?php
+
+define('CONVERSATION_DEFAULT_IMAGE_NUMBER', 1);
+define('IMAGE_NAME_PATTERN', '_icon%.jpg');
+define('CONVERSATION_IMAGE_PATH', 'content_media/main_characters/');
+
+function conversation_init() {
+  drupal_add_css(drupal_get_path('module', 'conversation') .'/conversation.css');
+}
+
+function conversation_filter($op, $delta=0, $format=-1, $text='') {
+  switch($op) {
+    case 'list':
+      return array(t('Conversation filter'));
+    case 'description':
+      return t('Format conversation tags.');
+    case 'settings':
+      break;
+    case 'no cache':
+      return FALSE;
+    case 'prepare':
+      return $text;
+    case 'process':
+      return preg_replace_callback(
+'/\<p\>\s*\+{3}\s*start\s*conversation\s*\+{3}\s*\<\/p\>?(.*?)\<p\>\s*\+{3}\s*end\s*conversation\s*\+{3}\s*\<\/p\>?/is',
+          'conversation_add_conversation', $text);
+    default:
+      return $text;
+  }
+}
+
+/**
+ * Format a conversation.
+ * @param object $matches Contains one conversation, without delimiters.
+ * @return HTML for the conversation. 
+ */
+function conversation_add_conversation($matches) {
+  $text = $matches[1];
+  $text = preg_replace_callback(
+      '/\<p\>\s*(kieran|cc|renata)(\s*\d*\s*)\:/is',
+      'conversation_format_statement', $text);
+  //Find the first end div and kill it
+  $start = stripos($text, '</div>');
+  $text = substr($text, 0, $start) . substr($text, $start + 6);
+  //Wrap entire conversation.
+  $text = '<div class="conversation">' . $text . '</div></div>';
+  return $text;
+}
+
+/**
+ * Format one statement by a character in a conversation.
+ * @param object $matches
+ * @return 
+ */
+function conversation_format_statement($matches) {
+  $result = '</div>';
+  $character_name = $matches[1];
+  $image_number = (int)$matches[2];
+  if (! is_numeric($image_number) || $image_number < 1 ) {
+    $image_number = CONVERSATION_DEFAULT_IMAGE_NUMBER;
+  }
+  $image_name = strtolower($character_name) . str_replace(
+      '%', $image_number, IMAGE_NAME_PATTERN);
+  $result .= '<div class="conversation-turn"><div class="character-icon">'
+      .'<img src="'.base_path().CONVERSATION_IMAGE_PATH.$image_name.'" alt="'.$character_name.'">'
+      .'<div class="character-name">'.$character_name.'</div></div><p>';
+  return $result;
+}

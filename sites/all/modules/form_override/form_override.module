@@ -1,0 +1,13 @@
+<?php
+function form_override_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'search_block_form') {
+    $form['actions']['#attributes']['class'][] = 'element-invisible';
+    $form['search_block_form']['#attributes']['placeholder'] = t('Search...');
+        $form['first_name'] = array(
+       '#type' => 'markup',
+       '#prefix' => '<i class="icon-search nav-search-icon">',
+       '#suffix' => '</i>',
+
+    );
+  }
+}

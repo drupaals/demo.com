@@ -1,0 +1,502 @@
+<?php
+/*
+* Implememnting hook_block_info
+*/
+function custom_block_block_info(){
+     $blocks['Left-side-taxo-menu'] = array(
+        'info' => t('Taxonomy menu'),
+     );
+     $blocks['user-profile'] = array(
+        'info' => t('User profile'),
+     );
+     $blocks['info-box'] = array(
+        'info' => t('Information'),
+     );
+     $blocks['popular-modules'] = array(
+        'info' => t('Popular Modules'),
+     );
+     $blocks['Recent-comments'] = array(
+        'info' => t('Recent comments'),
+     );
+     $blocks['members'] = array(
+        'info' => t('Our members'),
+     );
+return $blocks;
+}
+/*
+* Implememnting hook_block_view
+*/
+function custom_block_block_view($delta = ''){
+     $block = array();
+          switch ($delta) {
+               case 'Left-side-taxo-menu':
+                  $block['subject'] = t('Taxonomy menu');
+                  $block['content'] =  taxonomy_menu_block();
+               break;
+	       
+	       case 'user-profile':
+                  $block['subject'] = t('User profile');
+                  $block['content'] =  user_profile_block();
+               break;
+	       
+	       case 'info-box':
+                  $block['subject'] = t('Information');
+                  $block['content'] =  information_block();
+               break;
+	       
+	       case 'popular-modules':
+                  $block['subject'] = t('Popular Modules');
+                  $block['content'] =  popular_modules_block();
+               break;
+	  
+	       case 'Recent-comments':
+                  $block['subject'] = t('Popular Modules');
+                  $block['content'] =  recent_comments_block();
+               break;
+	  
+	        case 'members':
+                  $block['subject'] = t('Our members');
+                  $block['content'] =  members_block();
+               break;
+          }
+     return $block;
+}
+//taxonomy_menu_block
+function taxonomy_menu_block(){
+     global $base_url;
+     $vocabulary=taxonomy_vocabulary_machine_name_load('left_side_taxo');
+     $tree = taxonomy_get_tree($vocabulary->vid, $parent = 0, $max_depth = 1, $load_entities = FALSE);
+     $taxo='<ul class="nav nav-list">';
+     foreach ($tree as $term){
+	  $page_url = drupal_lookup_path('alias',"taxonomy/term/".$term->tid);
+	  $child_tax=taxonomy_get_children($term->tid);
+	  if(!empty($child_tax)){
+	       $taxo.='<li>
+			 <a href="'.$page_url.'" class="dropdown-toggle">
+			      <i class="icon-list"></i>
+			      <span class="menu-text"> '.$term->name.' </span>
+			      <b class="arrow icon-angle-down"></b>
+			 </a>
+			 <ul class="submenu">';
+		    foreach($child_tax as $key=>$value){
+			 $taxo.='<li>
+				   <a href="'.$page_url.'">
+					   <i class="icon-double-angle-right"></i>
+					   '.$value->name.'
+				   </a>
+				 </li>';
+		    }
+			 $taxo.='</ul></li>';  
+	  }else{
+	       $taxo.='<li>
+			 <a href="'.$page_url.'">
+			       <i class="icon-list"></i>
+			      <span class="menu-text"> '.$term->name.' </span>
+			 </a>
+		    </li>';
+	  }
+     }					
+     $taxo.='</ul>';
+     return $taxo;
+}
+//user profile block for top side
+function user_profile_block(){
+     global $user;
+     if ($user->uid){
+	  $user_profile=user_load($user->uid);
+	  if(!empty($user_profile->picture)){
+	       $user_img=theme_image_style(array('style_name'=>'36x36', 'path'=>$user_profile->picture->uri, 'width'=>'', 'height'=>'', 'alt'=>$user_profile->name, 'title'=>$user_profile->name, 'attributes' => array('class' => 'nav-user-photo')));
+	  }else{
+	       $user_img=theme("image", array('path' => path_to_theme().'/images/user.png',  'alt'=>$user_profile->name, 'title'=>$user_profile->name,  'width' => 36,    'height' => 36, 'attributes' => array('class' => 'nav-user-photo')));
+	  }
+	 $output='<li class="light-blue">
+			 <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+				 '.$user_img.'
+				 <span class="user-info">
+					 <small>Welcome,</small>
+					 '.ucfirst($user_profile->name).'
+				 </span>
+     
+				 <i class="icon-caret-down"></i>
+			 </a>
+			 <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">';
+			      
+		    foreach(menu_get_names() as $menus){
+			 if($menus=='main-menu'){
+			      $menus_item=menu_load_links($menus);
+			      foreach($menus_item as $menus_items){
+				   $linktitle=$menus_items['link_title'];
+				   $link_path=$menus_items['link_path'];
+					      
+				  $output.='<li>'.l($linktitle, $link_path, array('html' => TRUE)).' </li>';
+				       
+			      }
+			 }
+			       
+		    }
+		    $output.='</ul></li>';
+	  return $output;
+     }
+     
+}
+//information_block like comment ,pageviews , no. new modules demo we added  and much more
+function information_block(){
+     $query = new EntityFieldQuery;// total number of modules we have demo ready
+     $count = $query->entityCondition('entity_type', 'node')
+	       ->entityCondition('bundle', 'module_review')
+	       ->propertyCondition('status', 1) 
+	       ->count()
+	       ->execute();
+     
+     $count1 = $query->entityCondition('entity_type', 'node')//Number new modules demo we added in week
+	       ->entityCondition('bundle', 'module_review')
+	       ->propertyCondition('created', strtotime("last week"), '>=') 
+	       ->count()
+	       ->execute();
+	       
+     //get total no. pageviews
+     $pageviews=db_query("SELECT node_counter.totalcount AS node_counter_totalcount
+	       FROM 
+	       {node} node
+	       LEFT JOIN {node_counter} node_counter ON node.nid = node_counter.nid
+	       WHERE (( (node.status = '1') AND (node.type IN  ('module_review')) ))");
+     $array="";     
+     foreach($pageviews as $key=>$pageviews){$array[$key]=$pageviews->node_counter_totalcount;}
+     
+     $info='<div class="infobox infobox-green  ">
+		       <div class="infobox-icon">
+			       <i class="icon-comments"></i>
+		       </div>
+
+		       <div class="infobox-data">
+			       <span class="infobox-data-number">'.$count.'</span>
+			       <div class="infobox-content">Number of modules</div>
+		       </div>
+	       </div>
+
+	       <div class="infobox infobox-blue  ">
+		       <div class="infobox-icon">
+			       <i class="icon-pencil"></i>
+		       </div>
+
+		       <div class="infobox-data">
+			       <span class="infobox-data-number">'.$count1.'</span>
+			       <div class="infobox-content">Add modules in week</div>
+		       </div>
+	       </div>
+
+	       <div class="infobox infobox-pink  ">
+		       <div class="infobox-icon">
+			       <i class="icon-shopping-cart"></i>
+		       </div>
+
+		       <div class="infobox-data">
+			       <span class="infobox-data-number">8</span>
+			       <div class="infobox-content">New added modules</div>
+		       </div>
+	       </div>
+
+	       <div class="infobox infobox-red  ">
+		       <div class="infobox-icon">
+			       <i class="icon-beaker"></i>
+		       </div>
+
+		       <div class="infobox-data">
+			       <span class="infobox-data-number">7</span>
+			       <div class="infobox-content">Under development</div>
+		       </div>
+	       </div>
+
+	       <div class="infobox infobox-orange2  ">
+		       <div class="infobox-chart">
+			       <span data-values="196,128,202,177,154,94,100,170,224" class="sparkline"><canvas style="display: inline-block; width: 44px; height: 34px; vertical-align: top;" width="44" height="34"></canvas></span>
+		       </div>
+
+		       <div class="infobox-data">
+			       <span class="infobox-data-number">'.array_sum($array).'</span>
+			       <div class="infobox-content">Pageviews</div>
+		       </div>
+	       </div>
+
+	       <div class="infobox infobox-blue2  ">
+		       <div class="infobox-progress">
+			       <div data-size="46" data-percent="42" class="easy-pie-chart percentage easyPieChart" style="width: 46px; height: 46px; line-height: 46px;">
+				       <span class="percent">42</span>%
+			       <canvas height="46" width="46"></canvas></div>
+		       </div>
+
+		       <div class="infobox-data">
+			       <span class="infobox-text">Traffic used</span>
+
+			       <div class="infobox-content">
+				       <span class="bigger-110">~</span>
+				       58GB remaining
+			       </div>
+		       </div>
+	       </div>
+
+	       <div class="space-6"></div>
+
+	       <div class="infobox infobox-green infobox-small infobox-dark">
+		       <div class="infobox-progress">
+			       <div data-size="39" data-percent="61" class="easy-pie-chart percentage easyPieChart" style="width: 39px; height: 39px; line-height: 39px;">
+				       <span class="percent">61</span>%
+			       <canvas height="39" width="39"></canvas></div>
+		       </div>
+
+		       <div class="infobox-data">
+			       <div class="infobox-content">Task</div>
+			       <div class="infobox-content">Completion</div>
+		       </div>
+	       </div>
+
+	       <div class="infobox infobox-blue infobox-small infobox-dark">
+		       <div class="infobox-chart">
+			       <span data-values="3,4,2,3,4,4,2,2" class="sparkline"><canvas style="display: inline-block; width: 39px; height: 20px; vertical-align: top;" width="39" height="20"></canvas></span>
+		       </div>
+
+		       <div class="infobox-data">
+			       <div class="infobox-content">Earnings</div>
+			       <div class="infobox-content">$32,000</div>
+		       </div>
+	       </div>
+
+	       <div class="infobox infobox-grey infobox-small infobox-dark">
+		       <div class="infobox-icon">
+			       <i class="icon-download-alt"></i>
+		       </div>
+
+		       <div class="infobox-data">
+			       <div class="infobox-content">Downloads</div>
+			       <div class="infobox-content">1,205</div>
+		       </div>
+	       </div>';
+     return $info;
+}
+//popular_modules_block
+function popular_modules_block(){
+$popular_modules='<div class="widget-box transparent">
+		    <div class="widget-header widget-header-flat">
+			    <h4 class="lighter">
+				    <i class="icon-star orange"></i>
+				    Popular Modules
+			    </h4>
+
+			    <div class="widget-toolbar">
+				    <a data-action="collapse" href="#">
+					    <i class="icon-chevron-up"></i>
+				    </a>
+			    </div>
+		    </div>
+
+		    <div class="widget-body"><div class="widget-body-inner" style="display: block;">
+			 <div class="widget-main no-padding">
+				 <table class="table table-bordered table-striped">
+					 <thead class="thin-border-bottom">
+						 <tr>
+							 <th>
+								 Name
+							 </th>
+	  
+							 <th>
+								 Version
+							 </th>
+	  
+							 <th class="hidden-480">
+								 Up or Down this day
+							 </th>
+						 </tr>
+					 </thead><tbody>';
+$q = db_select('node_counter', 'n');
+$q->join('popular_pages', 'p', 'p.nid = n.nid');
+$q->fields('n');
+$q->fields('p', array('date','lastday_count'));
+$q->orderBy('n.totalcount' , 'DESC');
+$q->range(0, 5);
+$result = $q->execute();
+	  $version_result="";
+     foreach($result as $output){
+	  $value = node_load($output->nid);
+	  foreach($value->field_module_version['und'] as $key=>$module_version){
+	       $version=taxonomy_term_load($module_version['tid']);
+	       $tid_name=substr($version->name, 0 , 1);
+	       $version_result.=$tid_name.', ';  
+	  }
+	  $change_date=date('j F Y',$output->timestamp);
+	  $last_date=date('j F Y',$output->date);
+	  if($output->lastday_count < $output->totalcount){
+	       $position='<span class="label label-success arrowed-in arrowed-in-right">Up</span>';
+	  }else{
+	       $position='<span class="label label-danger arrowed">Down</span>';
+	  }
+	  $popular_modules.='<tr>
+			      <td>'.$value->title.'</td>
+			      <td>
+				   <b class="green">'.$version_result.'</b>
+			      </td>
+			      <td class="hidden-480">
+				   '.$position.'
+			      </td>
+		    </tr>';
+		    $version_result="";
+     }
+    
+     $popular_modules.='</tbody></table></div></div></div></div>';
+     return $popular_modules;
+}
+//hook cron
+function custom_block_cron(){
+    $cron_lastdate=date('h A',variable_get('cron_last'));
+    
+    //if($cron_lastdate == '11 PM'){
+	  db_delete('popular_pages') 
+	  ->execute();
+	  
+	  $query = db_select('node_counter', 'n');
+	  $query->fields('n', array('nid','totalcount','timestamp'));
+	  $result = $query->execute();
+	  foreach($result as $output){
+	      // db_query("INSERT INTO main_popular_pages(nid,lastday_count,date) VALUES(".$output->nid.",".$output->totalcount.",".$output->timestamp.")");
+	  $id = db_insert('popular_pages')
+	       ->fields(array(
+		   'nid' => $output->nid,
+		   'lastday_count' => $output->totalcount,
+		   'date' => $output->timestamp,
+		    ))
+	       ->execute();
+	  
+	  }
+   // }
+
+}
+//show recent comments
+function recent_comments_block(){
+     global $base_url; $themepath = $base_url.'/'.path_to_theme();
+     $query = db_select('comment', 'c');
+     $query->fields('c');
+     $query->orderBy('c.created' , 'ASC');
+     $query->range(0, 4);
+     $result = $query->execute();
+     $comments='<div class="col-sm-6">
+		    <div class="widget-box ">
+			    <div class="widget-header">
+				    <h4 class="lighter smaller">
+					    <i class="icon-comment blue"></i>
+					    Recent comments
+				    </h4>
+			    </div>
+     
+			 <div class="widget-body">
+			      <div class="widget-main no-padding">
+				   <div style="position: relative; overflow: hidden; width: auto;" class="slimScrollDiv"><div style="overflow: hidden; width: auto;" class="dialogs">';
+     foreach($result as $output){
+	  $comment_load=comment_load($output->cid);
+	  $user_profile=user_load($output->uid);
+	  //$created_date=date('j F Y h:i:s',$comment_load->created);
+	  //echo time_elapsed_string($created_date);
+	  if(!empty($user_profile->picture)){
+	       $user_img=theme_image_style(array('style_name'=>'48x48', 'path'=>$user_profile->picture->uri, 'width'=>'', 'height'=>'', 'alt'=>$user_profile->name, 'title'=>$user_profile->name));
+	  }else{
+	       $user_img=theme("image", array('path' => path_to_theme().'/images/user.png',  'alt'=>$user_profile->name, 'title'=>$user_profile->name,  'width' => 48,    'height' => 48));
+	  }
+	  $comments.='<div class="itemdiv dialogdiv">
+		    <div class="user">
+			 '.$user_img.'
+		    </div>
+     
+		    <div class="body">
+			    <div class="time">
+				    <i class="icon-time"></i>
+				    <span class="green">'.humanTiming($comment_load->created).'  ago</span>
+			    </div>
+     
+			    <div class="name">
+				   '.ucfirst($output->name).'
+			    </div>
+			    <div class="text">'.$comment_load->comment_body['und'][0]['value'].'</div>
+		    </div>
+	    </div>';
+     }			    
+	  $comments.='</div><div style="background: none repeat scroll 0% 0% rgb(0, 0, 0); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 225.564px;" class="slimScrollBar ui-draggable"></div><div style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: none repeat scroll 0% 0% rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;" class="slimScrollRail"></div></div>	  
+		    <div class="center" style="text-align: right ! important; margin-right: 15px;">
+			 <i class="icon-comments-alt icon-2x green"></i>
+			 <a href="'.$base_url.'/comments">
+			     See all comments
+			     <i class="icon-arrow-right"></i>
+			 </a>
+		     </div>
+	       	    </div><!-- /widget-main -->
+		  </div><!-- /widget-body -->
+		  </div><!-- /widget-box -->
+		  </div><!-- /span -->';
+     return $comments;
+}
+//Converting timestamp to time ago in PHP e.g 1 day ago, 2 days ago…
+function humanTiming ($time){
+
+    $time = time() - $time; // to get the time since that moment
+
+    $tokens = array (
+        31536000 => 'year',
+        2592000 => 'month',
+        604800 => 'week',
+        86400 => 'day',
+        3600 => 'hour',
+        60 => 'minute',
+        1 => 'second'
+    );
+
+    foreach ($tokens as $unit => $text) {
+        if ($time < $unit) continue;
+        $numberOfUnits = floor($time / $unit);
+        return $numberOfUnits.' '.$text.(($numberOfUnits>1)?'s':'');
+    }
+
+}
+//member Block
+function members_block(){
+     global $base_url; $themepath = $base_url.'/'.path_to_theme();
+      $query = db_select('users', 'u');
+     $query->fields('u');
+      $query->condition('u.uid',0,'>');
+     $query->range(0, 9);
+     $result = $query->execute();
+     $member='<div class="clearfix">';
+     foreach($result as $output){
+	 $user_profile=user_load($output->uid);
+	  if(!empty($user_profile->picture)){
+	       $user_img=theme_image_style(array('style_name'=>'48x48', 'path'=>$user_profile->picture->uri, 'width'=>'', 'height'=>'', 'alt'=>$user_profile->name, 'title'=>$user_profile->name));
+	  }else{
+	       $user_img=theme("image", array('path' => path_to_theme().'/images/user.png',  'alt'=>$user_profile->name, 'title'=>$user_profile->name,  'width' => 48,    'height' => 48));
+	  }
+	  
+	  if($user_profile->status == 1){
+	       $status='<span class="label label-success label-sm arrowed-in">approved</span>';
+	  }else{
+	       $status='<span class="label label-danger label-sm">blocked</span>';
+	  }
+	  $member.='<div class="itemdiv memberdiv">
+			 <div class="user">
+			      '.$user_img.'
+			 </div>
+		    
+			 <div class="body">
+				 <div class="name">
+				   '.ucfirst($user_profile->name).'
+				 </div>
+		    
+				 <div class="time">
+					 <i class="ace-icon fa fa-clock-o"></i>
+					 <span class="green">'.humanTiming($user_profile->created).'  ago</span>
+				 </div>
+		    
+				 <div>
+					'.$status.'
+				 </div>
+			 </div>
+		    </div>';
+     }
+     
+     $member.='</div>';
+return $member;
+}

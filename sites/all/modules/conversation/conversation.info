@@ -1,0 +1,5 @@
+; $Id$
+name = Conversation
+description = Support for conversations.
+package = Other
+core = 7.x
