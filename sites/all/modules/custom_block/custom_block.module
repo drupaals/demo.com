@@ -348,7 +348,7 @@ $result = $q->execute();
 function custom_block_cron(){
     $cron_lastdate=date('h A',variable_get('cron_last'));
     
-    //if($cron_lastdate == '11 PM'){
+    if($cron_lastdate == '11 PM'){
 	  db_delete('popular_pages') 
 	  ->execute();
 	  
@@ -366,7 +366,7 @@ function custom_block_cron(){
 	       ->execute();
 	  
 	  }
-   // }
+   }
 
 }
 //show recent comments
