@@ -1,3 +1,0 @@
-name = Custom block
-description = we define custom block which derives drupal dynamic content.
-core = 7.x

@@ -1,4 +1,0 @@
-; $Id$
-name = Form Override
-description = Adding some custom form overrides.
-core = 7.x
