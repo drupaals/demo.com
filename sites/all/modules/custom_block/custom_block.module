@@ -317,10 +317,12 @@ $result = $q->execute();
 	  $version_result="";
      foreach($result as $output){
 	  $value = node_load($output->nid);
-	  foreach($value->field_module_version['und'] as $key=>$module_version){
-	       $version=taxonomy_term_load($module_version['tid']);
-	       $tid_name=substr($version->name, 0 , 1);
-	       $version_result.=$tid_name.', ';  
+	  if(!empty($value->field_module_version)){
+	       foreach($value->field_module_version['und'] as $key=>$module_version){
+		    $version=taxonomy_term_load($module_version['tid']);
+		    $tid_name=substr($version->name, 0 , 1);
+		    $version_result.=$tid_name.', ';  
+	       }
 	  }
 	  $change_date=date('j F Y',$output->timestamp);
 	  $last_date=date('j F Y',$output->date);
