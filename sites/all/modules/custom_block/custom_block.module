@@ -324,6 +324,10 @@ $result = $q->execute();
 		    $version_result.=$tid_name.', ';  
 	       }
 	  }
+
+	  $num = explode(',',$version_result); $j=2; $tgs='';
+	  foreach($num as $nums){if($j<count($num)) $comma = ', '; else $comma = '';  $tgs .= $nums.$comma; $j++;}
+	  
 	  $change_date=date('j F Y',$output->timestamp);
 	  $last_date=date('j F Y',$output->date);
 	  if($output->lastday_count < $output->totalcount){
@@ -334,7 +338,7 @@ $result = $q->execute();
 	  $popular_modules.='<tr>
 			      <td>'.$value->title.'</td>
 			      <td>
-				   <b class="green">'.$version_result.'</b>
+				   <b class="green">'.$tgs.'</b>
 			      </td>
 			      <td class="hidden-480">
 				   '.$position.'
