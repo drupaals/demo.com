@@ -282,7 +282,7 @@ function information_block(){
 
 		       <div class="infobox-data">
 			       <div class="infobox-content">Downloads</div>
-			       <div class="infobox-content">'.download_count().'</div>
+			       <div class="infobox-content">2333</div>
 		       </div>
 	       </div>';
      return $info;
