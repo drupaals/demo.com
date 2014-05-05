@@ -164,7 +164,7 @@
 													  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
 													  fjs.parentNode.insertBefore(js, fjs);
 													}(document, 'script', 'facebook-jssdk'));</script>
-													<div class="fb-like" data-href="http://beta.rhaasoft.com" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+													<div class="fb-like" data-href="http://beta.rhaasoft.com" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div>
 															</span>
 															
 														</div>
@@ -280,5 +280,4 @@
 <script type="text/javascript">
 	if("ontouchend" in document) document.write("<script src='<?php echo $themepath; ?>/assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
 </script>
-
 <div style="top: 394px; left: 963px; display: none;" class="tooltip top in"><div class="tooltip-inner">search engines : 24.5%</div></div>
