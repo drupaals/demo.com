@@ -797,15 +797,15 @@ function stats_block() {
      $var41 = '<div id="container1" style="min-width: 200px; height: 200px; margin: 0 auto"></div>';
       return $var41;     
 }
-//custom function to count all download files
-function download_count(){
-$q = db_select('pubdlcnt', 'pc');
-$q->fields('pc', array('count'));
-$result = $q->execute();
-$total="";
-     foreach($result as $output){
-	  $total.=$output->count.',';	 
-     }
-     $total_download=explode(',',$total);
-return array_sum($total_download);
-}
+////custom function to count all download files
+//function download_count(){
+//$q = db_select('pubdlcnt', 'pc');
+//$q->fields('pc', array('count'));
+//$result = $q->execute();
+//$total="";
+//     foreach($result as $output){
+//	  $total.=$output->count.',';	 
+//     }
+//     $total_download=explode(',',$total);
+//return array_sum($total_download);
+//}
