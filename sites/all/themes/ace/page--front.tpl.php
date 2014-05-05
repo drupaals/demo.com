@@ -99,90 +99,66 @@
 									<?php if ($page['script_first']): ?> <div class="col-sm-7 infobox-container"> <?php print render($page['script_first']); ?> </div> <?php  endif; ?>
 
 									<div class="vspace-sm"></div>
-
+											    <?php
+									    global $base_url;
+									    $url = (!empty($_SERVER['HTTPS'])) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] : "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];									    
+									    $explode = explode('=', $url);
+									    $name_of_week = "This Week";
+									    $name = '';
+									    if(!empty($explode)){
+										foreach($explode as $key => $explode){
+										    $name = $explode;
+										}
+										if($name == 'thisweek'){
+										    $name_of_week = "This Week";
+										}elseif($name == 'lastweek'){
+										    $name_of_week = "Last Week";
+										}
+									    }
+									?>
+									<?php if ($page['script_second']): ?>
 									<div class="col-sm-5">
 										<div class="widget-box">
 											<div class="widget-header widget-header-flat widget-header-small">
 												<h5>
 													<i class="icon-signal"></i>
-													Traffic Sources
+													Modules Traffic 
 												</h5>
 
 												<div class="widget-toolbar no-border">
-													<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
-														This Week
-														<i class="icon-angle-down icon-on-right bigger-110"></i>
+													<button class="btn btn-minier btn-primary">
+														<?php echo $name_of_week; ?>
+														<i class="ace-icon fa fa-angle-down icon-on-right bigger-110"></i>
 													</button>
-
-													<ul class="dropdown-menu pull-right dropdown-125 dropdown-lighter dropdown-caret">
-														<li class="active">
-															<a href="#" class="blue">
-																<i class="icon-caret-right bigger-110">&nbsp;</i>
+															<ul class="dropdown-menu dropdown-menu-right dropdown-125 dropdown-lighter dropdown-close dropdown-caret">
+														<li class="active" id = "this_week">
+															<a href="#" class="blue" id="thisweek">
+																<i class="ace-icon fa fa-caret-right bigger-110">&nbsp;</i>
 																This Week
 															</a>
 														</li>
 
 														<li>
-															<a href="#">
-																<i class="icon-caret-right bigger-110 invisible">&nbsp;</i>
+															<a href="#" id = "lastweek">
+																<i class="ace-icon fa fa-caret-right bigger-110 invisible">&nbsp;</i>
 																Last Week
 															</a>
 														</li>
 
-														<li>
-															<a href="#">
-																<i class="icon-caret-right bigger-110 invisible">&nbsp;</i>
-																This Month
-															</a>
-														</li>
-
-														<li>
-															<a href="#">
-																<i class="icon-caret-right bigger-110 invisible">&nbsp;</i>
-																Last Month
-															</a>
-														</li>
 													</ul>
 												</div>
 											</div>
 
 											<div class="widget-body">
 												<div class="widget-main">
-													<div style="width: 90%; min-height: 150px; padding: 0px; position: relative;" id="piechart-placeholder"><canvas height="150" width="384" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 384px; height: 150px;" class="flot-base"></canvas><canvas height="150" width="384" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 384px; height: 150px;" class="flot-overlay"></canvas><div class="legend"><div style="position: absolute; width: 92px; height: 110px; top: 15px; right: -30px; background-color: rgb(255, 255, 255); opacity: 0.85;"> </div><table style="position:absolute;top:15px;right:-30px;;font-size:smaller;color:#545454"><tbody><tr><td class="legendColorBox"><div style="border:1px solid null;padding:1px"><div style="width:4px;height:0;border:5px solid #68BC31;overflow:hidden"></div></div></td><td class="legendLabel">social networks</td></tr><tr><td class="legendColorBox"><div style="border:1px solid null;padding:1px"><div style="width:4px;height:0;border:5px solid #2091CF;overflow:hidden"></div></div></td><td class="legendLabel">search engines</td></tr><tr><td class="legendColorBox"><div style="border:1px solid null;padding:1px"><div style="width:4px;height:0;border:5px solid #AF4E96;overflow:hidden"></div></div></td><td class="legendLabel">ad campaigns</td></tr><tr><td class="legendColorBox"><div style="border:1px solid null;padding:1px"><div style="width:4px;height:0;border:5px solid #DA5430;overflow:hidden"></div></div></td><td class="legendLabel">direct traffic</td></tr><tr><td class="legendColorBox"><div style="border:1px solid null;padding:1px"><div style="width:4px;height:0;border:5px solid #FEE074;overflow:hidden"></div></div></td><td class="legendLabel">other</td></tr></tbody></table></div></div>
-
-													<div class="hr hr8 hr-double"></div>
-													
-
-													<div class="clearfix">
-														<div class="grid3">
-															<span class="grey">
-																<i class="icon-facebook-sign icon-2x blue"></i>
-																&nbsp; likes
-															</span>
-															<h4 class="bigger pull-right">1,255</h4>
-														</div>
-
-														<div class="grid3">
-															<span class="grey">
-																<i class="icon-twitter-sign icon-2x purple"></i>
-																&nbsp; tweets
-															</span>
-															<h4 class="bigger pull-right">941</h4>
-														</div>
-
-														<div class="grid3">
-															<span class="grey">
-																<i class="icon-pinterest-sign icon-2x red"></i>
-																&nbsp; pins
-															</span>
-															<h4 class="bigger pull-right">1,050</h4>
-														</div>
-													</div>
-												</div><!-- /widget-main -->
-											</div><!-- /widget-body -->
-										</div><!-- /widget-box -->
-									</div><!-- /span -->
-								</div><!-- /row -->
+													<?php print render($page['script_second']); ?>
+												</div>
+											</div>
+											<div class="hr hr8 hr-double"></div>
+											</div><!-- /widget-box -->
+											</div><!-- /span -->
+											<?php endif;?>
+											</div><!-- /row -->
 
 								<div class="hr hr32 hr-dotted"></div>
 
