@@ -481,7 +481,9 @@ function members_block(){
 	  }else{
 	       $status='<span class="label label-danger label-sm">blocked</span>';
 	  }
-	  $member.='<div class="itemdiv memberdiv">
+	  $dateInLastTwoWeeks = strtotime('-2 weeks');
+	  if($dateInLastTwoWeeks <= $user_profile->created){
+	       $member.='<div class="itemdiv memberdiv">
 			 <div class="user">
 			      '.$user_img.'
 			 </div>
@@ -501,6 +503,7 @@ function members_block(){
 				 </div>
 			 </div>
 		    </div>';
+	  }
      }
      
      $member.='</div>';
