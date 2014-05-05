@@ -126,6 +126,7 @@
 												</h5>
 
 												<div class="widget-toolbar no-border">
+												    <div class="inline dropdown-hover">
 													<button class="btn btn-minier btn-primary">
 														<?php echo $name_of_week; ?>
 														<i class="ace-icon fa fa-angle-down icon-on-right bigger-110"></i>
@@ -145,7 +146,7 @@
 															</a>
 														</li>
 
-													</ul>
+													</ul></div>
 												</div>
 											</div>
 
@@ -164,7 +165,7 @@
 													  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
 													  fjs.parentNode.insertBefore(js, fjs);
 													}(document, 'script', 'facebook-jssdk'));</script>
-													<div class="fb-like" data-href="http://beta.rhaasoft.com" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+													<div class="fb-like" data-href="<?php print $base_url; ?>" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
 															</span>
 															
 														</div>
@@ -174,14 +175,14 @@
 																<script src="//platform.linkedin.com/in.js" type="text/javascript">
 														    lang: en_US
 														  </script>
-														  <script type="IN/Share" data-url="http://beta.rhaasoft.com" data-counter="right"></script>
+														  <script type="IN/Share" data-url="<?php print $base_url; ?>" data-counter="right"></script>
 															</span>
 															
 														</div>
 
 														<div class="grid3">
 															<span class="grey">
-															   <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://demo.drupaals.com">Tweet</a>
+															   <a href="https://twitter.com/share" class="twitter-share-button" data-url="<?php print $base_url; ?>">Tweet</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 															</span>
 															
@@ -196,7 +197,7 @@
 											<?php endif;?>
 											</div><!-- /row -->
 
-								<!--<div class="hr hr32 hr-dotted"></div>-->
+								<div class="hr hr32 hr-dotted"></div>
 
 								<div class="row">
 									<?php if ($page['script_third']): ?> <div class="col-sm-5"> <?php print render($page['script_third']); ?> </div> <?php  endif; ?>	<!-- /widget-box -->
