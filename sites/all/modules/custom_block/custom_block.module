@@ -78,7 +78,7 @@ function custom_block_block_view($delta = ''){
 //taxonomy_menu_block
 function taxonomy_menu_block(){
      global $base_url;
-     $vocabulary=taxonomy_vocabulary_machine_name_load('left_side_taxo');
+     $vocabulary=taxonomy_vocabulary_machine_name_load('module_category');
      $tree = taxonomy_get_tree($vocabulary->vid, $parent = 0, $max_depth = 1, $load_entities = FALSE);
      $taxo='<ul class="nav nav-list">';
      foreach ($tree as $term){
