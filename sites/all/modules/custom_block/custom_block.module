@@ -547,21 +547,6 @@ function pie_chart_block(){
      $query->fields('n', array('nid'))
 	  ->condition('n.type', array('module_review','IN'));
     }
-    
-//    if(!empty($_GET['value'])){     
-//     $query = db_select('node', 'n')->distinct();
-//      $query->fields('n', array('nid'))
-//	        ->condition('n.type', array('module_review','IN'))
-//	        ->condition('n.created',$current_date,'<=');     
-//    }
-// else {
-//       $query = db_select('node', 'n')->distinct();
-//      $query->fields('n', array('nid'))
-//	        ->condition('n.type', array('module_review','IN'));
-//	     
-//     
-//     
-// }
    $result = $query->execute();	  
 	  $array= '';
 	  $value6='';
@@ -588,7 +573,9 @@ function pie_chart_block(){
 	  $value7 = ($value7/100)*$total_number;
 	  $value8 = ($value8/100)*$total_number;
 
-     
+     drupal_add_js("http://code.jquery.com/jquery-1.6.3.min.js","external");
+     drupal_add_js("http://code.highcharts.com/highcharts.js","external");
+     drupal_add_js("http://code.highcharts.com/modules/exporting.js","external");
      drupal_add_js("$(function () {
     var chart;
     
@@ -754,11 +741,7 @@ function pie_chart_ajax(){
 function stats_block() {
      drupal_add_js("$(function () {
      $('#container1').highcharts({
-            //title: {
-            //    text: 'Module Stats',
-            //    x: -20 //center
-            //},
-           
+            
             xAxis: {
                 categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -792,20 +775,21 @@ function stats_block() {
                 name: 'Drupal 6',
                 data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
             }]
-        });
+        }); 
     });","inline");
      $var41 = '<div id="container1" style="min-width: 200px; height: 200px; margin: 0 auto"></div>';
       return $var41;     
 }
-////custom function to count all download files
-//function download_count(){
-//$q = db_select('pubdlcnt', 'pc');
-//$q->fields('pc', array('count'));
-//$result = $q->execute();
-//$total="";
-//     foreach($result as $output){
-//	  $total.=$output->count.',';	 
-//     }
-//     $total_download=explode(',',$total);
-//return array_sum($total_download);
-//}
+
+//custom function to count all download files
+function download_count(){
+$q = db_select('pubdlcnt', 'pc');
+$q->fields('pc', array('count'));
+$result = $q->execute();
+$total="";
+     foreach($result as $output){
+	  $total.=$output->count.',';	 
+     }
+     $total_download=explode(',',$total);
+return array_sum($total_download);
+}

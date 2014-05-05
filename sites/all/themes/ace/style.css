@@ -6,6 +6,12 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .icon-caret-down{color:#fff;}
 .region-script-second .highcharts-title {display:none;}
 .region-script-second .highcharts-button {display:none;}
+.region-script-fourth .highcharts-button {display:none;}
+.region-script-fourth .highcharts-title {display:none;}
+#highcharts-0 text {display:none !important;}
+#highcharts-0 g text {display:block !important;}
+#highcharts-4 g text {display:block !important;}
+#highcharts-4 text {display:none !important;}
 .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {background-color: none; border-color: none;}
 #quicktabs-container-recent{border-top: 1px solid #DCE8F1;}
 #recent-box .widget-header{ border: medium none; float: left;}
