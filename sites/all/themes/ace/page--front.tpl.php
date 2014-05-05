@@ -152,24 +152,61 @@
 											<div class="widget-body">
 												<div class="widget-main">
 													<?php print render($page['script_second']); ?>
+													<div class="hr hr8 hr-double"></div>
+														<div class="clearfix">
+														<div class="grid3">
+															<span class="grey">
+																    <div id="fb-root"></div>
+													<script>(function(d, s, id) {
+													  var js, fjs = d.getElementsByTagName(s)[0];
+													  if (d.getElementById(id)) return;
+													  js = d.createElement(s); js.id = id;
+													  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+													  fjs.parentNode.insertBefore(js, fjs);
+													}(document, 'script', 'facebook-jssdk'));</script>
+													<div class="fb-like" data-href="http://beta.rhaasoft.com" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+															</span>
+															
+														</div>
+
+														<div class="grid3">
+															<span class="grey">
+																<script src="//platform.linkedin.com/in.js" type="text/javascript">
+														    lang: en_US
+														  </script>
+														  <script type="IN/Share" data-url="http://beta.rhaasoft.com" data-counter="right"></script>
+															</span>
+															
+														</div>
+
+														<div class="grid3">
+															<span class="grey">
+															   <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://demo.drupaals.com">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+															</span>
+															
+														</div>
+													</div>
 												</div>
+												
 											</div>
-											<div class="hr hr8 hr-double"></div>
+											
 											</div><!-- /widget-box -->
 											</div><!-- /span -->
 											<?php endif;?>
 											</div><!-- /row -->
 
-								<div class="hr hr32 hr-dotted"></div>
+								<!--<div class="hr hr32 hr-dotted"></div>-->
 
 								<div class="row">
 									<?php if ($page['script_third']): ?> <div class="col-sm-5"> <?php print render($page['script_third']); ?> </div> <?php  endif; ?>	<!-- /widget-box -->
+									<?php if ($page['script_fourth']): ?>
 									<div class="col-sm-7">
 										<div class="widget-box transparent">
 											<div class="widget-header widget-header-flat">
 												<h4 class="lighter">
 													<i class="icon-signal"></i>
-													Sale Stats
+													Modules download Stats
 												</h4>
 
 												<div class="widget-toolbar">
@@ -181,11 +218,11 @@
 
 											<div class="widget-body">
 												<div class="widget-main padding-4">
-													<div style="width: 100%; height: 220px; padding: 0px; position: relative;" id="sales-charts"><canvas height="220" width="635" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 635px; height: 220px;" class="flot-base"></canvas><div style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; font-size: smaller; color: rgb(84, 84, 84);" class="flot-text"><div style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block;" class="flot-x-axis flot-x1-axis xAxis x1Axis"><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 79px; top: 204px; left: 28px; text-align: center;">0.0</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 79px; top: 204px; left: 123px; text-align: center;">1.0</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 79px; top: 204px; left: 219px; text-align: center;">2.0</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 79px; top: 204px; left: 314px; text-align: center;">3.0</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 79px; top: 204px; left: 410px; text-align: center;">4.0</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 79px; top: 204px; left: 505px; text-align: center;">5.0</div><div class="flot-tick-label tickLabel" style="position: absolute; max-width: 79px; top: 204px; left: 601px; text-align: center;">6.0</div></div><div style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block;" class="flot-y-axis flot-y1-axis yAxis y1Axis"><div class="flot-tick-label tickLabel" style="position: absolute; top: 192px; left: 1px; text-align: right;">-2.000</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 168px; left: 1px; text-align: right;">-1.500</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 144px; left: 1px; text-align: right;">-1.000</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 120px; left: 1px; text-align: right;">-0.500</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 96px; left: 4px; text-align: right;">0.000</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 72px; left: 4px; text-align: right;">0.500</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 48px; left: 4px; text-align: right;">1.000</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 24px; left: 4px; text-align: right;">1.500</div><div class="flot-tick-label tickLabel" style="position: absolute; top: 1px; left: 4px; text-align: right;">2.000</div></div></div><canvas height="220" width="635" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 635px; height: 220px;" class="flot-overlay"></canvas><div class="legend"><div style="position: absolute; width: 64px; height: 66px; top: 13px; right: 13px; background-color: rgb(255, 255, 255); opacity: 0.85;"> </div><table style="position:absolute;top:13px;right:13px;;font-size:smaller;color:#545454"><tbody><tr><td class="legendColorBox"><div style="border:1px solid #ccc;padding:1px"><div style="width:4px;height:0;border:5px solid rgb(237,194,64);overflow:hidden"></div></div></td><td class="legendLabel">Domains</td></tr><tr><td class="legendColorBox"><div style="border:1px solid #ccc;padding:1px"><div style="width:4px;height:0;border:5px solid rgb(175,216,248);overflow:hidden"></div></div></td><td class="legendLabel">Hosting</td></tr><tr><td class="legendColorBox"><div style="border:1px solid #ccc;padding:1px"><div style="width:4px;height:0;border:5px solid rgb(203,75,75);overflow:hidden"></div></div></td><td class="legendLabel">Services</td></tr></tbody></table></div></div>
-												</div><!-- /widget-main -->
+													<div style="width: 100%; height: 220px; padding: 0px; position: relative;" id="sales-charts">
+												<?php print render($page['script_fourth']); ?></div><!-- /widget-main -->
 											</div><!-- /widget-body -->
 										</div><!-- /widget-box -->
-									</div>
+									</div><?php  endif ;?>
 								</div>
 
 								<div class="hr hr32 hr-dotted"></div>

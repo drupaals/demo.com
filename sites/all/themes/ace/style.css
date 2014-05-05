@@ -4,6 +4,8 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .light-blue .dropdown-toggle{background-color: #62A8D1; color: #FFFFFF; display: block;    height: 100%;    line-height: inherit;    min-width: 50px;    padding: 5px 8px;    position: relative;    text-align: center;    width: auto;}
 .dropdown-toggle:hover{text-decoration: none;background-color: #579EC8;}
 .icon-caret-down{color:#fff;}
+.region-script-second .highcharts-title {display:none;}
+.region-script-second .highcharts-button {display:none;}
 .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {background-color: none; border-color: none;}
 #quicktabs-container-recent{border-top: 1px solid #DCE8F1;}
 #recent-box .widget-header{ border: medium none; float: left;}
