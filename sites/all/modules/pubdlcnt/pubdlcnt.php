@@ -32,20 +32,20 @@ $current_dir = getcwd();
 // we need to change the current directory to the (drupal-root) directory
 // in order to include some necessary files.
 if (file_exists('../../../../includes/bootstrap.inc')) {
-  // If this script is in the (drupal-root)/sites/(site)/modules/pubdlcnt directory
+  // If this script is in the (drupal-root)/sites/(site)/modules/(contrib)/pubdlcnt directory
   chdir('../../../../'); // go to drupal root
 }
-else if (file_exists('../../includes/bootstrap.inc')) {
-  // If this script is in the (drupal-root)/modules/pubdlcnt directory
-  chdir('../../'); // go to drupal root
-}
+elseif(file_exists('../../../../includes/bootstrap.inc')) {
+   // If this script is in the (drupal-root)/sites/(site)/modules/pubdlcnt directory
+   chdir('../../../../'); // go to drupal root
+ }
 else {
   // Non standard location: you need to edit the line below so that chdir()
   // command change the directory to the drupal root directory of your server
   // using an absolute path.
   // First, please delete the line below and then edit the next line
-  print "Error: Public Download Count module failed to work. The file pubdlcnt.php requires manual editing.\n";
-  chdir('/absolute-path-to-drupal-root/'); // <---- edit this line!
+  //print "Error: Public Download Count module failed to work. The file pubdlcnt.php requires manual editing.\n";
+  chdir('../../../../'); // <---- edit this line!
 
   if (!file_exists('./includes/bootstrap.inc')) {
     // We can not locate the bootstrap.inc file, let's give up using the
@@ -94,49 +94,22 @@ exit;
 /**
  * Function to check if the specified file URL is valid or not
  */
+/**
+ * Function to check if the specified file URL is valid or not
+ */
 function is_valid_file_url($url) {
   // replace space characters in the URL with '%20' to support file name
   // with space characters
   $url = preg_replace('/\s/', '%20', $url);
-
   if (!valid_url($url, true)) {
     return false;
   }
-  // URL end with slach (/) and no file name
-  if (preg_match('/\/$/', $url)) {
-    return false;
-  }
-  // in case of FTP, we just return TRUE (the file exists)
-  if (preg_match('/ftps?:\/\/.*/i', $url)) {
-    return true;
-  }
-
-  // extract file name and extention
-  $filename = basename($url);
-  $extension = explode(".", $filename);
-  // file name does not have extension
-  if (($num = count($extension)) <= 1) {
-    return false;
-  }
-  $ext = $extension[$num - 1];
-
-  // get valid extensions settings from Drupal
-  $result = db_query("SELECT value FROM {variable} 
-                      WHERE name = :name", array(':name' => 'pubdlcnt_valid_extensions'))->fetchField();
-  $valid_extensions = unserialize($result);
-  if (!empty($valid_extensions)) {
-    // check if the extension is a valid extension or not (case insensitive)
-    $s_valid_extensions = strtolower($valid_extensions);
-    $s_ext = strtolower($ext);
-    $s_valid_ext_array = explode(" ", $s_valid_extensions);
-    if (!in_array($s_ext, $s_valid_ext_array)) {
-      return false;
-    }
-  }
-  
+  //  -- skipped -- 
+/* -- comment out three lines below
   if (!url_exists($url)) {
     return false;
   }
+*/
   return true; // it seems that the file URL is valid
 }
 
