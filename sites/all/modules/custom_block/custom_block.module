@@ -282,7 +282,7 @@ function information_block(){
 
 		       <div class="infobox-data">
 			       <div class="infobox-content">Downloads</div>
-			       <div class="infobox-content">2333</div>
+			       <div class="infobox-content">'.download_count().'</div>
 		       </div>
 	       </div>';
      return $info;
@@ -780,6 +780,7 @@ function stats_block() {
      $var41 = '<div id="container1" style="min-width: 200px; height: 200px; margin: 0 auto"></div>';
       return $var41;     
 }
+
 //custom function to count all download files
 function download_count(){
 $q = db_select('pubdlcnt', 'pc');
