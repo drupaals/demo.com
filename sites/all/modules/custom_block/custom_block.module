@@ -747,9 +747,9 @@ function stats_block() {
                     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
             },
             yAxis: {
-                //title: {
-                //    text: 'Total no of Downloads'
-                //},
+                title: {
+                   text: 'Downloads'
+                },
                 plotLines: [{
                     value: 0,
                     width: 1,
