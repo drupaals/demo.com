@@ -17,4 +17,5 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .view-recent-modules .pager{margin-top:15px;}
 .headerSortUp{ background-clip: border-box;background-color: rgba(0, 0, 0, 0);  background-image: url("images/sort_down_green.png");    background-origin: padding-box;    background-position: 110px 1px;    background-repeat: no-repeat;    background-size: auto auto;}
 .headerSortDown{ background-clip: border-box;background-color: rgba(0, 0, 0, 0);background-image: url("images/sort_up_green.png");    background-origin: padding-box;    background-position: 110px 8px;    background-repeat: no-repeat;    background-size: auto auto;}
-
+.view-recent-modules thead .views-field-nid{float:right;Width:0%;}
+.headerSortUp,.headerSortDown{width: 75%;}
