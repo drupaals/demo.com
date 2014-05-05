@@ -1,5 +1,6 @@
-jQuery(function ($){
-          jQuery(".dropdown-menu li a").click(function(){          
+$(function ($){
+ 
+          jQuery(".dropdown-menu li a").click(function(){
                     var value = jQuery(this).attr('id'); 
                     var url=window.location.href;
 		    var n = url.split("?");
