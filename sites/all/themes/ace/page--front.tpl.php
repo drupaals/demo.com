@@ -122,14 +122,15 @@
 											<div class="widget-header widget-header-flat widget-header-small">
 												<h5>
 													<i class="icon-signal"></i>
-													Modules Traffic 
+													Modules Traffic
+													
 												</h5>
 
 												<div class="widget-toolbar no-border">
 												    <div class="inline dropdown-hover">
 													<button class="btn btn-minier btn-primary">
 														<?php echo $name_of_week; ?>
-														<i class="ace-icon fa fa-angle-down icon-on-right bigger-110"></i>
+														<b class="arrow icon-angle-down"></b>
 													</button>
 															<ul class="dropdown-menu dropdown-menu-right dropdown-125 dropdown-lighter dropdown-close dropdown-caret">
 														<li class="active" id = "this_week">
