@@ -368,8 +368,6 @@ $result = $q->execute();
 //hook cron
 function custom_block_cron(){
     $cron_lastdate=date('H A',variable_get('cron_last'));
-    print $cron_lastdate;
-    die;
     if($cron_lastdate == '23 PM'){
 	  db_delete('popular_pages') 
 	  ->execute();
