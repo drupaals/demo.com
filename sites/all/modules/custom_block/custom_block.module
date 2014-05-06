@@ -574,16 +574,16 @@ function pie_chart_block(){
 	  $value7 = ($value7/100)*$total_number;
 	  $value8 = ($value8/100)*$total_number;
 
-     drupal_add_js("http://code.jquery.com/jquery-1.6.3.min.js","external");
+     //drupal_add_js("http://code.jquery.com/jquery-1.6.3.min.js","external");
      drupal_add_js("http://code.highcharts.com/highcharts.js","external");
      drupal_add_js("http://code.highcharts.com/modules/exporting.js","external");
-     drupal_add_js("$(function () {
+     drupal_add_js("jQuery(function () {
     var chart;
     
-    $(document).ready(function () {
+    jQuery(document).ready(function () {
     	
     	// Build the chart
-        $('#container').highcharts({
+        jQuery('#container').highcharts({
             chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
