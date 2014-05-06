@@ -103,8 +103,8 @@ function taxonomy_menu_block(){
 		    }
 			 $taxo.='</ul></li>';  
 	  }else{
-	       $taxo.='<li>
-			 <a href="'.$page_url.'">
+	       $taxo.='<li class="active">
+			 <a href="'.$base_url.'">
 			       <i class="icon-list"></i>
 			      <span class="menu-text"> '.$term->name.' </span>
 			 </a>
