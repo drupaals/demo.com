@@ -85,16 +85,17 @@ function taxonomy_menu_block(){
 	  $page_url = drupal_lookup_path('alias',"taxonomy/term/".$term->tid);
 	  $child_tax=taxonomy_get_children($term->tid);
 	  if(!empty($child_tax)){
-	       $taxo.='<li>
-			 <a href="'.$page_url.'" class="dropdown-toggle">
+	       $taxo.='<li id="main-li">
+			 <a class="dropdown-toggle" href="#">
 			      <i class="icon-list"></i>
 			      <span class="menu-text"> '.$term->name.' </span>
 			      <b class="arrow icon-angle-down"></b>
 			 </a>
 			 <ul class="submenu">';
 		    foreach($child_tax as $key=>$value){
+			 $child_url = drupal_lookup_path('alias',"taxonomy/term/".$value->tid);
 			 $taxo.='<li>
-				   <a href="'.$page_url.'">
+				   <a href="'.$base_url.'/'.$child_url.'">
 					   <i class="icon-double-angle-right"></i>
 					   '.$value->name.'
 				   </a>
