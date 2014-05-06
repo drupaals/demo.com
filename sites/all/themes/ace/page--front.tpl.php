@@ -201,7 +201,7 @@
 									<?php if ($page['script_fourth']): ?>
 									<div class="col-sm-7">
 										<div class="widget-box transparent">
-											<div class="widget-header widget-header-flat">
+											<div class="widget-header  widget-header-flat">
 												<h4 class="lighter">
 													<i class="icon-signal"></i>
 													Modules Download Stats
