@@ -223,9 +223,14 @@
 									</div><?php  endif ;?>
 								</div>
 
-								<div class="hr hr32 hr-dotted"></div>
+								
 
-								<div class="row">
+								<!-- /row -->
+
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+							<div class="hr hr32 hr-dotted"></div>
+							<div class="row">
 								    <?php if ($page['script_fifth']): ?>
 									<div class="col-sm-6">
 										<div class="widget-box transparent" id="recent-box">
@@ -248,9 +253,6 @@
 								    <?php  endif; ?>
 								    <?php if ($page['script_sixth']): ?><?php print render($page['script_sixth']); ?><?php  endif; ?>
 								</div><!-- /row -->
-
-								<!-- PAGE CONTENT ENDS -->
-							</div><!-- /.col -->
 						</div><!-- /.row -->
 					</div><!-- /.page-content -->
 				</div><!-- /.main-content -->
