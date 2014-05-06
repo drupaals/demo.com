@@ -22,8 +22,12 @@ scripts[] = js/bootstrap.js
 scripts[] = js/typeahead-bs2.js
 scripts[] = assets/js/excanvas.min.js
 scripts[] = js/jquery-ui-1.js
+scripts[] = js/jquery_007.js
+scripts[] = js/jquery_003.js
+scripts[] = js/jquery_006.js
 scripts[] = js/ace-elements.js
 scripts[] = js/ace.js
+scripts[] = js/inline.js
 scripts[] = js/custom.js
 
 regions[alert]               = Alert
