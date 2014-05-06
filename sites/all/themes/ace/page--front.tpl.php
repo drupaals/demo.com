@@ -1,4 +1,4 @@
-<?php global $base_url; $themepath = $base_url.'/'.path_to_theme();?>
+<?php global $base_url; $themepath = $base_url.'/'.path_to_theme(); ?>
   <div class="navbar navbar-default" id="navbar">
       <div class="navbar-container" id="navbar-container">
 	<div class="navbar-header pull-left">
@@ -62,10 +62,6 @@
 					<div class="sidebar-collapse" id="sidebar-collapse">
 						<i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
 					</div>
-
-					<script type="text/javascript">
-						try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
-					</script>
 				</div>
 
 				<div class="main-content">

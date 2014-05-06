@@ -6,7 +6,7 @@
 function ace_breadcrumb($variables) {
   $breadcrumb = $variables['breadcrumb'];
 
-   if (!empty($breadcrumb)) {
+ if (!empty($breadcrumb)) {
         $breadcrumb[] = drupal_get_title();
         return '<div class="breadcrumb">'. implode(' / ', $breadcrumb) .'</div>';
     }

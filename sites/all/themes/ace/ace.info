@@ -32,7 +32,6 @@ scripts[] = js/jquery_004.js
 scripts[] = js/jquery_002.js
 scripts[] = js/ace-elements.js
 scripts[] = js/ace.js
-scripts[] = js/inline.js
 scripts[] = js/custom.js
 
 regions[alert]               = Alert

@@ -1,3 +1,4 @@
+<?php global $base_url; $themepath = $base_url.'/'.path_to_theme(); ?>
 <div class="navbar navbar-default" id="navbar">
 <div class="navbar-container" id="navbar-container">
   <div class="navbar-header pull-left">
