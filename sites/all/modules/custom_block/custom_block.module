@@ -80,6 +80,8 @@ function taxonomy_menu_block(){
      global $base_url;
      global $base_root;
 $current_url = $base_root . request_uri();
+$base_uri=$base_url.'/';
+
      $vocabulary=taxonomy_vocabulary_machine_name_load('module_category');
      $tree = taxonomy_get_tree($vocabulary->vid, $parent = 0, $max_depth = 1, $load_entities = FALSE);
      $taxo='<ul class="nav nav-list">';
@@ -105,8 +107,8 @@ $current_url = $base_root . request_uri();
 		    }
 			 $taxo.='</ul></li>';  
 	  }else{
-	       if($current_url == $base_url){$active ='active';}else{$active='';}
-	       $taxo.='<li class="'.$active.$current_url.'">
+	       if($current_url == $base_uri){$active ='active';}else{$active='';}
+	       $taxo.='<li class="'.$active.'">
 			 <a href="'.$base_url.'">
 			       <i class="icon-list"></i>
 			      <span class="menu-text"> '.$term->name.' </span>
