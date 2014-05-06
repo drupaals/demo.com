@@ -11,28 +11,28 @@ Drupal.Views = {};
  */
 Drupal.behaviors.viewsTabs = {
   attach: function (context) {
-    if ($.viewsUi && $.viewsUi.tabs) {
-      $('#views-tabset').once('views-processed').viewsTabs({
+    if (jQuery.viewsUi && $.viewsUi.tabs) {
+      jQuery('#views-tabset').once('views-processed').viewsTabs({
         selectedClass: 'active'
       });
     }
 
     $('a.views-remove-link').once('views-processed').click(function(event) {
       var id = $(this).attr('id').replace('views-remove-link-', '');
-      $('#views-row-' + id).hide();
-      $('#views-removed-' + id).attr('checked', true);
+      jQuery('#views-row-' + id).hide();
+      jQuery('#views-removed-' + id).attr('checked', true);
       event.preventDefault();
    });
   /**
     * Here is to handle display deletion
     * (checking in the hidden checkbox and hiding out the row)
     */
-  $('a.display-remove-link')
+  jQuery('a.display-remove-link')
     .addClass('display-processed')
     .click(function() {
       var id = $(this).attr('id').replace('display-remove-link-', '');
-      $('#display-row-' + id).hide();
-      $('#display-removed-' + id).attr('checked', true);
+      jQuery('#display-row-' + id).hide();
+      jQuery('#display-removed-' + id).attr('checked', true);
       return false;
   });
   }

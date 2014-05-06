@@ -78,23 +78,24 @@ function custom_block_block_view($delta = ''){
 //taxonomy_menu_block
 function taxonomy_menu_block(){
      global $base_url;
-     $vocabulary=taxonomy_vocabulary_machine_name_load('left_side_taxo');
+     $vocabulary=taxonomy_vocabulary_machine_name_load('module_category');
      $tree = taxonomy_get_tree($vocabulary->vid, $parent = 0, $max_depth = 1, $load_entities = FALSE);
      $taxo='<ul class="nav nav-list">';
      foreach ($tree as $term){
 	  $page_url = drupal_lookup_path('alias',"taxonomy/term/".$term->tid);
 	  $child_tax=taxonomy_get_children($term->tid);
 	  if(!empty($child_tax)){
-	       $taxo.='<li>
-			 <a href="'.$page_url.'" class="dropdown-toggle">
+	       $taxo.='<li id="main-li">
+			 <a class="dropdown-toggle" href="#">
 			      <i class="icon-list"></i>
 			      <span class="menu-text"> '.$term->name.' </span>
 			      <b class="arrow icon-angle-down"></b>
 			 </a>
 			 <ul class="submenu">';
 		    foreach($child_tax as $key=>$value){
+			 $child_url = drupal_lookup_path('alias',"taxonomy/term/".$value->tid);
 			 $taxo.='<li>
-				   <a href="'.$page_url.'">
+				   <a href="'.$base_url.'/'.$child_url.'">
 					   <i class="icon-double-angle-right"></i>
 					   '.$value->name.'
 				   </a>
@@ -102,8 +103,8 @@ function taxonomy_menu_block(){
 		    }
 			 $taxo.='</ul></li>';  
 	  }else{
-	       $taxo.='<li>
-			 <a href="'.$page_url.'">
+	       $taxo.='<li class="active">
+			 <a href="'.$base_url.'">
 			       <i class="icon-list"></i>
 			      <span class="menu-text"> '.$term->name.' </span>
 			 </a>
@@ -366,9 +367,8 @@ $result = $q->execute();
 }
 //hook cron
 function custom_block_cron(){
-    $cron_lastdate=date('h A',variable_get('cron_last'));
-    
-    if($cron_lastdate == '11 PM'){
+    $cron_lastdate=date('H A',variable_get('cron_last'));
+    if($cron_lastdate == '23 PM'){
 	  db_delete('popular_pages') 
 	  ->execute();
 	  
@@ -573,16 +573,16 @@ function pie_chart_block(){
 	  $value7 = ($value7/100)*$total_number;
 	  $value8 = ($value8/100)*$total_number;
 
-     drupal_add_js("http://code.jquery.com/jquery-1.6.3.min.js","external");
+     //drupal_add_js("http://code.jquery.com/jquery-1.6.3.min.js","external");
      drupal_add_js("http://code.highcharts.com/highcharts.js","external");
      drupal_add_js("http://code.highcharts.com/modules/exporting.js","external");
-     drupal_add_js("$(function () {
+     drupal_add_js("jQuery(function () {
     var chart;
     
-    $(document).ready(function () {
+    jQuery(document).ready(function () {
     	
     	// Build the chart
-        $('#container').highcharts({
+        jQuery('#container').highcharts({
             chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
@@ -688,16 +688,15 @@ function pie_chart_ajax(){
 	  $value7 = ($value7/100)*$total_number;
 	  $value8 = ($value8/100)*$total_number;
 
-   drupal_add_js("http://code.jquery.com/jquery-1.6.3.min.js","external");
      drupal_add_js("http://code.highcharts.com/highcharts.js","external");
      drupal_add_js("http://code.highcharts.com/modules/exporting.js","external");
-     drupal_add_js("$(function () {
+     drupal_add_js("jQuery(function () {
     var chart;
     
-    $(document).ready(function () {
+    jQuery(document).ready(function () {
     	
     	// Build the chart
-        $('#container').highcharts({
+        jQuery('#container').highcharts({
             chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
@@ -739,8 +738,8 @@ function pie_chart_ajax(){
 }
 
 function stats_block() {
-     drupal_add_js("$(function () {
-     $('#container1').highcharts({
+     drupal_add_js("jQuery(function () {
+     jQuery('#container1').highcharts({
             
             xAxis: {
                 categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
