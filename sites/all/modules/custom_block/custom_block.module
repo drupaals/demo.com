@@ -106,7 +106,7 @@ $current_url = $base_root . request_uri();
 			 $taxo.='</ul></li>';  
 	  }else{
 	       if($current_url == $base_url){$active ='active';}else{$active='';}
-	       $taxo.='<li class="'.$active.$current_url'">
+	       $taxo.='<li class="'.$active.$current_url.'">
 			 <a href="'.$base_url.'">
 			       <i class="icon-list"></i>
 			      <span class="menu-text"> '.$term->name.' </span>
