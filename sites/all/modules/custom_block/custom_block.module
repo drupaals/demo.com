@@ -156,9 +156,11 @@ function user_profile_block(){
 			       
 		    }
 		    $output.='</ul></li>';
-	  return $output;
+	  
+     }else{
+	  $output='<div id="anno-user">'.l('Login', 'user' , array('html' => TRUE)).'  |  '.l('Register', 'user/register' , array('html' => TRUE)).'</div>';
      }
-     
+     return $output;
 }
 //information_block like comment ,pageviews , no. new modules demo we added  and much more
 function information_block(){

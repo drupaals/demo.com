@@ -31,3 +31,7 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .btn-minier {font-size:12px !important; padding:0 4px !important;}
 .rating{ float: right;font-size: 12px;margin-right: 60px;position: relative;}
 .rating span.on{background: url("images/druplicon.gif") no-repeat scroll 0 -32px rgba(0, 0, 0, 0);display: block; height: 100%; width: 100%;}
+#block-custom-block-user-profile .dropdown-menu{min-width: 150px;}
+#block-custom-block-user-profile .dropdown-menu li a{padding: 10px;    text-align: center;}
+#block-custom-block-user-profile #anno-user a , #block-custom-block-user-profile #anno-user{color: #FFFFFF;}
+#block-custom-block-user-profile #anno-user{margin-right: 5px;    margin-top: 12px;}
