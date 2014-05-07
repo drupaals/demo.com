@@ -29,3 +29,5 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .view-recent-modules thead .views-field-nid{float:right;Width:0%;}
 .headerSortUp,.headerSortDown{width: 75%;}
 .btn-minier {font-size:12px !important; padding:0 4px !important;}
+.rating{ float: right;font-size: 12px;margin-right: 60px;position: relative;}
+.rating span.on{background: url("images/druplicon.gif") no-repeat scroll 0 -32px rgba(0, 0, 0, 0);display: block; height: 100%; width: 100%;}
