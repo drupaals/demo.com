@@ -97,8 +97,9 @@ $base_uri=$base_url.'/';
 			 </a>
 			 <ul class="submenu">';
 		    foreach($child_tax as $key=>$value){
+			 if(arg(2) == $value->tid){$active ='active';}else{$active='';}
 			 $child_url = drupal_lookup_path('alias',"taxonomy/term/".$value->tid);
-			 $taxo.='<li>
+			 $taxo.='<li class="'.$active.'">
 				   <a href="'.$base_url.'/'.$child_url.'">
 					   <i class="icon-double-angle-right"></i>
 					   '.$value->name.'
