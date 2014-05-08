@@ -340,6 +340,7 @@ $result = $q->execute();
 	  $version_result="";
      foreach($result as $output){
 	  $value = node_load($output->nid);
+	  if($value->type == 'module_review'){
 	  if(!empty($value->field_module_version)){
 	       foreach($value->field_module_version['und'] as $key=>$module_version){
 		    $version=taxonomy_term_load($module_version['tid']);
@@ -368,6 +369,7 @@ $result = $q->execute();
 			      </td>
 		    </tr>';
 		    $version_result="";
+	  }
      }
     
      $popular_modules.='</tbody></table></div></div></div></div>';
