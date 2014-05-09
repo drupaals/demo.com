@@ -4,8 +4,9 @@
 	<div class="navbar-header pull-left">
 	  <a href="<?php print $base_path ?>" class="navbar-brand" title="<?php print $site_name_and_slogan  ?>">
 	    <small>
-	      <i class="icon-leaf"></i>
-	      <?php if ($site_name || $site_slogan) print $site_name;  ?>
+	    <?php if ($logo): ?>
+                <img src="<?php print $logo ?>" alt="<?php print $site_name_and_slogan ?>" title="<?php print $site_name_and_slogan ?>" id="logo" />
+            <?php endif; ?>
 	    </small>
 	  </a><!-- /.brand -->
 	</div><!-- /.navbar-header -->
