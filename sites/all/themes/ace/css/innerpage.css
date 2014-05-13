@@ -1,0 +1,4 @@
+.cover-container{display: inline-block; float: left;}
+.info-container{float: right; width: 75%;}
+.fivestar-default,.fivestar-widget, .stars-count {display: inline-block !important;vertical-align: middle;white-space: nowrap;}
+.reviewers-small {background-image: url("../images/commentmodule.png"); background-position: center center; background-repeat: no-repeat;display: inline-block;  height: 16px;    position: relative;    top: 0px;vertical-align: text-bottom;    width: 16px;}
