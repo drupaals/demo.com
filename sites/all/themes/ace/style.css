@@ -38,3 +38,10 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .screenshotsD7{ margin-top: 5%;margin-bottom:5%;}
 .screenshotsD8{ margin-top: 5%;margin-bottom:5%;}
 .details-info{ height: 230px;width: 900px;}
+#review-rating{ display: inline-block;float: left; position: relative; width: 12%;}
+#review-comment{   margin: 0 auto;    width: 30%;}
+#review-comment .author img{ border-radius: 24px;box-shadow: 0 1px 2px #8D8D8D; height: 48px; width: 48px;}
+#review-comment .author{ display: inline-block;float: left;position: absolute;text-align: center;}
+.review-cooment-desc{float: right;left: 20%; position: relative;}
+#review-comment .author-name{float: left;position: relative;right: 0;}
+#review-comment .featured-review-star-rating{margin: 0 auto 2%; width: 50%;}
