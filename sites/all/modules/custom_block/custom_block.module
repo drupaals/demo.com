@@ -767,6 +767,186 @@ function pie_chart_ajax(){
 }
 
 function stats_block() {
+     
+      $query = db_select('node', 'n')->distinct();
+      $query->fields('n', array('nid'))
+	       ->condition('n.type', array('module_review','IN'));
+               $result = $query->execute();
+	  $array= '';
+	  $jan6='';$jan7=''; $jan8='';
+	  $feb6='';$feb7=''; $feb8='';
+	  $mar6='';$mar7=''; $mar8='';
+	  $apr6='';$apr7=''; $apr8='';
+	  $may6='';$may7=''; $may8='';
+	  $jun6='';$jun7=''; $jun8='';
+	  $jul6='';$jul7=''; $jul8='';
+	  $aug6='';$aug7=''; $aug8='';
+	  $sep6='';$sep7=''; $sep8='';
+	  $oct6='';$oct7=''; $oct8='';
+	  $nov6='';$nov7=''; $nov8='';
+	  $dec6='';$dec7=''; $dec8='';
+	 
+	  foreach($result  as $key=>$output){
+	      
+	       $node=node_load($output->nid);
+	       if(date('M-Y',$node->created) == 'Jan-2014'){
+		    foreach($node->field_module_version['und'] as $key=>$result){		       
+			 $array[$key]=substr(taxonomy_term_load($result['tid'])->name, 0 , 1);		  
+		    }	  
+		 
+		    $count=array_count_values($array);		
+		    if(!empty($count[6]) )  {$jan6.= $count[6];}	       
+		    if(!empty($count[7])  ) {$jan7.= $count[7];}		
+		    if(!empty($count[8])  ) {$jan8.= $count[8];}
+		     
+		    $array="";   
+	       }
+	       if(date('M-Y',$node->created) == 'Feb-2014'){
+		    foreach($node->field_module_version['und'] as $key=>$result){		       
+			 $array[$key]=substr(taxonomy_term_load($result['tid'])->name, 0 , 1);		  
+		    }	  
+		 
+		    $count=array_count_values($array);		
+		    if(!empty($count[6]) )  {$feb6.= $count[6];}	       
+		    if(!empty($count[7])  ) {$feb7.= $count[7];}		
+		    if(!empty($count[8])  ) {$feb8.= $count[8];}
+		     
+		    $array="";   
+	       }
+	       if(date('M-Y',$node->created) == 'Mar-2014'){
+		    foreach($node->field_module_version['und'] as $key=>$result){		       
+			 $array[$key]=substr(taxonomy_term_load($result['tid'])->name, 0 , 1);		  
+		    }	  
+		 
+		    $count=array_count_values($array);		
+		    if(!empty($count[6]) )  {$mar6.= $count[6];}	       
+		    if(!empty($count[7])  ) {$mar7.= $count[7];}		
+		    if(!empty($count[8])  ) {$mar8.= $count[8];}
+		     
+		    $array="";   
+	       }
+	       if(date('M-Y',$node->created) == 'Apr-2014'){
+		    foreach($node->field_module_version['und'] as $key=>$result){		       
+			 $array[$key]=substr(taxonomy_term_load($result['tid'])->name, 0 , 1);		  
+		    }	  
+		 
+		    $count=array_count_values($array);		
+		    if(!empty($count[6]) )  {$apr6.= $count[6];}	       
+		    if(!empty($count[7])  ) {$apr7.= $count[7];}		
+		    if(!empty($count[8])  ) {$apr8.= $count[8];}
+		     
+		    $array="";   
+	       }
+	       if(date('M-Y',$node->created) == 'May-2014'){
+		    foreach($node->field_module_version['und'] as $key=>$result){		       
+			 $array[$key]=substr(taxonomy_term_load($result['tid'])->name, 0 , 1);		  
+		    }	  
+		 
+		    $count=array_count_values($array);		
+		    if(!empty($count[6]) )  {$may6.= $count[6];}	       
+		    if(!empty($count[7])  ) {$may7.= $count[7];}		
+		    if(!empty($count[8])  ) {$may8.= $count[8];}
+		     
+		    $array="";   
+	       }
+	        if(date('M-Y',$node->created) == 'Jun-2014'){
+		    foreach($node->field_module_version['und'] as $key=>$result){		       
+			 $array[$key]=substr(taxonomy_term_load($result['tid'])->name, 0 , 1);		  
+		    }	  
+		 
+		    $count=array_count_values($array);		
+		    if(!empty($count[6]) )  {$jun6.= $count[6];}	       
+		    if(!empty($count[7])  ) {$jun7.= $count[7];}		
+		    if(!empty($count[8])  ) {$jun8.= $count[8];}
+		     
+		    $array="";   
+	       }
+	       if(date('M-Y',$node->created) == 'Jul-2014'){
+		    foreach($node->field_module_version['und'] as $key=>$result){		       
+			 $array[$key]=substr(taxonomy_term_load($result['tid'])->name, 0 , 1);		  
+		    }	  
+		 
+		    $count=array_count_values($array);		
+		    if(!empty($count[6]) )  {$jul6.= $count[6];}	       
+		    if(!empty($count[7])  ) {$jul7.= $count[7];}		
+		    if(!empty($count[8])  ) {$jul8.= $count[8];}
+		     
+		    $array="";   
+	       }
+	       if(date('M-Y',$node->created) == 'Aug-2014'){
+		    foreach($node->field_module_version['und'] as $key=>$result){		       
+			 $array[$key]=substr(taxonomy_term_load($result['tid'])->name, 0 , 1);		  
+		    }	  
+		 
+		    $count=array_count_values($array);		
+		    if(!empty($count[6]) )  {$aug6.= $count[6];}	       
+		    if(!empty($count[7])  ) {$aug7.= $count[7];}		
+		    if(!empty($count[8])  ) {$aug8.= $count[8];}
+		     
+		    $array="";   
+	       }
+	       if(date('M-Y',$node->created) == 'Sep-2014'){
+		    foreach($node->field_module_version['und'] as $key=>$result){		       
+			 $array[$key]=substr(taxonomy_term_load($result['tid'])->name, 0 , 1);		  
+		    }	  
+		 
+		    $count=array_count_values($array);		
+		    if(!empty($count[6]) )  {$sep6.= $count[6];}	       
+		    if(!empty($count[7])  ) {$sep7.= $count[7];}		
+		    if(!empty($count[8])  ) {$sep8.= $count[8];}
+		     
+		    $array="";   
+	       }
+	       if(date('M-Y',$node->created) == 'Oct-2014'){
+		    foreach($node->field_module_version['und'] as $key=>$result){		       
+			 $array[$key]=substr(taxonomy_term_load($result['tid'])->name, 0 , 1);		  
+		    }	  
+		 
+		    $count=array_count_values($array);		
+		    if(!empty($count[6]) )  {$oct6.= $count[6];}	       
+		    if(!empty($count[7])  ) {$oct7.= $count[7];}		
+		    if(!empty($count[8])  ) {$oct8.= $count[8];}
+		     
+		    $array="";   
+	       }
+	       if(date('M-Y',$node->created) == 'Nov-2014'){
+		    foreach($node->field_module_version['und'] as $key=>$result){		       
+			 $array[$key]=substr(taxonomy_term_load($result['tid'])->name, 0 , 1);		  
+		    }	  
+		    $count=array_count_values($array);		
+		    if(!empty($count[6]) ) { $nov6.= $count[6];}	       
+		    if(!empty($count[7])  ) {$nov7.= $count[7];}		
+		    if(!empty($count[8])  ) { $nov8.= $count[8];}
+			 
+		    $array="";   
+	       }
+	       if(date('M-Y',$node->created) == 'Dec-2014'){
+		    foreach($node->field_module_version['und'] as $key=>$result){		       
+			 $array[$key]=substr(taxonomy_term_load($result['tid'])->name, 0 , 1);		  
+		    }	  
+		 
+		    $count=array_count_values($array);		
+		    
+		    if(!empty($count[6]) ) { $dec6.= $count[6];}	       
+		    if(!empty($count[7])  ) {$dec7.= $count[7];}		
+		    if(!empty($count[8])  ) { $dec8.= $count[8];}
+			 
+		    $array="";   
+	       }
+	  }
+
+	  if($jan6 || $jan7 || $jan8){$jan6 = count_digit($jan6); $jan7 = count_digit($jan7); $jan8 = count_digit($jan8);}
+	  if($feb6 || $feb7 || $feb8){$feb6 = count_digit($feb6); $feb7 = count_digit($feb7); $feb8 = count_digit($feb8);}
+	  if($mar6 || $mar7 || $may8){$mar6 = count_digit($mar6); $mar7 = count_digit($mar7); $mar8 = count_digit($mar8);}else{$mar6=0; $mar7=0; $mar8=0;}
+	  if($apr6 || $apr7 || $apr8){$apr6 = count_digit($apr6); $apr7 = count_digit($apr7); $apr8 = count_digit($apr8);}else{$apr6=0; $apr7=0; $apr8=0;}
+	  if($may6 || $may7 || $may8){$may6 = count_digit($may6); $may7 = count_digit($may7); $may8 = count_digit($may8);}else{$may6=0; $may7=0; $may8=0;}
+	  if($jun6 || $jun7 || $jun8){$jun6 = count_digit($jun6); $jun7 = count_digit($jun7); $jun8 = count_digit($jun8);}
+	  if($jul6 || $jul7 || $jul8){$jul6 = count_digit($jul6); $jul7 = count_digit($jul7); $jul8 = count_digit($jul8);}
+	  if($aug6 || $aug7 || $aug8){$aug6 = count_digit($aug6); $aug7 = count_digit($aug7); $aug8 = count_digit($aug8);}
+	  if($sep6 || $sep7 || $sep8){$sep6 = count_digit($sep6); $sep7 = count_digit($sep7); $sep8 = count_digit($sep8);}
+	  if($oct6 || $oct7 || $oct8){$oct6 = count_digit($oct6); $oct7 = count_digit($oct7); $oct8 = count_digit($oct8);}
+	  if($nov6 || $nov7 || $nov8){$nov6 = count_digit($nov6); $nov7 = count_digit($nov7); $nov8 = count_digit($nov8);}
+	  if($dec6 || $dec7 || $dec8){$dec6 = count_digit($dec6); $dec7 = count_digit($dec7); $dec8 = count_digit($dec8);}
      drupal_add_js("jQuery(function () {
      jQuery('#container1').highcharts({
             
@@ -795,13 +975,13 @@ function stats_block() {
             },
             series: [{
                 name: 'Drupal 8',
-                data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+                data: [$jan8, $feb8, $mar7, $apr8, $may8 , $jun8, $jul8, $aug8, $sep8, $oct6, $nov8, $dec8]
             }, {
                 name: 'Drupal 7',
-                data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+                data: [$jan7, $feb7, $mar7, $apr7, $may7, $jun7, $jul7, $aug7, $sep7, $oct7, $nov7, $dec7]
             }, {
                 name: 'Drupal 6',
-                data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
+                data: [$jan6, $feb6, $mar6, $apr6, $may6, $jun6, $jul6, $aug6, $sep6, $oct6, $nov6, $dec6]
             }]
         }); 
     });","inline");
