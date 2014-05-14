@@ -956,7 +956,7 @@ function stats_block() {
             },
             yAxis: {
                 title: {
-                   text: 'Downloads'
+                   text: 'Total'
                 },
                 plotLines: [{
                     value: 0,
@@ -965,7 +965,7 @@ function stats_block() {
                 }]
             },
             tooltip: {
-                valueSuffix: '%'
+                valueSuffix: ' '
             },
             legend: {
                 layout: 'vertical',
