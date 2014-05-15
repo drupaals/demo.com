@@ -314,14 +314,14 @@ $popular_modules='<div class="widget-box transparent">
 
 		    <div class="widget-body"><div class="widget-body-inner" style="display: block;">
 			 <div class="widget-main no-padding">
-				 <table class="table table-bordered table-striped tablesorter">
+				 <table class="table table-bordered table-striped">
 					 <thead class="thin-border-bottom">
 						 <tr>
 							 <th>
 								 Name
 							 </th>
 	  
-							 <th class="headerSortUp">
+							 <th>
 								 Version
 							 </th>
 	  
