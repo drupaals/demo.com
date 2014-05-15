@@ -33,15 +33,19 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .rating span.on{background: url("images/druplicon.gif") no-repeat scroll 0 -32px rgba(0, 0, 0, 0);display: block; height: 100%; width: 100%;}
 #block-custom-block-user-profile .dropdown-menu{min-width: 150px;}
 #block-custom-block-user-profile .dropdown-menu li a{padding: 10px;    text-align: center;}
-#block-custom-block-user-profile #anno-user a , #block-custom-block-user-profile #anno-user{color: #FFFFFF;}
+#block-custom-block-user-profile #anno-user a , #block-custom-block-user-profile #anno-user{color: #2B7DBC; line-height: 40px;}
 #block-custom-block-user-profile #anno-user{margin-right: 5px;    margin-top: 12px;}
 .screenshotsD7{ margin-top: 5%;margin-bottom:5%;}
 .screenshotsD8{ margin-top: 5%;margin-bottom:5%;}
 .details-info{ height: 230px;width: 900px;}
-#review-rating{ display: inline-block;float: left; position: relative; width: 12%;}
-#review-comment{   margin: 0 auto;    width: 30%;}
+#review-rating{  display: inline-block;float: left;margin-right: 80px;position: relative;width: auto;}
+#review-comment{ display: inline-block; margin: 0 auto;width: 45%;}
 #review-comment .author img{ border-radius: 24px;box-shadow: 0 1px 2px #8D8D8D; height: 48px; width: 48px;}
 #review-comment .author{ display: inline-block;float: left;position: absolute;text-align: center;}
-.review-cooment-desc{float: right;left: 20%; position: relative;}
+.review-cooment-desc{left: 16%; position: relative;}
 #review-comment .author-name{float: left;position: relative;right: 0;}
 #review-comment .featured-review-star-rating{margin: 0 auto 2%; width: 50%;}
+#review-comment-section{margin: 0 auto;    width: 70%;}
+.review-cooment-desc p {width: 85%;}
+.big-link{float: right; width: 15%;  -moz-user-select: none;background-color: #FFFFFF;border: 1px solid rgba(0, 0, 0, 0.17);border-radius: 2px; box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);    box-sizing: border-box;    color: #737373;    cursor: pointer;    display: inline-block;    font-family: "Roboto",sans-serif;    font-size: 14px;    font-style: normal;    font-weight: 500;    height: 36px;    line-height: 34px;    min-width: 40px;    padding: 0 20px;    position: relative;    text-align: center;    text-decoration: none;    transition: all 0.2s ease 0s;    vertical-align: middle;    white-space: nowrap;}
+.big-link:hover {border: 1px solid rgba(0, 0, 0, 0.27);box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.27);color: #333333;cursor: pointer;}
