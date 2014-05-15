@@ -321,7 +321,7 @@ $popular_modules='<div class="widget-box transparent">
 								 Name
 							 </th>
 	  
-							 <th>
+							 <th class="headerSortUp">
 								 Version
 							 </th>
 	  
