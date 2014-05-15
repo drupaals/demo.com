@@ -27,7 +27,7 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .headerSortUp{ background-clip: border-box;background-color: rgba(0, 0, 0, 0);  background-image: url("images/sort_down_green.png");    background-origin: padding-box;    background-position: 110px 1px;    background-repeat: no-repeat;    background-size: auto auto;}
 .headerSortDown{ background-clip: border-box;background-color: rgba(0, 0, 0, 0);background-image: url("images/sort_up_green.png");    background-origin: padding-box;    background-position: 110px 8px;    background-repeat: no-repeat;    background-size: auto auto;}
 .view-recent-modules thead .views-field-nid{float:right;Width:0%;}
-.headerSortUp,.headerSortDown{width: 75%;}
+.view-recent-modules .headerSortUp,.view-recent-modules .headerSortDown{width: 75%;}
 .btn-minier {font-size:12px !important; padding:0 4px !important;}
 .rating{ float: right;font-size: 12px;margin-right: 60px;position: relative;}
 .rating span.on{background: url("images/druplicon.gif") no-repeat scroll 0 -32px rgba(0, 0, 0, 0);display: block; height: 100%; width: 100%;}
@@ -49,3 +49,5 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .review-cooment-desc p {width: 85%;}
 .big-link{float: right; width: 15%;  -moz-user-select: none;background-color: #FFFFFF;border: 1px solid rgba(0, 0, 0, 0.17);border-radius: 2px; box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);    box-sizing: border-box;    color: #737373;    cursor: pointer;    display: inline-block;    font-family: "Roboto",sans-serif;    font-size: 14px;    font-style: normal;    font-weight: 500;    height: 36px;    line-height: 34px;    min-width: 40px;    padding: 0 20px;    position: relative;    text-align: center;    text-decoration: none;    transition: all 0.2s ease 0s;    vertical-align: middle;    white-space: nowrap;}
 .big-link:hover {border: 1px solid rgba(0, 0, 0, 0.27);box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.27);color: #333333;cursor: pointer;}
+#block-custom-block-popular-modules .headerSortUp{ background-clip: border-box;background-color: rgba(0, 0, 0, 0);  background-image: url("images/sort_down_green.png");    background-origin: padding-box;    background-position: 65px 6px;    background-repeat: no-repeat;    background-size: auto auto;}
+#block-custom-block-popular-modules .headerSortDown{ background-clip: border-box;background-color: rgba(0, 0, 0, 0);background-image: url("images/sort_up_green.png");    background-origin: padding-box;    background-position: 65px 10px;    background-repeat: no-repeat;    background-size: auto auto;}
