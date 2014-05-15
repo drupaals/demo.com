@@ -39,15 +39,15 @@ $output='<div class="details-info">
             </div>
             <span class="info-container">
                 <div itemprop="name" class="document-title"> <h3>'.$node->title.'</h3> </div>
-                <span>Author name: <b>'.ucfirst(user_load($node->uid)->name).'</b>  -  '.date("F j,  Y",$node->created).'</span>
+                <span><b>'.ucfirst(user_load($node->uid)->name).'</b>  -  '.date("F j,  Y",$node->created).'</span>
                 <div><b>Available version:</b>
                     <div>
-                        <div>D6: <b>'.l($node->field_demo_link_d6['und'][0]['title'], $node->field_demo_link_d6['und'][0]['url'], array('html' => TRUE,'attributes'=> array('target' => '_blank'))).'</b></div>
-                        <div>D7: <b>'.l($node->field_demo_link_d7['und'][0]['title'], $node->field_demo_link_d7['und'][0]['url'], array('html' => TRUE,'attributes'=> array('target' => '_blank'))).'</b></div>
-                        <div>D8: <b>'.l($node->field_demo_link_d8['und'][0]['title'], $node->field_demo_link_d8['und'][0]['url'], array('html' => TRUE,'attributes'=> array('target' => '_blank'))).'</b></div>
+                        <div><b>D6: </b>'.l($node->field_demo_link_d6['und'][0]['title'], $node->field_demo_link_d6['und'][0]['url'], array('html' => TRUE,'attributes'=> array('target' => '_blank'))).'</div>
+                        <div><b>D7: </b>'.l($node->field_demo_link_d7['und'][0]['title'], $node->field_demo_link_d7['und'][0]['url'], array('html' => TRUE,'attributes'=> array('target' => '_blank'))).'</div>
+                        <div><b>D8: </b>'.l($node->field_demo_link_d8['und'][0]['title'], $node->field_demo_link_d8['und'][0]['url'], array('html' => TRUE,'attributes'=> array('target' => '_blank'))).'</div>
                     </div>
                 </div>
-                <div>Module Category: <b>'.taxonomy_term_load($node->field_module_category['und'][0]['tid'])->name.'</b></div>
+                <div><b>Module Category: </b>'.taxonomy_term_load($node->field_module_category['und'][0]['tid'])->name.'</div>
                 <hr>
                 <div style="width: 50%;">
                     '.$rating.'
@@ -58,13 +58,13 @@ $output='<div class="details-info">
         </div>';
     //screenshots image slider for d6
     if(!empty($node->field_screenshots_d6)){
-	$outputd6='<div id="ca-containerd6" class="ca-container"><h3>Screenshot for d6</h3><div class="ca-wrapper">';
+	$outputd6='<div id="ca-containerd6" class="ca-container"><h3>Screenshots for D6</h3><div class="ca-wrapper">';
 	$i=1;
 	foreach($node->field_screenshots_d6['und'] as $key=>$value){
     
 		$outputd6.='<div class="ca-item ca-item-'.$i.'">
 				<div class="ca-item-main">
-				<a href="'.$base_url.'/sites/default/files/d6/'.$value['filename'].'" rel="lightbox">
+				<a href="'.$base_url.'/sites/default/files/d6/'.$value['filename'].'" rel="lightbox[roadtrip]">
 				    '.theme_image_style(array('style_name'=>'slider', 'path'=>$value['uri'], 'width'=>'', 'height'=>'')).'
 				</a>
 				</div>   
@@ -75,13 +75,13 @@ $output='<div class="details-info">
     }else{$outputd6="";}
     //screenshots image slider for d7
     if(!empty($node->field_screenshots_d7)){
-	$outputd7='<div id="ca-containerd7" class="ca-container screenshotsD7"><h3>Screenshot for d7</h3><div class="ca-wrapper">';
+	$outputd7='<div id="ca-containerd7" class="ca-container screenshotsD7"><h3>Screenshots for D7</h3><div class="ca-wrapper">';
 	$d=1;
 	foreach($node->field_screenshots_d7['und'] as $key=>$value_d7){
     
 		$outputd7.='<div class="ca-item ca-item-'.$d.'">
 				<div class="ca-item-main">
-				<a href="'.$base_url.'/sites/default/files/d7/'.$value_d7['filename'].'" rel="lightbox">
+				<a href="'.$base_url.'/sites/default/files/d7/'.$value_d7['filename'].'" rel="lightbox[roadtrip1]">
 				    '.theme_image_style(array('style_name'=>'slider', 'path'=>$value_d7['uri'], 'width'=>'', 'height'=>'')).'
 				</a>
 				</div>   
@@ -93,13 +93,13 @@ $output='<div class="details-info">
     
     //screenshots image slider for d8
     if(!empty($node->field_screenshots_d8)){
-	$outputd8='<div id="ca-containerd8" class="ca-container screenshotsD8"><h3>Screenshot for d8</h3><div class="ca-wrapper">';
+	$outputd8='<div id="ca-containerd8" class="ca-container screenshotsD8"><h3>Screenshots for D8</h3><div class="ca-wrapper">';
 	$d8=1;
 	foreach($node->field_screenshots_d8['und'] as $key=>$value_d8){
     
 		$outputd8.='<div class="ca-item ca-item-'.$d8.'">
 				<div class="ca-item-main">
-				<a href="'.$base_url.'/sites/default/files/d8/'.$value_d8['filename'].'" rel="lightbox">
+				<a href="'.$base_url.'/sites/default/files/d8/'.$value_d8['filename'].'" rel="lightbox[roadtrip2]">
 				    '.theme_image_style(array('style_name'=>'slider', 'path'=>$value_d8['uri'], 'width'=>'', 'height'=>'')).'
 				</a>
 				</div>   
@@ -148,8 +148,20 @@ $output='<div class="details-info">
 				    </div>';
 	}
     }else{$review_comm_description="";}
+    
+    if(user_is_logged_in()){
+	$comment_link=' <p class="big-link" data-reveal-id="myModal" data-animation="none"> Write a Review </p>';
+
+	
+    }else{$comment_link=' <a href="#" class="big-link" data-reveal-id="myModal" data-animation="none">Write a Review </a>
+
+
+		<div id="myModal" class="reveal-modal">
+		<div id="anno-user">'.l('Login', 'user?destination='.drupal_get_destination()['destination'].'' , array('html' => TRUE)).'  |  '.l('Register', 'user/register?destination='.drupal_get_destination()['destination'].'' , array('html' => TRUE)).'</div>
+    
+		</div>';}
     $output_description='<div class="details-section description simple contains-text-link"><hr><h3>Description</h3><div>'.$body.'</div></div><hr>';
-    $output_review='<div class="details-section description simple contains-text-link"><h3>Reviews <p class="big-link" data-reveal-id="myModal" data-animation="none"> Write a Review </p></h3>
+    $output_review='<div class="details-section description simple contains-text-link"><h3>Reviews '.$comment_link.'</h3>
 			
 			    <div id="review-rating">
 				<h1 style="text-align: center;">'.$rating_count.'</h1>
@@ -159,17 +171,20 @@ $output='<div class="details-info">
 			    <div id="review-comment-section">
 			    '.$review_comm_description.'
 			    </div>
-			    <div id="myModal" class="reveal-modal">
+			   
+			<div id="module-comment">
 			    '.render($content['comments']).'
-			    </div>
+			</div>
 			</div>';
     $output_review.='<hr>';
-			
+    
 print $output.''.$outputd6.''.$outputd7.''.$outputd8.$output_description.$output_review;
 
 drupal_add_js(drupal_get_path('theme', 'ace') .'/js/jquery.contentcarousel.js', 'file');
 drupal_add_js(drupal_get_path('theme', 'ace') .'/js/jquery.easing.1.3.js', 'file');
 drupal_add_js(drupal_get_path('theme', 'ace') .'/js/jquery.mousewheel.js', 'file');
+drupal_add_js(drupal_get_path('theme', 'ace') .'/js/jquery.reveal.js', 'file');
+drupal_add_css(drupal_get_path('theme', 'ace') .'/css/reveal.css', 'file');
 drupal_add_js("jQuery(document).ready(function(){jQuery('#ca-containerd6').contentcarousel(); });",'inline');
 drupal_add_js("jQuery(document).ready(function(){jQuery('#ca-containerd7').contentcarousel(); });",'inline');
 drupal_add_js("jQuery(document).ready(function(){jQuery('#ca-containerd8').contentcarousel(); });",'inline');

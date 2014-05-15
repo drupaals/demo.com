@@ -1,5 +1,5 @@
 jQuery(function ($){
-          jQuery('#myModal').hide();
+          jQuery('#module-comment').hide();
           jQuery(".dropdown-menu li a").click(function(){
                     var value = jQuery(this).attr('id'); 
                     var url=window.location.href;
@@ -13,6 +13,6 @@ jQuery(function ($){
           });
           
            jQuery('.big-link').click(function(){
-                   jQuery('#myModal').toggle();
+                   jQuery('#module-comment').toggle();
           });   
 });

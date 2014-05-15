@@ -45,7 +45,7 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .review-cooment-desc{left: 16%; position: relative;}
 #review-comment .author-name{float: left;position: relative;right: 0;}
 #review-comment .featured-review-star-rating{margin: 0 auto 2%; width: 50%;}
-#review-comment-section{margin: 0 auto;    width: 70%;}
+#review-comment-section{margin: 0 auto; border-left: 1px solid #CCCCCC;   width: 70%;}
 .review-cooment-desc p {width: 85%;}
 .big-link{float: right; width: 15%;  -moz-user-select: none;background-color: #FFFFFF;border: 1px solid rgba(0, 0, 0, 0.17);border-radius: 2px; box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);    box-sizing: border-box;    color: #737373;    cursor: pointer;    display: inline-block;    font-family: "Roboto",sans-serif;    font-size: 14px;    font-style: normal;    font-weight: 500;    height: 36px;    line-height: 34px;    min-width: 40px;    padding: 0 20px;    position: relative;    text-align: center;    text-decoration: none;    transition: all 0.2s ease 0s;    vertical-align: middle;    white-space: nowrap;}
 .big-link:hover {border: 1px solid rgba(0, 0, 0, 0.27);box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.27);color: #333333;cursor: pointer;}
