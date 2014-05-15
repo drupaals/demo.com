@@ -175,6 +175,7 @@ $output='<div class="details-info">
 			<div id="module-comment">
 			    '.render($content['comments']).'
 			</div>
+    
 			</div>';
     $output_review.='<hr>';
     
