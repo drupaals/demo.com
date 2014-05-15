@@ -61,7 +61,7 @@
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
-								<?php print $messages; ?>
+								
 								<div class="row">
 									<div class="space-6"></div>
 
