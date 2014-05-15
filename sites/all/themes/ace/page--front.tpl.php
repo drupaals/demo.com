@@ -178,7 +178,7 @@
 											<div class="widget-header  widget-header-flat">
 												<h4 class="lighter">
 													<i class="icon-signal"></i>
-													Modules Download Stats
+													Modules Added Stats
 												</h4>
 
 												<div class="widget-toolbar">
