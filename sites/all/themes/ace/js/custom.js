@@ -1,4 +1,5 @@
 jQuery(function ($){
+          jQuery('#myModal').hide();
           jQuery(".dropdown-menu li a").click(function(){
                     var value = jQuery(this).attr('id'); 
                     var url=window.location.href;
@@ -10,5 +11,8 @@ jQuery(function ($){
           jQuery('.dropdown-menu li').click(function(){
                     $(this).addClass("active");
           });
-                    
+          
+           jQuery('.big-link').click(function(){
+                   jQuery('#myModal').toggle();
+          });   
 });
