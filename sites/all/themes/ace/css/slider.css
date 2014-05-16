@@ -1,6 +1,6 @@
 /* Circular Content Carousel Style */
 .ca-container{
-	 height: 450px;
+	 height: 300px;
     left: 6%;
     position: relative;
     width: 880px;
@@ -182,7 +182,7 @@
 	background:transparent url(../images/arrows.png) no-repeat top left;
 	position:absolute;
 	top:50%;
-	margin-top:-100px;
+	margin-top:25px;
 	left:-40px;
 	text-indent:-9000px;
 	opacity:0.7;
