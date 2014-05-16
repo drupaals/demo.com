@@ -50,7 +50,7 @@
   margin: 0;
   display: block;
   float: left;
-  min-width: 350px;
+  min-width: 150px !important;width: 150px !important;
 }
 #ui-theme-basic-blue.ui-menu .ui-menu {
   margin-top: -3px;
