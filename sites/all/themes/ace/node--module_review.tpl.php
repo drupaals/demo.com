@@ -58,7 +58,7 @@ $output='<div class="details-info">
         </div>';
     //screenshots image slider for d6
     if(!empty($node->field_screenshots_d6)){
-	$outputd6='<div id="ca-containerd6" class="ca-container"><h3>Screenshots for D6</h3><div class="ca-wrapper">';
+	$outputd6='<div id="ca-containerd6" class="ca-container"><h4 style="margin-left: 15px;">Screenshots for D6</h4><div class="ca-wrapper">';
 	$i=1;
 	foreach($node->field_screenshots_d6['und'] as $key=>$value){
     
@@ -75,7 +75,7 @@ $output='<div class="details-info">
     }else{$outputd6="";}
     //screenshots image slider for d7
     if(!empty($node->field_screenshots_d7)){
-	$outputd7='<div id="ca-containerd7" class="ca-container screenshotsD7"><h3>Screenshots for D7</h3><div class="ca-wrapper">';
+	$outputd7='<div id="ca-containerd7" class="ca-container screenshotsD7"><h4 style="margin-left: 15px;">Screenshots for D7</h4><div class="ca-wrapper">';
 	$d=1;
 	foreach($node->field_screenshots_d7['und'] as $key=>$value_d7){
     
@@ -93,7 +93,7 @@ $output='<div class="details-info">
     
     //screenshots image slider for d8
     if(!empty($node->field_screenshots_d8)){
-	$outputd8='<div id="ca-containerd8" class="ca-container screenshotsD8"><h3>Screenshots for D8</h3><div class="ca-wrapper">';
+	$outputd8='<div id="ca-containerd8" class="ca-container screenshotsD8"><h4 style="margin-left: 15px;">Screenshots for D8</h4><div class="ca-wrapper">';
 	$d8=1;
 	foreach($node->field_screenshots_d8['und'] as $key=>$value_d8){
     
@@ -163,9 +163,9 @@ $output='<div class="details-info">
 		 <div id="anno-user" style="text-align: center;">'.l('Login', 'user' , array('query' => array('destination' => $output_url))).'  |  '.l('Register', 'user/register' , array('query' => array('destination' => $output_url))).'</div>
     
 		</div>';}
-    $output_description='<div class="details-section description simple contains-text-link"><hr><h3>Description</h3><div>'.$body.'</div></div><hr>';
-    $output_review='<div class="details-section description simple contains-text-link"><h3>Reviews '.$comment_link.'</h3>
-			
+    $output_description='<div class="details-section description simple contains-text-link"><hr><h4>Description</h4><div>'.$body.'</div></div><hr>';
+    $output_review='<div class="details-section description simple contains-text-link"><h4>Reviews '.$comment_link.'</h4>
+			<div id="review-inner">
 			    <div id="review-rating">
 				<h1 style="text-align: center;">'.$rating_count.'</h1>
 				'.$rating.'
@@ -174,13 +174,12 @@ $output='<div class="details-info">
 			    <div id="review-comment-section">
 			    '.$review_comm_description.'
 			    </div>
-			   
+			</div>   
 			<div id="module-comment">
 			    '.render($content['comments']).'
 			</div>
     
 			</div>';
-    $output_review.='<hr>';
     
 print $output.''.$outputd6.''.$outputd7.''.$outputd8.$output_description.$output_review;
 

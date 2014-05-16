@@ -37,18 +37,19 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 #block-custom-block-user-profile #anno-user{margin-right: 5px;    margin-top: 12px;}
 .screenshotsD7{ margin-top: 5%;margin-bottom:5%;}
 .screenshotsD8{ margin-top: 5%;margin-bottom:5%;}
-.details-info{ height: 230px;width: 900px;}
-#review-rating{  display: inline-block;float: left;margin-right: 80px;position: relative;width: auto;}
+.details-info{background-color: #E5E5E5;height: 230px;width: 100%;  border-bottom: 2px solid #D6D6D6;  margin-bottom: 2.5%;}
+#review-rating{  padding: 20px; background: none repeat scroll 0 0 #E5E5E5;border-radius: 2px;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);margin-bottom: 50px;margin-right: 7px;  white-space: nowrap;float: left; display: inline-block;position: relative;width: auto;}
 #review-comment{ display: inline-block; margin: 0 auto;width: 45%;}
 #review-comment .author img{ border-radius: 24px;box-shadow: 0 1px 2px #8D8D8D; height: 48px; width: 48px;}
 #review-comment .author{ display: inline-block;float: left;position: absolute;text-align: center;}
 .review-cooment-desc{left: 16%; position: relative;}
 #review-comment .author-name{float: left;position: relative;right: 0;}
 #review-comment .featured-review-star-rating{margin: 0 auto 2%; width: 50%;}
-#review-comment-section{margin: 0 auto; border-left: 1px solid #CCCCCC;   width: 70%;}
+#review-comment-section{float: right;margin: 0 auto;width: 70%;}
 .review-cooment-desc p {width: 85%;}
 .big-link{float: right; width: 15%;  -moz-user-select: none;background-color: #FFFFFF;border: 1px solid rgba(0, 0, 0, 0.17);border-radius: 2px; box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);    box-sizing: border-box;    color: #737373;    cursor: pointer;    display: inline-block;    font-family: "Roboto",sans-serif;    font-size: 14px;    font-style: normal;    font-weight: 500;    height: 36px;    line-height: 34px;    min-width: 40px;    padding: 0 20px;    position: relative;    text-align: center;    text-decoration: none;    transition: all 0.2s ease 0s;    vertical-align: middle;    white-space: nowrap;}
 .big-link:hover {border: 1px solid rgba(0, 0, 0, 0.27);box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.27);color: #333333;cursor: pointer;}
 #module-comment{border-top: 1px solid #CCCCCC;margin-top: 5%;}
 .views-field-nid.headerSortUp , .views-field-nid.up{ background-clip: border-box;background-color: rgba(0, 0, 0, 0);  background-image: url("images/sort_down_green.png");    background-origin: padding-box;    background-position: 60px 1px;    background-repeat: no-repeat;    background-size: auto auto;}
 .views-field-nid.headerSortDown{ background-clip: border-box;background-color: rgba(0, 0, 0, 0);background-image: url("images/sort_up_green.png");    background-origin: padding-box;    background-position: 60px 8px;    background-repeat: no-repeat;    background-size: auto auto;}
+#review-inner{ clear: both;height: auto; overflow: hidden; width: auto;}

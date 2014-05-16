@@ -9,7 +9,7 @@
 					
 				if( cache.expanded ) {
 					scroll		= 1; // scroll is always 1 in full mode
-					factor		= 3; // the width of the expanded item will be 3 times bigger than 1 collapsed item	
+					factor		= 4; // the width of the expanded item will be 3 times bigger than 1 collapsed item	
 					idxClicked	= cache.idxClicked; // the index of the clicked item
 				}
 				
