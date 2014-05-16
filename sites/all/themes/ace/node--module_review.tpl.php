@@ -58,7 +58,7 @@ $output='<div class="details-info">
         </div>';
     //screenshots image slider for d6
     if(!empty($node->field_screenshots_d6)){
-	$outputd6='<div id="ca-containerd6" class="ca-container"><h4 style="margin-left: 15px;">Screenshots for D6</h4><div class="ca-wrapper">';
+	$outputd6='<div id="ca-containerd6" class="ca-container"><h4 class="screenshots-title">Screenshots for D6</h4><div class="ca-wrapper">';
 	$i=1;
 	foreach($node->field_screenshots_d6['und'] as $key=>$value){
     
@@ -75,7 +75,7 @@ $output='<div class="details-info">
     }else{$outputd6="";}
     //screenshots image slider for d7
     if(!empty($node->field_screenshots_d7)){
-	$outputd7='<div id="ca-containerd7" class="ca-container screenshotsD7"><h4 style="margin-left: 15px;">Screenshots for D7</h4><div class="ca-wrapper">';
+	$outputd7='<div id="ca-containerd7" class="ca-container screenshotsD7"><h4 class="screenshots-title">Screenshots for D7</h4><div class="ca-wrapper">';
 	$d=1;
 	foreach($node->field_screenshots_d7['und'] as $key=>$value_d7){
     
@@ -93,7 +93,7 @@ $output='<div class="details-info">
     
     //screenshots image slider for d8
     if(!empty($node->field_screenshots_d8)){
-	$outputd8='<div id="ca-containerd8" class="ca-container screenshotsD8"><h4 style="margin-left: 15px;">Screenshots for D8</h4><div class="ca-wrapper">';
+	$outputd8='<div id="ca-containerd8" class="ca-container screenshotsD8"><h4 class="screenshots-title">Screenshots for D8</h4><div class="ca-wrapper">';
 	$d8=1;
 	foreach($node->field_screenshots_d8['und'] as $key=>$value_d8){
     

@@ -54,3 +54,4 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .views-field-nid.headerSortDown{ background-clip: border-box;background-color: rgba(0, 0, 0, 0);background-image: url("images/sort_up_green.png");    background-origin: padding-box;    background-position: 60px 8px;    background-repeat: no-repeat;    background-size: auto auto;}
 #review-inner{ clear: both;height: auto; overflow: hidden; width: auto;}
 .highlight{ box-shadow: none;outline: 4px solid #428BCA;}
+.screenshots-title{ margin: 0 0 -10px 15px;}
