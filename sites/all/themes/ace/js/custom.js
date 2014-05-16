@@ -14,5 +14,6 @@ jQuery(function ($){
           
            jQuery('.big-link').click(function(){
                    jQuery('#module-comment').toggle();
+                   jQuery('.big-link').toggleClass( "highlight" );
           });   
 });
