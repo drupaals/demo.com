@@ -163,7 +163,12 @@ $output='<div class="details-info">
 		 <div id="anno-user" style="text-align: center;">'.l('Login', 'user' , array('query' => array('destination' => $output_url))).'  |  '.l('Register', 'user/register' , array('query' => array('destination' => $output_url))).'</div>
     
 		</div>';}
-    $output_description='<div class="details-section description simple contains-text-link"><hr><h4>Description</h4><div>'.$body.'</div></div><hr>';
+    $output_description='<div class="details-section description simple contains-text-link"><hr><h4>Description</h4><div>'.$body.'</div></div><hr>
+    <div id="module-comment">
+			    '.render($content['comments']).'
+			</div>
+    
+			</div>';
     $output_review='<div class="details-section description simple contains-text-link"><h4>Reviews '.$comment_link.'</h4>
 			<div id="review-inner">
 			    <div id="review-rating">
@@ -174,11 +179,6 @@ $output='<div class="details-info">
 			    <div id="review-comment-section">
 			    '.$review_comm_description.'
 			    </div>
-			</div>   
-			<div id="module-comment">
-			    '.render($content['comments']).'
-			</div>
-    
 			</div>';
     
 print $output.''.$outputd6.''.$outputd7.''.$outputd8.$output_description.$output_review;
