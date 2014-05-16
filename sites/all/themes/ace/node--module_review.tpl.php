@@ -157,7 +157,7 @@ $output='<div class="details-info">
 
 
 		<div id="myModal" class="reveal-modal">
-		 <div id="anno-user">'.l('Login', 'user' , array('html' => TRUE)).'  |  '.l('Register', 'user/register' , array('html' => TRUE)).'</div>
+		 <div id="anno-user" style="text-align: center;">'.l('Login', 'user' , array('query' => array('destination' => drupal_get_destination()['destination']))).'  |  '.l('Register', 'user/register' , array('query' => array('destination' => drupal_get_destination()['destination']))).'</div>
     
 		</div>';}
     $output_description='<div class="details-section description simple contains-text-link"><hr><h3>Description</h3><div>'.$body.'</div></div><hr>';
