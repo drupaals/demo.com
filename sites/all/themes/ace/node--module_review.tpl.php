@@ -153,11 +153,14 @@ $output='<div class="details-info">
 	$comment_link=' <p class="big-link" data-reveal-id="myModal" data-animation="none"> Write a Review </p>';
 
 	
-    }else{$comment_link=' <a href="#" class="big-link" data-reveal-id="myModal" data-animation="none">Write a Review </a>
+    }else{
+	$node_url=drupal_get_destination();
+	$output_url=$node_url['destination'];
+	$comment_link=' <a href="#" class="big-link" data-reveal-id="myModal" data-animation="none">Write a Review </a>
 
 
 		<div id="myModal" class="reveal-modal">
-		 <div id="anno-user" style="text-align: center;">'.l('Login', 'user' , array('query' => array('destination' => drupal_get_destination()['destination']))).'  |  '.l('Register', 'user/register' , array('query' => array('destination' => drupal_get_destination()['destination']))).'</div>
+		 <div id="anno-user" style="text-align: center;">'.l('Login', 'user' , array('query' => array('destination' => $output_url))).'  |  '.l('Register', 'user/register' , array('query' => array('destination' => $output_url))).'</div>
     
 		</div>';}
     $output_description='<div class="details-section description simple contains-text-link"><hr><h3>Description</h3><div>'.$body.'</div></div><hr>';
