@@ -34,7 +34,7 @@ if($node->field_module_rating['und'][0]['user'] > 0){
 }
 	$tid_name="";
     foreach($node->field_module_category['und'] as $tid){
-	$tid_name.= taxonomy_term_load($tid['tid'])->name.' , ';
+	$tid_name.= taxonomy_term_load($tid['tid'])->name.', ';
     }
 	    $num = explode(',',$tid_name); $j=2; $tgs='';
 	    foreach($num as $nums){if($j<count($num)) $comma = ', '; else $comma = '';  $tgs .= $nums.$comma; $j++;}
