@@ -32,7 +32,12 @@ if($node->field_module_rating['und'][0]['user'] > 0){
 }else{$rating='<div class="fivestar-widget clearfix fivestar-widget-5"><div class="star star-1 odd star-first"><a title="Give it 1/5" href="#20">Give it 1/5</a></div><div class="star star-2 even"><a title="Give it 2/5" href="#40">Give it 2/5</a></div><div class="star star-3 odd"><a title="Give it 3/5" href="#60">Give it 3/5</a></div><div class="star star-4 even"><a title="Give it 4/5" href="#80">Give it 4/5</a></div><div class="star star-5 odd star-last"><a title="Give it 5/5" href="#100">Give it 5/5</a></div></div>';
 	$rating_count= 0;
 }
-	  
+	$tid_name="";
+    foreach($node->field_module_category['und'] as $tid){
+	$tid_name.= taxonomy_term_load($tid['tid'])->name.' , ';
+    }
+	    $num = explode(',',$tid_name); $j=2; $tgs='';
+	    foreach($num as $nums){if($j<count($num)) $comma = ', '; else $comma = '';  $tgs .= $nums.$comma; $j++;}
 $output='<div class="details-info">
             <div class="cover-container">
                 <img height="150" width="200" src="'.$themepath.'/images/project.png" class="cover-image">
@@ -47,7 +52,7 @@ $output='<div class="details-info">
                         <div><b>D8: </b>'.l($node->field_demo_link_d8['und'][0]['title'], $node->field_demo_link_d8['und'][0]['url'], array('html' => TRUE,'attributes'=> array('target' => '_blank'))).'</div>
                     </div>
                 </div>
-                <div><b>Module Category: </b>'.taxonomy_term_load($node->field_module_category['und'][0]['tid'])->name.'</div>
+                <div><b>Module Category: </b>'.$tgs.'</div>
                 <hr>
                 <div style="width: 50%;">
                     '.$rating.'
