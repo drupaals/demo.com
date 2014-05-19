@@ -32,12 +32,24 @@ if($node->field_module_rating['und'][0]['user'] > 0){
 }else{$rating='<div class="fivestar-widget clearfix fivestar-widget-5"><div class="star star-1 odd star-first"><a title="Give it 1/5" href="#20">Give it 1/5</a></div><div class="star star-2 even"><a title="Give it 2/5" href="#40">Give it 2/5</a></div><div class="star star-3 odd"><a title="Give it 3/5" href="#60">Give it 3/5</a></div><div class="star star-4 even"><a title="Give it 4/5" href="#80">Give it 4/5</a></div><div class="star star-5 odd star-last"><a title="Give it 5/5" href="#100">Give it 5/5</a></div></div>';
 	$rating_count= 0;
 }
-	$tid_name="";
+    $tid_name="";
     foreach($node->field_module_category['und'] as $tid){
 	$tid_name.= taxonomy_term_load($tid['tid'])->name.', ';
     }
-	    $num = explode(',',$tid_name); $j=2; $tgs='';
-	    foreach($num as $nums){if($j<count($num)) $comma = ', '; else $comma = '';  $tgs .= $nums.$comma; $j++;}
+    $num = explode(',',$tid_name); $j=2; $tgs='';
+    foreach($num as $nums){if($j<count($num)) $comma = ', '; else $comma = '';  $tgs .= $nums.$comma; $j++;}
+    //D6 link condition
+    if($node->field_demo_link_d6['und'][0]['url']){
+	$d6_link=l($node->field_demo_link_d6['und'][0]['title'], $node->field_demo_link_d6['und'][0]['url'], array('html' => TRUE,'attributes'=> array('target' => '_blank')));
+    }else{$d6_link=$node->field_demo_link_d6['und'][0]['title'];}
+    //D7 link condition
+    if($node->field_demo_link_d7['und'][0]['url']){
+	$d7_link=l($node->field_demo_link_d7['und'][0]['title'], $node->field_demo_link_d7['und'][0]['url'], array('html' => TRUE,'attributes'=> array('target' => '_blank')));
+    }else{$d7_link=$node->field_demo_link_d7['und'][0]['title'];}
+    //D8 link condition
+    if($node->field_demo_link_d8['und'][0]['url']){
+	$d8_link=l($node->field_demo_link_d8['und'][0]['title'], $node->field_demo_link_d8['und'][0]['url'], array('html' => TRUE,'attributes'=> array('target' => '_blank')));
+    }else{$d8_link=$node->field_demo_link_d8['und'][0]['title'];}
 $output='<div class="details-info">
             <div class="cover-container">
                 <img height="150" width="200" src="'.$themepath.'/images/project.png" class="cover-image">
@@ -47,9 +59,9 @@ $output='<div class="details-info">
                 <span><b>'.ucfirst(user_load($node->uid)->name).'</b>  -  '.date("F j,  Y",$node->created).'</span>
                 <div><b>Available version:</b>
                     <div>
-                        <div><b>D6: </b>'.l($node->field_demo_link_d6['und'][0]['title'], $node->field_demo_link_d6['und'][0]['url'], array('html' => TRUE,'attributes'=> array('target' => '_blank'))).'</div>
-                        <div><b>D7: </b>'.l($node->field_demo_link_d7['und'][0]['title'], $node->field_demo_link_d7['und'][0]['url'], array('html' => TRUE,'attributes'=> array('target' => '_blank'))).'</div>
-                        <div><b>D8: </b>'.l($node->field_demo_link_d8['und'][0]['title'], $node->field_demo_link_d8['und'][0]['url'], array('html' => TRUE,'attributes'=> array('target' => '_blank'))).'</div>
+                        <div><b>D6: </b>'.$d6_link.'</div>
+                        <div><b>D7: </b>'.$d7_link.'</div>
+                        <div><b>D8: </b>'.$d8_link.'</div>
                     </div>
                 </div>
                 <div><b>Module Category: </b>'.$tgs.'</div>
