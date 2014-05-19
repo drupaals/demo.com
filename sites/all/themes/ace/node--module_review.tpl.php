@@ -169,12 +169,13 @@ $output='<div class="details-info">
     
 		</div>';}
     $output_description='<div class="details-section description simple contains-text-link"><hr><h4>Description</h4><div>'.$body.'</div></div><hr>
-    <div id="module-comment">
-			    '.render($content['comments']).'
-			</div>
+   
     
 			</div>';
     $output_review='<div class="details-section description simple contains-text-link"><h4>Reviews '.$comment_link.'</h4>
+			     <div id="module-comment">
+			    '.render($content['comments']).'
+			</div>
 			<div id="review-inner">
 			    <div id="review-rating">
 				<h1 style="text-align: center;">'.$rating_count.'</h1>
