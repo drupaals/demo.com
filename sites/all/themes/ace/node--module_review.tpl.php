@@ -2,6 +2,7 @@
 <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
 <script type="text/javascript">stLight.options({publisher: "ur-dd988ab-74af-dc9b-7657-3556c57fea64", doNotHash: false, doNotCopy: true, hashAddressBar: false, minorServices:false});</script>
 <?php
+if(arg(0) ==  "node"){
 global $base_url; $themepath = $base_url.'/'.path_to_theme();
 drupal_add_css(drupal_get_path('theme', 'ace') .'/css/innerpage.css', 'file');
 drupal_add_css(drupal_get_path('theme', 'ace') .'/css/slider.css', 'file');
@@ -209,3 +210,4 @@ drupal_add_css(drupal_get_path('theme', 'ace') .'/css/reveal.css', 'file');
 drupal_add_js("jQuery(document).ready(function(){jQuery('#ca-containerd6').contentcarousel(); });",'inline');
 drupal_add_js("jQuery(document).ready(function(){jQuery('#ca-containerd7').contentcarousel(); });",'inline');
 drupal_add_js("jQuery(document).ready(function(){jQuery('#ca-containerd8').contentcarousel(); });",'inline');
+}
