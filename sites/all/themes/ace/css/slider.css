@@ -58,7 +58,7 @@
 	overflow:hidden;
 
 }
-.ca-item-main img{border: 1px solid #CCCCCC; padding: 10px;}
+.ca-item-main img{border: 1px solid #CCCCCC; padding: 10px;  cursor: zoom-in;}
 .ca-icon{
 	width:233px;
 	height:189px;
