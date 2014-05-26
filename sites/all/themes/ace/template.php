@@ -10,6 +10,7 @@ function ace_breadcrumb($variables) {
         $breadcrumb[] = drupal_get_title();
         return '<div class="breadcrumb">'. implode(' / ', $breadcrumb) .'</div>';
     }
+    
 }
 
 /**

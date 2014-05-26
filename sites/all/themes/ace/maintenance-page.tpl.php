@@ -57,12 +57,6 @@
 
       </div> <!-- /header -->
 
-      <?php if ($sidebar_first): ?>
-        <div id="sidebar-first" class="sidebar">
-          <?php print $sidebar_first ?>
-        </div>
-      <?php endif; ?>
-
       <div id="center"><div id="squeeze"><div class="right-corner"><div class="left-corner">
           <?php if ($title): ?><h2><?php print $title ?></h2><?php endif; ?>
           <?php print $messages; ?>
@@ -72,12 +66,6 @@
           </div>
           <div id="footer"><?php print $footer ?></div>
       </div></div></div></div> <!-- /.left-corner, /.right-corner, /#squeeze, /#center -->
-
-      <?php if ($sidebar_second): ?>
-        <div id="sidebar-second" class="sidebar">
-          <?php print $sidebar_second ?>
-        </div>
-      <?php endif; ?>
 
     </div> <!-- /container -->
   </div>
