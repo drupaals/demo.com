@@ -185,7 +185,7 @@ if(arg(0) ==  "node"){
 	$drupal_download='<div class="drupal-download"><h4>Recommended releases</h4>'.htmlspecialchars_decode(substr($substr, 0,2470)).'</div>
 	
 			 </ br></ br><div class="drupal-dev-download" style="margin-top: 25px;"><h4>Development releases</h4>'.htmlspecialchars_decode(substr($substr1, 0,2470)).'</div>
-			 <div class="see-all-releases"><h3>'.l('See all releases', $node->field_drupal_module_link['und'][0]['value'].'/release', array('attributes'=>array('target'=>'_blank'))).'</h3></div><hr>';
+			 <div class="see-all-releases"><h4>'.l('See all releases', $node->field_drupal_module_link['und'][0]['value'].'/release', array('attributes'=>array('target'=>'_blank'))).'</h4></div><hr>';
 	}
 	$output_review='<div class="details-section description simple contains-text-link"><h4>Reviews '.$comment_link.'</h4>
 				 <div id="module-comment">
