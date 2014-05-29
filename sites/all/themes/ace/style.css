@@ -61,3 +61,4 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .module-catagory{height: auto;overflow: hidden; width: auto;}
 .form-submit{background-color: #5899D2;border: 2px solid #5899D2;border-radius: 5px;color: #FFFFFF;padding: 5px;}
 .form-submit:hover{background-color: #1B6AAA;}
+.see-all-releases{text-align: right;}

@@ -176,15 +176,17 @@ if(arg(0) ==  "node"){
 				</div>';
 	    }
 	$output_description='<div class="details-section description simple contains-text-link"><hr><h4>Description</h4><div>'.$body.'</div></div><hr></div>';
+	if(!empty($node->field_drupal_module_link)){
 	//Recommended releases
-	$str = file_get_contents('https://drupal.org/node/2260281/release/feed');
+	$str = file_get_contents($node->field_drupal_module_link['und'][0]['value'].'/release/feed');
 	$substr=substr(explode("view-project-release-files",$str)[1], 173);
 	//Development releases
-	$str1 = file_get_contents('https://drupal.org/node/2260281/release/feed');
-	$substr1=substr(explode("view-project-release-files",$str1)[2], 173);
-	$drupal_download='<div class="drupal-download"><h4>Recommended releases</h4>'.htmlspecialchars_decode(substr($substr, 0, -1620)).'</div>
+	$substr1=substr(explode("view-project-release-files",$str)[2], 173);
+	$drupal_download='<div class="drupal-download"><h4>Recommended releases</h4>'.htmlspecialchars_decode(substr($substr, 0,2470)).'</div>
 	
-			 </ br></ br><div class="drupal-dev-download" style="margin-top: 25px;"><h4>Development releases</h4>'.htmlspecialchars_decode(substr($substr1, 0, -1220)).'</div><hr>';
+			 </ br></ br><div class="drupal-dev-download" style="margin-top: 25px;"><h4>Development releases</h4>'.htmlspecialchars_decode(substr($substr1, 0,2470)).'</div>
+			 <div class="see-all-releases"><h3>'.l('See all releases', $node->field_drupal_module_link['und'][0]['value'].'/release', array('attributes'=>array('target'=>'_blank'))).'</h3></div><hr>';
+	}
 	$output_review='<div class="details-section description simple contains-text-link"><h4>Reviews '.$comment_link.'</h4>
 				 <div id="module-comment">
 				'.render($content['comments']).'
