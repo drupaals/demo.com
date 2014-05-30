@@ -86,7 +86,7 @@
 									?>
 									<?php if ($page['script_second']): ?>
 									<div class="col-sm-5">
-										<div class="widget-box">
+										<div class="widget-box" style="margin-top: 1px;">
 											<div class="widget-header widget-header-flat widget-header-small">
 												<h5>
 													<i class="icon-signal"></i>
