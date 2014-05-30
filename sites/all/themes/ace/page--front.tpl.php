@@ -122,7 +122,7 @@
 											<div class="widget-body">
 												<div class="widget-main">
 													<?php print render($page['script_second']); ?>
-													<div class="hr hr8 hr-double"></div>
+													<div class="hr hr8 hr-double" style="margin-top: 0px;"></div>
 														<div class="clearfix">
 														<div class="grid3">
 															<span class="grey">

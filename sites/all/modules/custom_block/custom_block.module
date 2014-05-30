@@ -405,11 +405,11 @@ function recent_comments_block(){
      drupal_add_css(drupal_get_path('module','fivestar').'/css/fivestar.css');
      $query = db_select('comment', 'c');
      $query->fields('c');
-     $query->orderBy('c.created' , 'ASC');
+     $query->orderBy('c.created' , 'DESC');
      $query->range(0, 4);
      $result = $query->execute();
      $comments='<div class="col-sm-6">
-		    <div class="widget-box ">
+		    <div class="widget-box "  style="margin-top: 10px;">
 			    <div class="widget-header">
 				    <h4 class="lighter smaller">
 					    <i class="icon-comment blue"></i>
@@ -935,18 +935,18 @@ function stats_block() {
 	       }
 	  }
 
-	  if($jan6 || $jan7 || $jan8){$jan6 = count_digit($jan6); $jan7 = count_digit($jan7); $jan8 = count_digit($jan8);}
-	  if($feb6 || $feb7 || $feb8){$feb6 = count_digit($feb6); $feb7 = count_digit($feb7); $feb8 = count_digit($feb8);}
+	  if($jan6 || $jan7 || $jan8){$jan6 = count_digit($jan6); $jan7 = count_digit($jan7); $jan8 = count_digit($jan8);}else{$jan6=0; $jan7=0; $jan8=0;}
+	  if($feb6 || $feb7 || $feb8){$feb6 = count_digit($feb6); $feb7 = count_digit($feb7); $feb8 = count_digit($feb8);}else{$feb6=0; $feb7=0; $feb8=0;}
 	  if($mar6 || $mar7 || $may8){$mar6 = count_digit($mar6); $mar7 = count_digit($mar7); $mar8 = count_digit($mar8);}else{$mar6=0; $mar7=0; $mar8=0;}
 	  if($apr6 || $apr7 || $apr8){$apr6 = count_digit($apr6); $apr7 = count_digit($apr7); $apr8 = count_digit($apr8);}else{$apr6=0; $apr7=0; $apr8=0;}
 	  if($may6 || $may7 || $may8){$may6 = count_digit($may6); $may7 = count_digit($may7); $may8 = count_digit($may8);}else{$may6=0; $may7=0; $may8=0;}
-	  if($jun6 || $jun7 || $jun8){$jun6 = count_digit($jun6); $jun7 = count_digit($jun7); $jun8 = count_digit($jun8);}
-	  if($jul6 || $jul7 || $jul8){$jul6 = count_digit($jul6); $jul7 = count_digit($jul7); $jul8 = count_digit($jul8);}
-	  if($aug6 || $aug7 || $aug8){$aug6 = count_digit($aug6); $aug7 = count_digit($aug7); $aug8 = count_digit($aug8);}
-	  if($sep6 || $sep7 || $sep8){$sep6 = count_digit($sep6); $sep7 = count_digit($sep7); $sep8 = count_digit($sep8);}
-	  if($oct6 || $oct7 || $oct8){$oct6 = count_digit($oct6); $oct7 = count_digit($oct7); $oct8 = count_digit($oct8);}
-	  if($nov6 || $nov7 || $nov8){$nov6 = count_digit($nov6); $nov7 = count_digit($nov7); $nov8 = count_digit($nov8);}
-	  if($dec6 || $dec7 || $dec8){$dec6 = count_digit($dec6); $dec7 = count_digit($dec7); $dec8 = count_digit($dec8);}
+	  if($jun6 || $jun7 || $jun8){$jun6 = count_digit($jun6); $jun7 = count_digit($jun7); $jun8 = count_digit($jun8);}else{$jun6=0; $jun7=0; $jun8=0;}
+	  if($jul6 || $jul7 || $jul8){$jul6 = count_digit($jul6); $jul7 = count_digit($jul7); $jul8 = count_digit($jul8);}else{$jul6=0; $jul7=0; $jul8=0;}
+	  if($aug6 || $aug7 || $aug8){$aug6 = count_digit($aug6); $aug7 = count_digit($aug7); $aug8 = count_digit($aug8);}else{$aug6=0; $aug7=0; $aug8=0;}
+	  if($sep6 || $sep7 || $sep8){$sep6 = count_digit($sep6); $sep7 = count_digit($sep7); $sep8 = count_digit($sep8);}else{$sep6=0; $sep7=0; $sep8=0;}
+	  if($oct6 || $oct7 || $oct8){$oct6 = count_digit($oct6); $oct7 = count_digit($oct7); $oct8 = count_digit($oct8);}else{$oct6=0; $oct7=0; $oct8=0;}
+	  if($nov6 || $nov7 || $nov8){$nov6 = count_digit($nov6); $nov7 = count_digit($nov7); $nov8 = count_digit($nov8);}else{$nov6=0; $nov7=0; $nov8=0;}
+	  if($dec6 || $dec7 || $dec8){$dec6 = count_digit($dec6); $dec7 = count_digit($dec7); $dec8 = count_digit($dec8);}else{$dec6=0; $dec7=0; $dec8=0;}
      drupal_add_js("jQuery(function () {
      jQuery('#container1').highcharts({
             
@@ -1000,4 +1000,12 @@ $total="";
      }
      $total_download=explode(',',$total);
 return array_sum($total_download);
+}
+//get feeds form drupal.orgs
+function drupal_content(){
+     $str = file_get_contents('https://drupal.org/node/2260281/release/feed');
+     return explode("views-table",$str)[1];
+//echo "<pre>";
+//print_r (explode("view-project-release-files",$str)[1]);
+//echo "</pre>";
 }
