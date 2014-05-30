@@ -182,7 +182,7 @@ if(arg(0) ==  "node"){
 	$substr=substr(explode("view-project-release-files",$str)[1], 173);
 	//Development releases
 	$substr1=substr(explode("view-project-release-files",$str)[2], 173);
-	$drupal_download='<div class="drupal-download"><h4>Recommended releases</h4>'.htmlspecialchars_decode(substr($substr, 0,2515)).'</div>
+	$drupal_download='<div class="drupal-download"><h4>Recommended releases</h4>'.htmlspecialchars_decode(substr($substr, 0,2508)).'</div>
 	
 			 </ br></ br><div class="drupal-dev-download" style="margin-top: 25px;"><h4>Development releases</h4>'.htmlspecialchars_decode(substr($substr1, 0,2515)).'
 			 <div class="see-all-releases"><h4>'.l('See all releases', $node->field_drupal_module_link['und'][0]['value'].'/release', array('attributes'=>array('target'=>'_blank'))).'</h4></div><hr>';
