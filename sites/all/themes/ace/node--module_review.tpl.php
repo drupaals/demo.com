@@ -204,7 +204,6 @@ if(arg(0) ==  "node"){
     print $output.''.$outputd6.''.$outputd7.''.$outputd8.$output_description.$drupal_download.$output_review;
     drupal_add_js(drupal_get_path('theme', 'ace') .'/js/jquery.contentcarousel.js', 'file');
     drupal_add_js(drupal_get_path('theme', 'ace') .'/js/jquery.easing.1.3.js', 'file');
-    drupal_add_js(drupal_get_path('theme', 'ace') .'/js/jquery.mousewheel.js', 'file');
     drupal_add_js(drupal_get_path('theme', 'ace') .'/js/jquery.reveal.js', 'file');
     drupal_add_css(drupal_get_path('theme', 'ace') .'/css/reveal.css', 'file');
     drupal_add_js("jQuery(document).ready(function(){jQuery('#ca-containerd6').contentcarousel(); });",'inline');
