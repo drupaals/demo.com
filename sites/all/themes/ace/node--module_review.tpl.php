@@ -82,7 +82,7 @@ if(arg(0) ==  "node"){
 	
 		    $outputd6.='<div class="ca-item ca-item-'.$i.'">
 				    <div class="ca-item-main">
-				    <a href="'.$base_url.'/sites/default/files/d6/'.$value['filename'].'" rel="lightbox[roadtrip]">
+				    <a href="'.image_style_url("1000", $value['uri']).'" rel="lightbox[roadtrip]">
 					'.theme_image_style(array('style_name'=>'slider', 'path'=>$value['uri'], 'width'=>'', 'height'=>'')).'
 				    </a>
 				    </div>   
@@ -98,7 +98,7 @@ if(arg(0) ==  "node"){
 	    foreach($node->field_screenshots_d7['und'] as $key=>$value_d7){
 		    $outputd7.='<div class="ca-item ca-item-'.$d.'">
 				    <div class="ca-item-main">
-				    <a href="'.$base_url.'/sites/default/files/d7/'.$value_d7['filename'].'" rel="lightbox[roadtrip1]">
+				    <a href="'.image_style_url("1000", $value_d7['uri']).'" rel="lightbox[roadtrip1]">
 					'.theme_image_style(array('style_name'=>'slider', 'path'=>$value_d7['uri'], 'width'=>'', 'height'=>'')).'
 				    </a>
 				    </div>   
@@ -115,7 +115,7 @@ if(arg(0) ==  "node"){
 	
 		    $outputd8.='<div class="ca-item ca-item-'.$d8.'">
 				    <div class="ca-item-main">
-				    <a href="'.$base_url.'/sites/default/files/d8/'.$value_d8['filename'].'" rel="lightbox[roadtrip2]">
+				    <a href="'.image_style_url("1000", $value_d8['uri']).'" rel="lightbox[roadtrip2]">
 					'.theme_image_style(array('style_name'=>'slider', 'path'=>$value_d8['uri'], 'width'=>'', 'height'=>'')).'
 				    </a>
 				    </div>   
