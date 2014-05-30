@@ -26,7 +26,7 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .view-recent-modules .pager{margin-top:15px;}
 .views-field-title.headerSortUp , .views-field-title.up{ background-clip: border-box;background-color: rgba(0, 0, 0, 0);  background-image: url("images/sort_down_green.png");    background-origin: padding-box;    background-position: 110px 1px;    background-repeat: no-repeat;    background-size: auto auto;}
 .views-field-title.headerSortDown{ background-clip: border-box;background-color: rgba(0, 0, 0, 0);background-image: url("images/sort_up_green.png");    background-origin: padding-box;    background-position: 110px 8px;    background-repeat: no-repeat;    background-size: auto auto;}
-.view-recent-modules thead .views-field-nid{float:right;}
+.view-recent-modules thead .views-field-nid{float:right;width: 83px;}
 .view-recent-modules td.views-field-nid{float: right;width: 90px;}
 .btn-minier {font-size:12px !important; padding:0 4px !important;}
 .rating{ float: right;font-size: 12px;margin-right: 60px;position: relative;}
