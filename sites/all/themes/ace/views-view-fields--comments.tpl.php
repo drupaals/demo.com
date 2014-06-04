@@ -64,7 +64,7 @@
 				   '.$rating.'
 			    </div>
                           <div class="name">
-                                 '.ucfirst($comment_load->name).$row->comment_node_cid'
+                                 '.ucfirst($comment_load->name).$row->comment_node_cid.'
                           </div>
                           <div class="text">'.$comment_load->comment_body['und'][0]['value'].'</div>
                   </div>
