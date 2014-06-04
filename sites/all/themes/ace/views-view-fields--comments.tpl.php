@@ -56,7 +56,7 @@
                   </div>
    
                   <div class="body">
-                          <div class="time">
+                          <div class="time" style="width: 99px;">
                                   <i class="icon-time"></i>
                                   <span class="green">'.humanTiming($comment_load->created).'  ago</span>
                           </div>
