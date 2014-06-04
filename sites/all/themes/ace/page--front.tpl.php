@@ -189,7 +189,7 @@
 
 											<div class="widget-body">
 												<div class="widget-main padding-4">
-													<div style="width: 100%; height: 220px; padding: 0px; position: relative;" id="sales-charts">
+													<div style="width: 100%; height: 200px; padding: 0px; position: relative;" id="sales-charts">
 												<?php print render($page['script_fourth']); ?></div><!-- /widget-main -->
 											</div><!-- /widget-body -->
 										</div><!-- /widget-box -->

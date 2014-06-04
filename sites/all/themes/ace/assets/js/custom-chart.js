@@ -106,7 +106,7 @@ jQuery(document).ready(function(jQuery) {
 				}
 				
 			
-				var sales_charts = $('#sales-charts').css({'width':'100%' , 'height':'220px'});
+				var sales_charts = $('#sales-charts').css({'width':'100%' , 'height':'200px'});
 				$.plot("#sales-charts", [
 					{ label: "Domains", data: d1 },
 					{ label: "Hosting", data: d2 },
