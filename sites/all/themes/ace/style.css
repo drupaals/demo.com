@@ -39,7 +39,7 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .screenshotsD8{ margin-top: 5%;margin-bottom:5%;}
 .details-info{background-color: #E5E5E5;height: 230px;width: 100%;  border-bottom: 2px solid #D6D6D6;  margin-bottom: 2.5%;}
 #review-rating{  padding: 20px; background: none repeat scroll 0 0 #E5E5E5;border-radius: 2px;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);margin-bottom: 50px;margin-right: 7px;  white-space: nowrap;float: left; display: inline-block;position: relative;width: auto;}
-#review-comment{ float: left; width: auto;}
+#review-comment{ float: left; width:100%;}
 #review-comment .author img{ border-radius: 24px;box-shadow: 0 1px 2px #8D8D8D; height: 48px; width: 48px;}
 #review-comment .author{ display: inline-block;float: left;position: absolute;text-align: center;}
 .review-cooment-desc{left: 8%;  width: 90%; position: relative;}
