@@ -68,7 +68,7 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 #login{background-color: #FFFFFF;border: 7px solid #394557;margin-top: 5%;padding: 10px;}
 #user-login-form .form-text, #user-register-form .form-text, #user-pass .form-text{ width: 100%;}
 #login-content{margin: 0 auto;width: 300px;}
-#user-login-form ul{list-style-type: none;margin: 0 auto;overflow: hidden;width: auto;}
-#user-login-form ul li{margin:0px !important;}
-#user-login-form ul .first{float:left;}
-#user-login-form ul .last{float:right;}
+#user-login-form ul, #user-pass ul, #user-register-form ul{list-style-type: none;margin: 0 auto;overflow: hidden;width: auto;}
+#user-login-form ul li, #user-pass ul li, #user-register-form ul li{margin:0px !important;}
+#user-login-form ul .first, #user-pass ul .first, #user-register-form ul .first{float:left;}
+#user-login-form ul .last, #user-pass ul .last, #user-register-form ul .last{float:right;}

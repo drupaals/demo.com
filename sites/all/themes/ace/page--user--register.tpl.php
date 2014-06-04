@@ -1,12 +1,14 @@
 <?php if (user_is_anonymous()): ?>
     <div id="main-login">
+      <a href="<?php print $base_path ?>" title="<?php print $site_name_and_slogan  ?>">
         <?php if ($logo): ?>
             <img src="<?php print $logo ?>" alt="<?php print $site_name_and_slogan ?>" title="<?php print $site_name_and_slogan ?>" id="logo" />
         <?php endif; ?>
+      </a>
         
         <div id="login" class="animate form position">
             <div id="login-content">
-                <h4 style="color: rgb(66, 139, 202); margin-bottom: 0px;"> User login & Request new password</h4>
+                <h4 style="color: rgb(66, 139, 202); margin-bottom: 0px;">New User Registration</h4>
                 <?php print render($page['content']); ?>
             </div>
         </div>

@@ -50,7 +50,12 @@ function user_pass() {
   }
   $form['actions'] = array('#type' => 'actions');
   $form['actions']['submit'] = array('#type' => 'submit', '#value' => t('E-mail new password'));
-
+  $items = array();
+  if (variable_get('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL)) {
+    $items[] = l(t('Create new account'), 'user/register', array('attributes' => array('title' => t('Create new account'))));
+  }
+  $items[] = l(t('User login'), 'user', array('attributes' => array('title' => t('User login'))));
+  $form['links'] = array('#markup' => theme('item_list', array('items' => $items)));
   return $form;
 }
 

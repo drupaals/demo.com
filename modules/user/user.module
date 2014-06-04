@@ -1048,6 +1048,12 @@ function user_account_form(&$form, &$form_state) {
     '#required' => TRUE,
     '#default_value' => (!$register ? $account->mail : ''),
   );
+  $items = array();
+  if (variable_get('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL)) {
+    $items[] = l(t('Request new password'), 'user/password', array('attributes' => array('title' => t('Request new password'))));
+  }
+  $items[] = l(t('User login'), 'user', array('attributes' => array('title' => t('User login'))));
+  $form['links'] = array('#markup' => theme('item_list', array('items' => $items)));
 
   // Display password field only for existing users or when user is allowed to
   // assign a password during registration.
