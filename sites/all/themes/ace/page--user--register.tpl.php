@@ -1,10 +1,12 @@
 <?php if (user_is_anonymous()): ?>
     <div id="main-login">
-      <a href="<?php print $base_path ?>" title="<?php print $site_name_and_slogan  ?>">
-        <?php if ($logo): ?>
-            <img src="<?php print $logo ?>" alt="<?php print $site_name_and_slogan ?>" title="<?php print $site_name_and_slogan ?>" id="logo" />
-        <?php endif; ?>
-      </a>
+      <div id="inner-logo" style="text-align: center;">
+	<a href="<?php print $base_path ?>" title="<?php print $site_name_and_slogan  ?>">
+	  <?php if ($logo): ?>
+	      <img src="<?php print $logo ?>" alt="<?php print $site_name_and_slogan ?>" title="<?php print $site_name_and_slogan ?>" id="logo" />
+	  <?php endif; ?>
+	</a>
+      </div>
         
         <div id="login" class="animate form position">
             <div id="login-content">
