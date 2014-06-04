@@ -419,7 +419,7 @@ function recent_comments_block(){
      
 			 <div class="widget-body">
 			      <div class="widget-main no-padding">
-				   <div style="position: relative; overflow: hidden; width: auto;" class="slimScrollDiv"><div style="overflow: hidden; width: auto;" class="dialogs">';
+				   <div style="position: relative; overflow: hidden; width: auto; height: 212px;" class="slimScrollDiv"><div style="overflow: hidden; width: auto;" class="dialogs">';
      foreach($result as $output){
 	  $comment_load=comment_load($output->cid);
 	  $user_profile=user_load($output->uid);
