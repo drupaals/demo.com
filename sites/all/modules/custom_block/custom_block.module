@@ -462,7 +462,7 @@ function recent_comments_block(){
 			    <div class="name">
 				   '.ucfirst($output->name).'
 			    </div>
-			    <div class="text">'.truncate_utf8($comment_load->comment_body['und'][0]['value'], 200, $wordsafe = TRUE).'</div>
+			    <div class="text">'.truncate_utf8($comment_load->comment_body['und'][0]['value'], 90, $wordsafe = TRUE).'</div>
 		    </div>
 	    </div>';
      }			    
