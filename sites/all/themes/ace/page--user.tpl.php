@@ -6,9 +6,7 @@
         
         <div id="login" class="animate form position">
             <div id="login-content">
-                <h4 class="header blue lighter bigger">
-                    Please Enter Your Information
-                </h4>
+                <h4 style="color: rgb(66, 139, 202);">Enter Your Login Information</h4>
                 <?php print render(drupal_get_form('user_login_block')); ?>
             </div>
         </div>

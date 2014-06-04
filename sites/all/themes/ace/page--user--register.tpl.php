@@ -6,9 +6,7 @@
         
         <div id="login" class="animate form position">
             <div id="login-content">
-                <h4 class="header blue lighter bigger">
-                    New User Registration 
-                </h4>
+                <h4 style="color: rgb(66, 139, 202); margin-bottom: 0px;"> User login & Request new password</h4>
                 <?php print render($page['content']); ?>
             </div>
         </div>

@@ -6,9 +6,7 @@
         
         <div id="login" class="animate form position">
             <div id="login-content">
-                <h4 class="header blue lighter bigger">
-                    Retrieve Password 
-                </h4>
+               <h4 style="color: rgb(66, 139, 202); margin-bottom: 0px;">Create new account & User login</h4>
                 <?php print render($page['content']); ?>
             </div>
         </div>
