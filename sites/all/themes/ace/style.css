@@ -72,3 +72,6 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 #user-login-form ul li, #user-pass ul li, #user-register-form ul li{margin:0px !important;}
 #user-login-form ul .first, #user-pass ul .first, #user-register-form ul .first{float:left;}
 #user-login-form ul .last, #user-pass ul .last, #user-register-form ul .last{float:right;}
+#footer{  background: none repeat scroll 0 0 #CCCCCC;height: 30px;width: 100%;}
+#footer .powered-by p{line-height: 30px;text-align: center;}
+.powered-by{margin: 0 auto; width: 300px;overflow:hidden;height:30px;}

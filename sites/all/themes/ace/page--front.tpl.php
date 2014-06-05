@@ -238,7 +238,7 @@
 			</a>
 		</div><!-- /.main-container -->
 		<!-- basic scripts -->
-
+<div id="footer"><?php if ($page['footer']): ?><div class="powered-by"><?php print render($page['footer']); ?></div><?php  endif; ?></div>
 <!--[if !IE]> -->
 <script type="text/javascript">
 	window.jQuery || document.write("<script src='<?php echo $themepath; ?>/assets/js/jquery-2.0.3.min.js'>"+"<"+"/script>");

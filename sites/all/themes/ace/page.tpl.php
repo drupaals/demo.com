@@ -132,3 +132,4 @@
           <i class="icon-double-angle-up icon-only bigger-110"></i>
       </a>
 </div><!-- /.main-container -->
+<div id="footer"><?php if ($page['footer']): ?><div class="powered-by"><?php print render($page['footer']); ?></div><?php  endif; ?></div>
