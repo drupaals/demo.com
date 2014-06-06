@@ -532,7 +532,7 @@ function members_block(){
 			 </div>
 		    </div>';
 	  }else{
-	       $no_member='<div class="no-member"><p>No user add in last two weak</p></div>';
+	       $no_member='<div class="no-member"><p>No user add in last two weak.</p></div>';
 	  }
      }
      
