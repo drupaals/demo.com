@@ -275,7 +275,7 @@ function information_block(){
 	       <div class="space-6"></div>
 	       <div id="user-info">
 		    <span class="admin-img"  style="float: left;">'.theme("image", array('path' => path_to_theme().'/images/default_admin.png', 'width' => 100,    'height' => 100)).'</span>
-		    <span class="user-text"><p>Name: Drupaals <br> You can inquire about any other Drupal module demo as per your need or anything else you have in mind by sending us an e-mail.
+		    <span class="user-text"><p><b>Admin</b><br> You can inquire about any other Drupal module demo as per your need or anything else you have in mind by sending us an e-mail.
 		    You can contact us through our e-mail: <a href="mailto: contact@drupaals.com?subject=Contact"> contact@drupaals.com</a></p></span>
 	       </div>';
      return $info;
