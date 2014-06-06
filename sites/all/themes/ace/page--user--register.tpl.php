@@ -12,7 +12,12 @@
             <div id="login-content">
                 <h4 style="color: rgb(66, 139, 202); margin-bottom: 0px;">New User Registration</h4>
                 <?php print render($page['content']); ?>
+	      <ul style="margin: 0px; list-style-type: none; width: auto; height: auto; overflow: hidden;">
+		<li class="first" style="float: left;"><a title="User login" href="user">User login</a></li>
+		<li class="last"  style="float: right;"><a title="Request new password via e-mail." href="user/password">Request new password</a></li>
+	      </ul>
             </div>
+	    
         </div>
     </div>
 <?php endif; ?>
