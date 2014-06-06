@@ -80,6 +80,7 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .view-all-user-details .views-row{border: 1px solid #CCCCCC;display: inline-block;margin-bottom: 10px;margin-right: 20px; padding: 20px;position: relative;width: 150px;}
 .user-text{ float: right;font-size: 12px;line-height: 20px;text-align: justify; width: 530px;}
 .admin-img{ border: 1px solid #CCCCCC;}
-#user-info{height: auto;overflow: hidden;margin-top: 3%;width: auto;}
+#user-info{height: auto;overflow: hidden;margin-top: 4%;width: auto;}
 .captcha .fieldset-legend{display:none;}
 .captcha legend{border:none;}
+.no-member p{font-size: 20px;margin-top: 30px;}
