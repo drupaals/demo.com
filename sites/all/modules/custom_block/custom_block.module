@@ -185,7 +185,21 @@ function information_block(){
 	       WHERE (( (node.status = '1') AND (node.type IN  ('module_review')) ))");
      $array="";     
      foreach($pageviews as $key=>$pageviews){$array[$key]=$pageviews->node_counter_totalcount;}
-     
+     //count total users
+     $usercount = db_select('users', 'u')->fields('u', array('uid'))->condition('u.status', 1, '=')->execute()->rowCount();
+     //latest node
+     $query = db_select('node', 'n')->distinct();
+     $query->fields('n', array('nid'))->condition('n.type', array('module_review'))
+              ->range(0,1)->orderBy('n.created','DESC'); // Sort by 
+     $result = $query->execute();
+     foreach($result as $result){$node=node_load($result->nid);  }
+     //last month add modules
+     $last_month=db_query("SELECT node.title AS node_title, node.nid AS nid, node.created AS node_created
+			      FROM {node} node
+			      WHERE (( (node.status = '1') AND (node.type IN  ('module_review')) AND (DATE_FORMAT(ADDTIME(FROM_UNIXTIME(node.created), SEC_TO_TIME(19800)), '%Y-%m') >= '2014-05' AND DATE_FORMAT(ADDTIME(FROM_UNIXTIME(node.created), SEC_TO_TIME(19800)), '%Y-%m') <= '2014-06') ))
+			      ORDER BY node_created DESC");
+     $month_module_count="";
+     foreach($last_month as $last_month){$month_module_count[]=$last_month->nid;}
      $info='<div class="infobox infobox-green  ">
 		       <div class="infobox-icon">
 			       <i class="icon-comments"></i>
@@ -193,7 +207,7 @@ function information_block(){
 
 		       <div class="infobox-data">
 			       <span class="infobox-data-number">'.$count.'</span>
-			       <div class="infobox-content">Number of modules</div>
+			       <div class="infobox-content">'.l('Number of modules','all-modules').'</div>
 		       </div>
 	       </div>
 
@@ -204,7 +218,7 @@ function information_block(){
 
 		       <div class="infobox-data">
 			       <span class="infobox-data-number">'.$count1.'</span>
-			       <div class="infobox-content">Add modules in week</div>
+			       <div class="infobox-content">'.l('Add modules in week','weekly-module').'</div>
 		       </div>
 	       </div>
 
@@ -214,8 +228,8 @@ function information_block(){
 		       </div>
 
 		       <div class="infobox-data">
-			       <span class="infobox-data-number">8</span>
-			       <div class="infobox-content">New added modules</div>
+			       <span class="infobox-data-number">'.count($month_module_count).'</span>
+			       <div class="infobox-content">'.l('Last month modules','last-month-modules').'</div>
 		       </div>
 	       </div>
 
@@ -225,8 +239,8 @@ function information_block(){
 		       </div>
 
 		       <div class="infobox-data">
-			       <span class="infobox-data-number">7</span>
-			       <div class="infobox-content">Under development</div>
+			       <span class="infobox-data-number">'.$usercount.'</span>
+			       <div class="infobox-content">'.l('Total users','all-users').'</div>
 		       </div>
 	       </div>
 
@@ -249,11 +263,11 @@ function information_block(){
 		       </div>
 
 		       <div class="infobox-data">
-			       <span class="infobox-text">Traffic used</span>
+			       <span class="infobox-text" style="color: rgb(85, 85, 85); font-size: 15px;">Latest module</span>
 
 			       <div class="infobox-content">
-				       <span class="bigger-110">~</span>
-				       58GB remaining
+				       <span class="bigger-110">'.l($node->title,'node/'.$node->nid).'</span>
+				      
 			       </div>
 		       </div>
 	       </div>

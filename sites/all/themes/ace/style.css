@@ -75,3 +75,6 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 #footer{  background: none repeat scroll 0 0 #CCCCCC;height: 30px;width: 100%;}
 #footer .powered-by p{line-height: 30px;text-align: center;}
 .powered-by{margin: 0 auto; width: 300px;overflow:hidden;height:30px;}
+.views-view-grid{width: 100%;  margin-bottom: 30px;}
+.views-view-grid td{ padding: 10px;}
+.view-all-user-details .views-row{border: 1px solid #CCCCCC;display: inline-block;margin-bottom: 10px;margin-right: 20px; padding: 20px;position: relative;width: 150px;}
