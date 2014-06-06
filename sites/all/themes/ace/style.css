@@ -84,5 +84,5 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .captcha .fieldset-legend{display:none;}
 .captcha legend{border:none;}
 .no-member p{font-size: 20px;margin-top: 30px;}
-.links{height: auto;list-style-type: none; margin: 0;overflow: hidden; position: absolute; top: 67%; width: 22%;}
-#user-register-form #edit-submit{margin-top:22px;}
+.links{height: auto;list-style-type: none; margin: 0;overflow: hidden; position: absolute; top: 60%; width: 22%;}
+#user-register-form #edit-submit{margin-top:25px;}
