@@ -534,7 +534,7 @@ function members_block(){
 		    </div>';
 	  }
      }
-     if($nomember != "No member"){$no_member='<div class="no-member"><p>No user added in the last two weeks.</p></div>';}
+     if($nomember != "No member"){$no_member='<div class="no-member"> <p>No user added in the last two weeks.</p></div>';}
      
      $member.='</div>';
 return $member.$no_member;
