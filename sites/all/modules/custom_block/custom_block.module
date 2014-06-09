@@ -511,6 +511,7 @@ function members_block(){
 	  }
 	  $dateInLastTwoWeeks = strtotime('-2 weeks');
 	  if($dateInLastTwoWeeks <= $user_profile->created){
+	       $nomember="No member";
 	       $member.='<div class="itemdiv memberdiv">
 			 <div class="user">
 			      '.$user_img.'
@@ -532,9 +533,9 @@ function members_block(){
 			 </div>
 		    </div>';
 	  }
-	  if(!($output->uid)){$no_member='<div class="no-member"><p>No user add in last two weak.</p></div>';}
      }
-     if($no_member == ""){$no_member='<div class="no-member"><p>No user add in last two weak.</p></div>';}
+     if($nomember != "No member"){$no_member='<div class="no-member"><p>No user add in last two weak.</p></div>';}
+     
      $member.='</div>';
 return $member.$no_member;
 }
