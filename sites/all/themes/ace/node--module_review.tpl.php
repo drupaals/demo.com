@@ -173,6 +173,7 @@ if(arg(0) ==  "node"){
 		$comment_link=' <a href="#" class="big-link" data-reveal-id="myModal" data-animation="none">Write a Review </a>
 				<div id="myModal" class="reveal-modal">
 				    <div id="anno-user" style="text-align: center;">'.l('Login', 'user' , array('query' => array('destination' => $output_url))).'  |  '.l('Register', 'user/register' , array('query' => array('destination' => $output_url))).'</div>
+				<a class="close-reveal-modal">&#215;</a>
 				</div>';
 	    }
 	$output_description='<div class="details-section description simple contains-text-link"><hr><h4>Description</h4><div>'.$body.'</div></div><hr></div>';
