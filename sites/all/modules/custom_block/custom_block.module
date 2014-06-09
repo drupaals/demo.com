@@ -489,9 +489,9 @@ function humanTiming ($time){
 //member Block
 function members_block(){
      global $base_url; $themepath = $base_url.'/'.path_to_theme();
-      $query = db_select('users', 'u');
+     $query = db_select('users', 'u');
      $query->fields('u');
-      $query->condition('u.uid',0,'>');
+     $query->condition('u.status',1,'=');
      $query->range(0, 9);
      $result = $query->execute();
      $no_member="";
