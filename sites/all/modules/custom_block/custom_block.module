@@ -988,11 +988,3 @@ $total="";
      $total_download=explode(',',$total);
 return array_sum($total_download);
 }
-//get feeds form drupal.orgs
-function drupal_content(){
-     $str = file_get_contents('https://drupal.org/node/2260281/release/feed');
-     return explode("views-table",$str)[1];
-//echo "<pre>";
-//print_r (explode("view-project-release-files",$str)[1]);
-//echo "</pre>";
-}
