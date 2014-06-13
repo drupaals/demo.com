@@ -183,8 +183,9 @@ if(arg(0) ==  "node"){
 	    if($str){
 		$substr=explode("view-project-release-files",$str);
 		echo "<pre>";
-		print_r($substr);
+		print_r(substr($substr[1],173));
 		echo "</pre>";
+		echo htmlspecialchars_decode(substr(substr($substr[1],173)), 0,2515);
 		//Other releases
 	//	$substr1=explode("view-project-release-files",$str);
 	//	$drupal_download='<div class="drupal-download"><h4>Recommended releases</h4>'.htmlspecialchars_decode(substr($substr, 0,2515)).'</div>
