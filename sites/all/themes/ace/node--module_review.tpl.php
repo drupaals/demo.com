@@ -183,7 +183,8 @@ if(arg(0) ==  "node"){
 	    if($str){
 		$substr=explode("view-project-release-files",$str);
 		$rohit1=substr($substr[1],173);
-		$drupal_download= htmlspecialchars_decode($rohit1);
+		$rohit2 = substr($rohit1, 0,2515);
+		$drupal_download= htmlspecialchars_decode($rohit2);
 		//Other releases
 	//	$substr1=explode("view-project-release-files",$str);
 	//	$drupal_download='<div class="drupal-download"><h4>Recommended releases</h4>'.htmlspecialchars_decode(substr($substr, 0,2515)).'</div>
