@@ -22,9 +22,8 @@ DirectoryIndex index.php index.html index.htm
 
 # Override PHP settings that cannot be changed at runtime. See
 # sites/default/default.settings.php and drupal_environment_initialize() in
-php_value memory_limit 512M
 # includes/bootstrap.inc for settings that can be changed at runtime.
-
+php_value memory_limit 512M
 
 
 
