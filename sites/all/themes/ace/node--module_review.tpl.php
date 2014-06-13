@@ -182,10 +182,8 @@ if(arg(0) ==  "node"){
 	$str = file_get_contents($node->field_drupal_module_link['und'][0]['value'].'/release/feed');
 	    if($str){
 		$substr=explode("view-project-release-files",$str);
-		echo "<pre>";
-		print_r(substr($substr[1],173));
-		echo "</pre>";
-		echo htmlspecialchars_decode(substr(substr($substr[1],173)), 0,2515);
+		$rohit1=substr($substr[1],173);
+		$drupal_download= htmlspecialchars_decode($rohit1);
 		//Other releases
 	//	$substr1=explode("view-project-release-files",$str);
 	//	$drupal_download='<div class="drupal-download"><h4>Recommended releases</h4>'.htmlspecialchars_decode(substr($substr, 0,2515)).'</div>
