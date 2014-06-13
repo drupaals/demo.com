@@ -180,6 +180,10 @@ if(arg(0) ==  "node"){
 	if(!empty($node->field_drupal_module_link)){
 	//Recommended releases
 	$str = file_get_contents($node->field_drupal_module_link['und'][0]['value'].'/release/feed');
+	echo "<pre>";
+	print_r($str);
+	echo "</pre>";
+	die;
 	$substr=substr(explode("view-project-release-files",$str)[1], 173);
 	//Other releases
 	$substr1=substr(explode("view-project-release-files",$str)[2], 173);
