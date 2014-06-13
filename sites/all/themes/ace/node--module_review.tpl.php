@@ -180,14 +180,12 @@ if(arg(0) ==  "node"){
 	if(!empty($node->field_drupal_module_link)){
 	//Recommended releases
 	$str = file_get_contents($node->field_drupal_module_link['und'][0]['value'].'/release/feed');
-	$substr=substr(explode("view-project-release-files",$str));
-	$substr_expload=($substr[1], 173);
+	$substr=substr(explode("view-project-release-files",$str)[1], 173);
 	//Other releases
-	$substr1=substr(explode("view-project-release-files",$str));
-	$substr1_expload=($substr1[2], 173);
-	$drupal_download='<div class="drupal-download"><h4>Recommended releases</h4>'.htmlspecialchars_decode(substr($substr_expload, 0,2515)).'</div>
+	$substr1=substr(explode("view-project-release-files",$str)[2], 173);
+	$drupal_download='<div class="drupal-download"><h4>Recommended releases</h4>'.htmlspecialchars_decode(substr($substr, 0,2515)).'</div>
 	
-			 </ br></ br><div class="drupal-dev-download" style="margin-top: 25px;"><h4>Other releases</h4>'.htmlspecialchars_decode(substr($substr1_expload, 0,2515)).'
+			 </ br></ br><div class="drupal-dev-download" style="margin-top: 25px;"><h4>Other releases</h4>'.htmlspecialchars_decode(substr($substr1, 0,2515)).'
 			 <div class="see-all-releases"><h4 style="text-decoration: underline; color: rgb(66, 139, 202);">'.l('See all releases', $node->field_drupal_module_link['und'][0]['value'].'/release', array('attributes'=>array('target'=>'_blank'))).'</h4></div><hr>';
 	}
 	$output_review='<div class="details-section description simple contains-text-link"><h4>Reviews '.$comment_link.'</h4>
