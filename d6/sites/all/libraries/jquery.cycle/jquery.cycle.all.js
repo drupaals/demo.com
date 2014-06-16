@@ -984,7 +984,7 @@ $.fn.cycle.custom = function(curr, next, opts, cb, fwd, speedOverride) {
 	//	if (!opts.sync) 
 	//		fn();
 	//});
-	if (opts.sync) fn();
+	//if (opts.sync) fn();
 };
 
 // transition definitions - only fade is defined here, transition pack defines the rest
