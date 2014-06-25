@@ -1,0 +1,17 @@
+name = Nivo Slider
+description = Provides a nivo slider views display plugin.
+package = Views
+core = 6.x
+dependencies[] = views
+dependencies[] = jquery_update
+dependencies[] = libraries
+version = "6.x-1.x-dev"
+core = "6.x"
+project = "nivo_slider"
+
+; Information added by drupal.org packaging script on 2013-10-01
+version = "6.x-1.x-dev"
+core = "6.x"
+project = "nivo_slider"
+datestamp = "1380593192"
+
