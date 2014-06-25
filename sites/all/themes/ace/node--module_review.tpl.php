@@ -57,7 +57,7 @@ if(arg(0) ==  "node"){
 		</div>
 		<span class="info-container">
 		    <div itemprop="name" class="document-title"> <h3>'.$node->title.'</h3> </div>
-		    <span>-'.date("F j,  Y",$node->created).'</span>
+		    <span>- '.date("F j,  Y",$node->created).'</span>
 		    <div><b>Available version:</b>
 			<div>
 			    <div><b>D6: </b>'.$d6_link.'</div>
