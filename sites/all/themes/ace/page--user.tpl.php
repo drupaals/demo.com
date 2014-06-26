@@ -10,8 +10,9 @@
         
         <div id="login" class="animate form position">
             <div id="login-content">
+		<?php print $messages; ?>
                 <h4 style="color: rgb(66, 139, 202);">Enter Your Login Information</h4>
-                <?php print render(drupal_get_form('user_login_block')); ?>
+               <?php print render($page['content']); ?>
             </div>
         </div>
     </div>

@@ -86,3 +86,4 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .no-member p{font-size: 20px;margin-top: 30px;}
 .links{height: auto;list-style-type: none; margin: 0;overflow: hidden; position: absolute; margin-top: -5.5%; width: 22%;}
 #user-register-form #edit-submit{margin-top:25px;}
+#user-login .form-text{width: 100%;}
