@@ -10,6 +10,7 @@
         <div id="login" class="animate form position">
             <div id="login-content">
                <h4 style="color: rgb(66, 139, 202); margin-bottom: 0px;">Retrieve Password </h4>
+	       <?php print $messages; ?>
                 <?php print render($page['content']); ?>
             </div>
         </div>

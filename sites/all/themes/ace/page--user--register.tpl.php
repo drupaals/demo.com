@@ -12,6 +12,7 @@
         <div id="login" class="animate form position">
             <div id="login-content">
                 <h4 style="color: rgb(66, 139, 202); margin-bottom: 0px;">New User Registration</h4>
+		<?php print $messages; ?>
                 <?php print render($page['content']); ?>
 	      <ul class="links">
 		<li class="first" style="float: left;"><a title="User login" href="<?php print $base_url ?>/user">User login</a></li>
