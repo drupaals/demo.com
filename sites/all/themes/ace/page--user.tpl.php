@@ -13,6 +13,9 @@
 		<?php print $messages; ?>
                 <h4 style="color: rgb(66, 139, 202);">Enter Your Login Information</h4>
                <?php print render($page['content']); ?>
+	          <div class="user-login-links">
+	<span class="password-link"><a href="<?php echo $base_path.'user/password'; ?>">Forget your password?</a></span> | <span class="register-link"><a href="<?php echo $base_path.'user/register';?>">Create an account</a></span>
+    </div>
             </div>
         </div>
     </div>
