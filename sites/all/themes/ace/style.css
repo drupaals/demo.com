@@ -87,3 +87,6 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .links{height: auto;list-style-type: none; margin: 0;overflow: hidden; position: absolute; margin-top: -5.5%; width: 22%;}
 #user-register-form #edit-submit{margin-top:25px;}
 #user-login .form-text{width: 100%;}
+#edit-socialloginandsocialshare-links label{color: rgb(66, 139, 202);}
+#edit-socialloginandsocialshare-links{ max-height: 5em;}
+.lr-secured-linkbox{display:none;}
