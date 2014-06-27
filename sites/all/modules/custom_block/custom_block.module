@@ -314,40 +314,40 @@ $q->join('popular_pages', 'p', 'p.nid = n.nid');
 $q->fields('n');
 $q->fields('p', array('date','lastday_count'));
 $q->orderBy('n.totalcount' , 'DESC');
-$q->range(0, 5);
+$q->range(0, 6);
 $result = $q->execute();
 	  $version_result="";
      foreach($result as $output){
 	  $value = node_load($output->nid);
-	  if($value->type == 'module_review'){
-	  if(!empty($value->field_module_version)){
-	       foreach($value->field_module_version['und'] as $key=>$module_version){
-		    $version=taxonomy_term_load($module_version['tid']);
-		    $tid_name=substr($version->name, 0 , 1);
-		    $version_result.=$tid_name.', ';  
+	  if(!empty($value) && $value->type == 'module_review'){
+	       if(!empty($value->field_module_version)){
+		    foreach($value->field_module_version['und'] as $key=>$module_version){
+			 $version=taxonomy_term_load($module_version['tid']);
+			 $tid_name=substr($version->name, 0 , 1);
+			 $version_result.=$tid_name.', ';  
+		    }
 	       }
-	  }
-
-	  $num = explode(',',$version_result); $j=2; $tgs='';
-	  foreach($num as $nums){if($j<count($num)) $comma = ', '; else $comma = '';  $tgs .= $nums.$comma; $j++;}
-	  
-	  $change_date=date('j F Y',$output->timestamp);
-	  $last_date=date('j F Y',$output->date);
-	  if($output->lastday_count < $output->totalcount){
-	       $position='<span class="label label-success arrowed-in arrowed-in-right">Up</span>';
-	  }else{
-	       $position='<span class="label label-danger arrowed">Down</span>';
-	  }
-	  $popular_modules.='<tr>
-			      <td>'.l($value->title,'node/'.$value->nid).'</td>
-			      <td>
-				   <b class="green">'.$tgs.'</b>
-			      </td>
-			      <td class="hidden-480">
-				   '.$position.'
-			      </td>
-		    </tr>';
-		    $version_result="";
+     
+	       $num = explode(',',$version_result); $j=2; $tgs='';
+	       foreach($num as $nums){if($j<count($num)) $comma = ', '; else $comma = '';  $tgs .= $nums.$comma; $j++;}
+	       
+	       $change_date=date('j F Y',$output->timestamp);
+	       $last_date=date('j F Y',$output->date);
+	       if($output->lastday_count < $output->totalcount){
+		    $position='<span class="label label-success arrowed-in arrowed-in-right">Up</span>';
+	       }else{
+		    $position='<span class="label label-danger arrowed">Down</span>';
+	       }
+	       $popular_modules.='<tr>
+				   <td>'.l($value->title,'node/'.$value->nid).'</td>
+				   <td>
+					<b class="green">'.$tgs.'</b>
+				   </td>
+				   <td class="hidden-480">
+					'.$position.'
+				   </td>
+			 </tr>';
+			 $version_result="";
 	  }
      }
     
