@@ -429,7 +429,7 @@ function recent_comments_block(){
 			 '.$user_img.'
 		    </div>
      
-		    <div class="body" style="height: 85px;">
+		    <div class="body" style="height: 85px;overflow: hidden;">
 			    <div class="time">
 				    <i class="icon-time"></i>
 				    <span class="green">'.humanTiming($comment_load->created).'  ago</span>
