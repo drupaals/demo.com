@@ -1,0 +1,1183 @@
+<?php
+/**
+ * @file
+ * Implement socialloginandsocialshare support for Drupal
+ */
+
+/**
+ * Implements hook_menu().
+ *
+ * Responed to url handling for socialloginandsocialshare module.
+ */
+function socialloginandsocialshare_menu() {
+  $items['user/%user/delete'] = array(
+    'title' => 'Delete Social Login',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('socialloginandsocialshare_user_delete_form', 1),
+    'access callback' => 'user_edit_access',
+    'access arguments' => array(1),
+    'file' => 'socialloginandsocialshare.functions.inc',
+  );
+  $items['admin/config/people/socialloginandsocialshare'] = array(
+    'title' => 'Social Login and Social Share',
+    'description' => 'Configure settings for LoginRadius Social Login and Social Share',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('socialloginandsocialshare_admin_settings'),
+    'access arguments' => array('administer social login'),
+    'weight' => -4,
+    'file' => 'socialloginandsocialshare.admin.inc',
+  );
+  $items['admin/config/people/socialloginandsocialshare/settings'] = array(
+    'title' => 'Social Login',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('socialloginandsocialshare_admin_settings'),
+    'access arguments' => array('administer social login'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+    'file' => 'socialloginandsocialshare.admin.inc',
+  );
+  $items['admin/config/people/socialloginandsocialshare/share'] = array(
+    'title' => 'Social Sharing',
+    'description' => 'socialloginandsocialshare Share settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('socialloginandsocialshare_sharebar_settings_form'),
+    'access arguments' => array('administer social login'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 2,
+    'file' => 'socialloginandsocialshare.admin.inc',
+  );
+  $items['admin/config/people/socialloginandsocialshare/advancesettings'] = array(
+    'title' => 'Advance Settings',
+    'description' => 'Advance settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('socialloginandsocialshare_advance_settings_form'),
+    'access arguments' => array('administer social login'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 3,
+    'file' => 'socialloginandsocialshare.admin.inc',
+  );
+  $items['admin/config/people/socialloginandsocialshare/help'] = array(
+    'title' => 'Help',
+    'page callback' => 'socialloginandsocialshare_user_help',
+    'access arguments' => array('administer social login'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 4,
+    'file' => 'socialloginandsocialshare.admin.inc',
+  );
+  $items['socialloginandsocialshare/token_handler'] = array(
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('socialloginandsocialshare_user_register_validate'),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_admin_paths().
+ *
+ * Respond to Define administrative paths.
+ */
+function socialloginandsocialshare_admin_paths() {
+  $paths = array(
+    'user/*/socialloginandsocialshare' => TRUE,
+    'user/*/socialloginandsocialshare/delete/*' => TRUE,
+  );
+  return $paths;
+}
+
+/**
+ * Implements hook_permission().
+ *
+ * Responed to Define user permissions.
+ */
+function socialloginandsocialshare_permission() {
+  $permissions = array(
+    'administer social login' => array(
+      'title' => t('Administer Social Login settings'),
+      'restrict access' => TRUE,
+    ),
+  );
+  return $permissions;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function socialloginandsocialshare_theme() {
+  $path = drupal_get_path('module', 'socialloginandsocialshare') . '/theme';
+  return array(
+    'socialloginandsocialshare_popup' => array(
+      'variables' => array(
+        'popup_params' => NULL,
+      ),
+      'template' => 'socialloginandsocialshare_popup',
+      'path' => $path,
+    ),
+    'socialloginandsocialshare_links' => array(
+      'variables' => array(
+        'params' => NULL,
+      ),
+      'template' => 'socialloginandsocialshare_links',
+      'path' => $path,
+    ),
+    'socialloginandsocialshare_linked' => array(
+      'variables' => array(
+        'params' => NULL,
+      ),
+      'template' => 'socialloginandsocialshare_linked',
+      'path' => $path,
+    ),
+  );
+}
+
+function socialloginandsocialshare_form_user_profile_form_alter(&$form, &$form_state, $form_id) {
+  global $user;
+  if (is_null(arg(3)) || arg(3) == 'account') {
+    if (variable_get('socialloginandsocialshare_account_linking', '') == 1 && !user_access('administer site configuration')) {
+      $identity_title = variable_get('socialloginandsocialshare_identity_label_string');
+      $form['socialloginandsocialshare_linked'] = array(
+        '#type' => 'item',
+        '#title' => '',
+        '#markup' => theme('socialloginandsocialshare_linked'),
+        '#attributes' => array('class' => array('socialloginandsocialshare_linked')),
+        '#prefix' => '<fieldset class="form-wrapper" id="edit-social-linked"><legend><span class="fieldset-legend">' . t($identity_title) . '</span></legend>',
+        '#suffix' => '</fieldset>',
+        '#weight' => -20,
+      );
+    }
+  }
+  return $form;
+}
+
+/*
+ * variables for socialloginandsocialshare_linked.tpl file
+ * Show Social Login interface
+ */
+function socialloginandsocialshare_preprocess_socialloginandsocialshare_linked(&$vars) {
+  global $user;
+  socialloginandsocialshare_options($vars);
+  $result = db_query("SELECT am.aid, authname, provider, provider_id FROM {authmap} am INNER JOIN {socialloginandsocialshare_mapusers} sm ON am.aid = sm.aid WHERE module = :module AND uid = :uid", array(
+    ':module' => 'socialloginandsocialshare',
+    ':uid' => $user->uid
+  ));
+  foreach ($result as $identity) {
+    $key = $identity->aid;
+    $vars['providers'][$identity->provider_id] = $identity->provider;
+  }
+}
+
+/*
+ * variables for socialloginandsocialshare_links.tpl file
+ * Show Social Linking interface
+ */
+function socialloginandsocialshare_preprocess_socialloginandsocialshare_links(&$vars) {
+  socialloginandsocialshare_options($vars);
+}
+
+/**
+ * Add the LoginRadius Social Login script and Social Share Script.
+ */
+function socialloginandsocialshare_preprocess_page(&$vars, $hook) {
+  if (!user_access('administer site configuration')) {
+    $api_key = trim(variable_get('socialloginandsocialshare_apikey'));
+    if (!empty($api_key)) {
+      drupal_add_js('//hub.loginradius.com/include/js/LoginRadius.js', array(
+        'type' => 'external',
+        'scope' => 'header',
+        'weight' => 5
+      ));
+      drupal_add_js($GLOBALS['base_url'] . '/' . drupal_get_path('module', 'socialloginandsocialshare') . '/js/LoginRadiusSDK.2.0.0.js', array(
+          'type' => 'external',
+          'scope' => 'header',
+          'weight' => 6
+        ));
+    }
+    if (variable_get('socialloginandsocialshare_enable_horizontal_share') == 1 || variable_get('socialloginandsocialshare_enable_vertical_share') == 1) {
+      $share_script_init = "var islrsharing = true; var islrsocialcounter = true; var hybridsharing = true;";
+      drupal_add_js($share_script_init, array('type' => 'inline', 'scope' => 'footer', 'weight' => -10));
+    }
+  }
+}
+
+function socialloginandsocialshare_options(&$vars) {
+  $vars['api_key'] = trim(variable_get('socialloginandsocialshare_apikey'));
+  $vars['loc'] = get_callback_url();
+  $vars['interfaceiconsize'] = (variable_get('socialloginandsocialshare_interface_size') == 0 ? "small" : "");
+  $interfacebackgroundcolor = variable_get('socialloginandsocialshare_interface_bgcolor');
+  $vars['interfacebackgroundcolor'] = (!empty($interfacebackgroundcolor) ? trim($interfacebackgroundcolor) : "");
+  $interfacerow = variable_get('socialloginandsocialshare_interface_columns');
+  $vars['interfacerow'] = (!empty($interfacerow) && is_numeric($interfacerow) ? trim($interfacerow) : 0);
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Respond to disable traditional login form.
+ */
+function socialloginandsocialshare_form_alter(&$form, $form_state, $form_id) {
+  if (variable_get('socialloginandsocialshare_disable_traditional_login') == 1) {
+    if ($form_id == 'user_login_block') {
+      unset($form['name']);
+      unset($form['pass']);
+      unset($form['actions']);
+      unset($form['links']);
+    }
+    return $form;
+  }
+  //Add Social Login Interface at Comment form.
+
+}
+/*
+ * Add social login interface at commenting form.
+ */
+function socialloginandsocialshare_form_comment_form_alter(&$form, &$form_state) {
+  //add an I agree to house rules checkbox to the form
+  if (variable_get('socialloginandsocialshare_commenting_enable') == 1) {
+    // add field to comment content type
+    if (user_is_logged_in()) {
+      return;
+    }
+    // check if loginradius sent a token to authenticate the user
+    socialloginandsocialshare_user_login_form_alter($form, $form_state);
+  }
+}
+
+/**
+ * Implements hook_help().
+ *
+ * Respond to Provide online user help links.
+ *
+ * @param string $path
+ *   The router menu path, as defined in hook_menu.
+ */
+function socialloginandsocialshare_help($path) {
+  switch ($path) {
+    case 'admin/help#socialloginandsocialshare':
+      $loginradius_link = l(t('LoginRadius'), 'http://ish.re/4', array('attributes' => array('target' => '_blank')));
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('This social login module is developed by LoginRadius which is a Software As A Service (SaaS).Social Login module enables social login on a Drupal website letting users log in through their existing IDs such as Facebook, Twitter, Google, Yahoo and over 25 more!. Please visit the !loginradius.', array('!loginradius' => $loginradius_link)) . '</p>';
+      $items = array(
+        t('Social login'),
+        t('User profile data'),
+        t('Social analytics'),
+        t('Eliminating registration process'),
+        t('Syncronize social login with traditional login'),
+      );
+      $output .= theme('item_list', array('items' => $items, 'title' => t('Use')));
+      $items = array(
+        l(t('Drupal live demo'), 'http://drupaldemo.loginradius.com/', array('attributes' => array('target' => '_blank'))),
+        l(t('Drupal Plugin Documentations'), 'http://ish.re/AEGE', array('attributes' => array('target' => '_blank'))),
+        l(t('LoginRadius'), 'http://ish.re/4', array('attributes' => array('target' => '_blank'))),
+        l(t('Developers'), 'http://ish.re/AFGF', array('attributes' => array('target' => '_blank'))),
+        l(t('LoginRadius blog'), 'http://ish.re/AEGG', array('attributes' => array('target' => '_blank'))),
+        l(t('LoginRadius video'), 'http://ish.re/AEGI', array('attributes' => array('target' => '_blank'))),
+      );
+      $output .= theme('item_list', array('items' => $items, 'title' => t('Important links')));
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Respond to altering user login block.
+ */
+function socialloginandsocialshare_form_user_login_block_alter(&$form, &$form_state) {
+  if (variable_get('socialloginandsocialshare_attach_login_form') == 1) {
+    socialloginandsocialshare_user_login_form_alter($form, $form_state);
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for socialloginandsocialshare_form_user_login_alter().
+ *
+ * Respond to add a socialloginandsocialshare link on user login form.
+ */
+function socialloginandsocialshare_form_user_login_alter(&$form, &$form_state) {
+  if (variable_get('socialloginandsocialshare_loginpage_position') == 1) {
+    socialloginandsocialshare_user_login_form_alter($form, $form_state);
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Respond to add a socialloginandsocialshare link on user register form.
+ */
+function socialloginandsocialshare_form_user_register_form_alter(&$form, &$form_state) {
+// Add socialloginandsocialshare link to registration form.
+  if (isset($_SESSION['social_lrdata'])) {
+    $lrdata = $_SESSION['social_lrdata'];
+    if (isset($lrdata['id']) && !empty($lrdata['id'])) {
+      $data = socialloginandsocialshare_check_exist_username($lrdata);
+      $username = $data['username'];
+      $email = '';
+      if (isset($lrdata['email'])) {
+        $email = $lrdata['email'];
+      }
+      $fname = $data['fname'];
+      $lname = $data['lname'];
+      $form['account']['name']['#default_value'] = $username;
+      $form['account']['mail']['#default_value'] = $email;
+      $form['account']['pass']['#type'] = 'hidden';
+      $form['account']['pass']['#value'] = user_password();
+      module_load_include('inc', 'socialloginandsocialshare', 'socialloginandsocialshare.field');
+      if (!empty($lrdata['gender'])) {
+        if ($lrdata['gender'] == 'M') {
+          $lrdata['gender'] = 'Male';
+        }
+        if ($lrdata['gender'] == 'F') {
+          $lrdata['gender'] = 'Female';
+        }
+      }
+      $field_map = variable_get('socialloginandsocialshare_user_fields', array());
+      $field_convert_info = socialloginandsocialshare_field_convert_info();
+      $instances = field_info_instances('user', 'user');
+      foreach ($instances as $field_name => $instance) {
+        $field = field_info_field($instance['field_name']);
+        if (isset($field_map[$field_name]) && isset($field_convert_info[$field['type']]['callback'])) {
+          $callback = $field_convert_info[$field['type']]['callback'];
+          $socialloginandsocialshare_property_name = $field_map[$field_name];
+          if ($value = $callback($socialloginandsocialshare_property_name, $lrdata, $field, $instance)) {
+            $form[$field_name][LANGUAGE_NONE][0]['value']['#default_value'] = $value;
+          }
+        }
+      }
+      if (module_exists('profile2')) {
+        $field_map = variable_get('socialloginandsocialshare_profile_fields', array());
+        $field_convert_info = socialloginandsocialshare_field_convert_info();
+        $instances = field_info_instances('profile2');
+        foreach (field_info_instances('profile2') as $field_name => $instances) {
+          foreach ($instances as $instance => $array) {
+            $field = field_info_field($array['field_name']);
+            if (isset($field_map[$field_name][$array['field_name']]) && isset($field_convert_info[$field['type']]['callback'])) {
+              $callback = $field_convert_info[$field['type']]['callback'];
+              $socialloginandsocialshare_property_name = $field_map[$field_name][$array['field_name']];
+              if ($value = $callback($socialloginandsocialshare_property_name, $lrdata, $field, $array)) {
+                $form['profile_' . $field_name][$array['field_name']][LANGUAGE_NONE][0]['value']['#default_value'] = $value;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  //Add Social Login Interface at Register page.
+  if (variable_get('socialloginandsocialshare_registerpage_position') == 1) {
+    socialloginandsocialshare_user_login_form_alter($form, $form_state);
+  }
+}
+
+/*
+* Insert user data when New user register via traditional social login.
+*/
+function socialloginandsocialshare_user_insert(&$edit, $account, $category) {
+  if (isset($_SESSION['social_lrdata'])) {
+    $lrdata = $_SESSION['social_lrdata'];
+    unset($_SESSION['social_lrdata']);
+    if (variable_get('user_pictures') == 1 && !empty($lrdata['thumbnail'])) {
+      socialloginandsocialshare_insert_picture($lrdata, $account);
+    }
+    db_delete('authmap')
+      ->condition('authname', $lrdata['id'])
+      ->execute();
+    user_set_authmaps($account, array('authname_socialloginandsocialshare' => $lrdata['id']));
+    $aid = db_query('SELECT aid FROM {authmap} WHERE authname = :id', array('id' => $lrdata['id']))->fetchField();
+    $check_aid = db_query('SELECT aid FROM {socialloginandsocialshare_mapusers} WHERE aid = :id', array('id' => $aid))->fetchField();
+    if (!empty($check_aid)) {
+      $query2 = db_delete('socialloginandsocialshare_mapusers')
+        ->condition('aid', $aid)
+        ->execute();
+    }
+    db_insert('socialloginandsocialshare_mapusers')
+      ->fields(array(
+        'aid' => $aid,
+        'provider' => $lrdata['provider'],
+        'provider_id' => $lrdata['id'],
+      ))
+      ->execute();
+  }
+}
+
+/**
+ * Respond to altering user login/register form.
+ *
+ * @param array $form
+ *   Nested array of form elements that comprise the form.
+ * @param array $form_state
+ *   A keyed array containing the current state of the form.
+ */
+function socialloginandsocialshare_user_login_form_alter(&$form, &$form_state) {
+  global $user, $base_url;
+  $api_key = trim(variable_get('socialloginandsocialshare_apikey'));
+  $secret = trim(variable_get('socialloginandsocialshare_apisecret'));
+  $iconpos = (variable_get('socialloginandsocialshare_showicon_location', 0) ? 102 : -102);
+  if (!empty($api_key) && !empty($secret) && (!preg_match('/^\{?[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}\}?$/i', $api_key) || !preg_match('/^\{?[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}\}?$/i', $secret))) {
+    $form['socialloginandsocialshare_links'] = array(
+      '#type' => 'item',
+      '#title' => t('<div class="interface_error">Your LoginRadius API key or secret is not valid, please correct it or contact LoginRadius support at <a href="@this" target="_blank">www.LoginRadius.com</a></div>', array('@this' => 'http://www.Loginradius.com/')),
+      '#attributes' => array('class' => array('socialloginandsocialshare-links')),
+      '#weight' => $iconpos,
+    );
+  }
+  elseif (!empty($api_key) && !empty($secret)) {
+    //  $label_string = variable_get('socialloginandsocialshare_label_string');
+    $form['socialloginandsocialshare_links'] = array(
+      '#type' => 'item',
+      '#title' => variable_get('socialloginandsocialshare_label_string'),
+      '#markup' => theme('socialloginandsocialshare_links'),
+      '#attributes' => array('class' => array('socialloginandsocialshare-links')),
+      '#weight' => $iconpos,
+    );
+  }
+}
+
+/**
+ * Function that process login functionality.
+ *
+ */
+function socialloginandsocialshare_user_register_validate($form, &$form_state) {
+  global $user;
+  if (!user_is_logged_in()) {
+    if (isset($_SESSION['current_social_provider'])) {
+      unset($_SESSION['current_social_provider']);
+    }
+    $secret = trim(variable_get('socialloginandsocialshare_apisecret'));
+    // Get socialloginandsocialshare variable.
+    // Fetch data from submitted.
+    if (isset($_REQUEST['socialloginandsocialshare_emailclick'])) {
+      if (isset($_SESSION['lrdata']) && !empty($_SESSION['lrdata'])) {
+        $lrdata = $_SESSION['lrdata'];
+        $lrdata['email'] = trim($_REQUEST['email']);
+        //Call the email popup when email address is wrong.
+        if (!valid_email_address($lrdata['email'])) {
+          $popup_params['msg'] = t("This email is invalid. Please choose another one.");
+          if (empty($lrdata['email'])) {
+            $popup_params['msg'] = t("Email is required.");
+          }
+          $popup_params['msgtype'] = 'warning';
+          $popup_params['provider'] = $lrdata['provider'];
+          $form['socialloginandsocialshare_popup'] = array(
+            '#type' => 'item',
+            '#title' => '',
+            '#markup' => theme('socialloginandsocialshare_popup', array('popup_params' => $popup_params)),
+            '#attributes' => array('class' => array('socialloginandsocialshare_popup-links')),
+            '#weight' => 20,
+          );
+          return $form;
+        }
+        else {
+          $check_mail = user_load_by_mail($lrdata['email']);
+          if (!empty($check_mail)) {
+            $email_wrong = variable_get('socialloginandsocialshare_emailrequired_popup_wrong');
+            $popup_params['msg'] = t($email_wrong);
+            $popup_params['msgtype'] = 'warning';
+            $popup_params['provider'] = $lrdata['provider'];
+            $form['socialloginandsocialshare_popup'] = array(
+              '#type' => 'item',
+              '#title' => '',
+              '#markup' => theme('socialloginandsocialshare_popup', array('popup_params' => $popup_params)),
+              '#attributes' => array('class' => array('socialloginandsocialshare_popup-links')),
+              '#weight' => 20,
+            );
+            return $form;
+          }
+          else {
+            variable_set('user_verify', 1);
+            $lrdata = $_SESSION['lrdata'];
+            unset($_SESSION['lrdata']);
+            $lrdata['email'] = trim($_REQUEST['email']);
+            socialloginandsocialshare_adduser($lrdata, $form, $form_state);
+          }
+        }
+      }
+    }
+    elseif (isset($_REQUEST['socialloginandsocialshare_emailclick_cancel'])) {
+      unset($_SESSION['lrdata']);
+      drupal_goto();
+    }
+    if (!isset($_REQUEST['token'])) {
+      return;
+    }
+    $lrdata = array();
+    $obj = new LoginRadius();
+    $userprofile = $obj->loginradius_get_user_profiledata($_REQUEST['token']);
+    if (isset($userprofile->ID) && $userprofile->ID != '' && !user_is_logged_in()) {
+      $lrdata = socialloginandsocialshare_getuser_data($userprofile);
+      variable_set('user_verify', 0);
+      if ((empty($lrdata['email']) && variable_get('socialloginandsocialshare_email_required') == 0) || !empty($lrdata['email'])) {
+        if (empty($lrdata['email']) && variable_get('socialloginandsocialshare_email_required') == 0) {
+          switch ($lrdata['provider']) {
+            case 'twitter':
+              $lrdata['email'] = $lrdata['id'] . '@' . $lrdata['provider'] . '.com';
+              break;
+            default:
+              $email_id = drupal_substr($lrdata['id'], 7);
+              $email_id2 = str_replace("/", "_", $email_id);
+              $lrdata['email'] = str_replace(".", "_", $email_id2) . '@' . $lrdata['provider'] . '.com';
+              break;
+          }
+        }
+        $account = user_external_load($lrdata['id']);
+        if (!$account) {
+          $account = user_load_by_mail($lrdata['email']);
+          if (!$account) {
+            if (variable_get('socialloginandsocialshare_force_registration') == 0) {
+              $_SESSION['social_lrdata'] = $lrdata;
+              unset($_GET['destination']);
+              drupal_goto('user/register');
+            }
+          }
+        }
+        socialloginandsocialshare_adduser($lrdata, $form, $form_state);
+      }
+      if (variable_get('socialloginandsocialshare_email_required', '') == 1 && empty($lrdata['email'])) {
+        $account = user_external_load($lrdata['id']);
+        if (isset($account->uid)) {
+          if ($account->login) {
+            // Check if user is blocked.
+            $state['values']['name'] = $account->name;
+            user_login_name_validate(array(), $state);
+            if (!form_get_errors()) {
+              if (variable_get('socialloginandsocialshare_update_profile') == 1) {
+                module_load_include('inc', 'socialloginandsocialshare', 'socialloginandsocialshare.field');
+                $data = array();
+                if (!empty($lrdata['gender'])) {
+                  if ($lrdata['gender'] == 'M') {
+                    $lrdata['gender'] = 'Male';
+                  }
+                  elseif ($lrdata['gender'] == 'F') {
+                    $lrdata['gender'] = 'Female';
+                  }
+                }
+                socialloginandsocialshare_field_create_user($data, $lrdata);
+                if (module_exists('profile2')) {
+                  socialloginandsocialshare_field_create_profile_user($account, $lrdata, $form, $form_state);
+                }
+                $account = user_save($account, $data);
+                if (variable_get('user_pictures') == 1 && !empty($lrdata['thumbnail'])) {
+                  socialloginandsocialshare_insert_picture($lrdata, $account);
+                }
+              }
+              $form_state['uid'] = $account->uid;
+              user_login_submit(array(), $form_state);
+            }
+            $_SESSION['current_social_provider'] = $lrdata['id'];
+            socialloginandsocialshare_user_redirect($form, $account);
+          }
+          else {
+            drupal_set_message(t("You are either blocked, or have not activated your account. Please check your email."), 'error');
+            drupal_goto();
+          }
+        }
+        else {
+          if (variable_get('socialloginandsocialshare_force_registration') == 0) {
+            //if (variable_get('socialloginandsocialshare_force_registration') == 0) {
+            $_SESSION['social_lrdata'] = $lrdata;
+            unset($_GET['destination']);
+            drupal_goto('user/register');
+          }
+          $_SESSION['lrdata'] = $lrdata;
+          $popup_params['provider'] = $lrdata['provider'];
+          $text_emailpoup = variable_get('socialloginandsocialshare_emailrequired_popup_text');
+          $popup_params['msg'] = t($text_emailpoup, array('@provider' => t($lrdata['provider'])));
+          $popup_params['msgtype'] = 'status';
+          $form['socialloginandsocialshare_popup'] = array(
+            '#type' => 'item',
+            '#title' => '',
+            '#markup' => theme('socialloginandsocialshare_popup', array('popup_params' => $popup_params)),
+            '#attributes' => array('class' => array('socialloginandsocialshare-links')),
+            '#weight' => 20,
+          );
+          return $form;
+        }
+      }
+    }
+    elseif (!user_is_logged_in()) {
+      if (variable_get('socialloginandsocialshare_debug_mode') == 1) {
+        drupal_set_message(t($userprofile->description), 'error');
+      }
+      else {
+        drupal_set_message(t('An error occurred during the processing of your request. Please try again in a few minutes or contact the site admin.'), 'error');
+      }
+      drupal_goto();
+
+    }
+  }
+  elseif (isset($_REQUEST['token'])) {
+    module_load_include('inc', 'socialloginandsocialshare', 'socialloginandsocialshare.functions');
+    socialloginandsocialshare_user_identities_submit($form, $user, $_REQUEST['token']);
+  }
+}
+
+/*
+ * Welcome email content.
+ */
+function socialloginandsocialshare_email_content_text() {
+  $output = variable_get('socialloginandsocialshare_email_content', FALSE);
+  if (!$output && $output !== '') {
+    $loginradius_link = l(t('LoginRadius'), 'http://www.LoginRadius.com/', array('attributes' => array('target' => '_blank')));
+    $output = '';
+    $output .= '[user:name],
+
+Your account at [site:name] has been created.
+
+Please use following credentials to log into your account:
+
+Website : [site:login-url]
+User name : [user:name]
+Password :  @password
+
+--  [site:name]';
+  }
+  return $output;
+
+}
+
+/*
+ * Implementats hook_mail()
+ */
+function socialloginandsocialshare_mail($key, &$message, $params) {
+  $language = $message['language'];
+  $variables = array('user' => $params['account'], 'pass' => isset($params['pass']) ? $params['pass'] : '');
+  switch ($key) {
+    case 'newuser':
+      $message['subject'] = _sociallogin_mail_text($key . '_subject', $language, $variables);
+      $message['body'][] = _sociallogin_mail_text($key . '_body', $language, $variables);
+      break;
+  }
+}
+
+/*
+ * Email Content when new user registers.
+ */
+function _sociallogin_mail_text($key, $language = NULL, $variables = array()) {
+  $langcode = isset($language) ? $language->language : NULL;
+  // No override, return default string.
+  switch ($key) {
+    case 'newuser_subject':
+      $text = t('Thank you for registering at [site:name]', array(), array('langcode' => $langcode));
+      break;
+    case 'newuser_body':
+      $email_content = socialloginandsocialshare_email_content_text();
+      $email_content = t($email_content, array('@password' => t($variables['pass'])));
+      $text = t($email_content, array(), array('langcode' => $langcode));
+      break;
+  }
+  $text = token_replace($text, $variables, array('language' => $language, 'callback' => 'user_mail_tokens'));
+  return $text;
+}
+
+/**
+ * Function for adding social user.
+ */
+function socialloginandsocialshare_adduser($lrdata, $form, &$form_state) {
+  global $user;
+  if (isset($lrdata['id']) && !empty($lrdata['id'])) {
+    $email = $lrdata['email'];
+    //check social provider is is already registered.
+    $account = user_external_load($lrdata['id']);
+    if (!$account) {
+      //check email address is already registered.
+      $account = user_load_by_mail($email);
+      if ($account) {
+        $authname_exist = db_query("SELECT authname FROM {authmap} am INNER JOIN {socialloginandsocialshare_mapusers} sm ON am.aid = sm.aid WHERE am.authname = :authname", array(
+          ':authname' => $lrdata['id'],
+        ))
+          ->fetchField();
+        if (empty($authname_exist) && !$authname_exist) {
+          $query = db_delete('authmap')
+            ->condition('authname', $lrdata['id'])
+            ->execute();
+          db_insert('authmap')
+            ->fields(array(
+              'uid' => $account->uid,
+              'authname' => $lrdata['id'],
+              'module' => 'socialloginandsocialshare',
+            ))
+            ->execute();
+          if (variable_get('socialloginandsocialshare_update_profile') == 1) {
+            if (variable_get('user_pictures') == 1 && !empty($lrdata['thumbnail'])) {
+              socialloginandsocialshare_insert_picture($lrdata, $account);
+            }
+          }
+          $aid = db_query('SELECT aid FROM {authmap} WHERE authname = :id', array('id' => $lrdata['id']))->fetchField();
+
+          $query2 = db_delete('socialloginandsocialshare_mapusers')
+            ->condition('provider_id', $lrdata['id'])
+            ->execute();
+
+          db_insert('socialloginandsocialshare_mapusers')
+            ->fields(array(
+              'aid' => $aid,
+              'provider' => $lrdata['provider'],
+              'provider_id' => $lrdata['id'],
+            ))
+            ->execute();
+        }
+      }
+    }
+    if (isset($account->uid)) {
+      if ($account->login) {
+        // Check if user is blocked.
+        $authname_exist = db_query("SELECT am.aid FROM {authmap} am INNER JOIN {socialloginandsocialshare_mapusers} sm ON am.aid = sm.aid WHERE am.authname = :authname", array(
+          ':authname' => $lrdata['id'],
+        ))
+          ->fetchField();
+        if (empty($authname_exist) && !$authname_exist) {
+          try {
+            $aid = db_query('SELECT aid FROM {authmap} WHERE authname = :id', array('id' => $lrdata['id']))->fetchField();
+            db_insert('socialloginandsocialshare_mapusers')
+              ->fields(array(
+                'aid' => $aid,
+                'provider' => $lrdata['provider'],
+                'provider_id' => $lrdata['id'],
+              ))
+              ->execute();
+          } catch (Exception $e) {
+            watchdog_exception('type', $e);
+          }
+        }
+        $state['values']['name'] = $account->name;
+        user_login_name_validate(array(), $state);
+        if (!form_get_errors()) {
+          if (variable_get('socialloginandsocialshare_update_profile') == 1) {
+            module_load_include('inc', 'socialloginandsocialshare', 'socialloginandsocialshare.field');
+            $data = array();
+            if (!empty($lrdata['gender'])) {
+              if ($lrdata['gender'] == 'M') {
+                $lrdata['gender'] = 'Male';
+              }
+              elseif ($lrdata['gender'] == 'F') {
+                $lrdata['gender'] = 'Female';
+              }
+            }
+            //Fill user profile field with social login profile data.
+            socialloginandsocialshare_field_create_user($data, $lrdata);
+            if (module_exists('profile2')) {
+              socialloginandsocialshare_field_create_profile_user($account, $lrdata, $form, $form_state);
+            }
+            //Insert the new user into database.
+            $account = user_save($account, $data);
+            if (variable_get('user_pictures') == 1 && !empty($lrdata['thumbnail'])) {
+              socialloginandsocialshare_insert_picture($lrdata, $account);
+            }
+          }
+          $form_state['uid'] = $account->uid;
+          user_login_submit(array(), $form_state);
+        }
+        $_SESSION['current_social_provider'] = $lrdata['id'];
+        //Redirect user after login.
+        socialloginandsocialshare_user_redirect($form, $account);
+      }
+      else {
+        drupal_set_message(t("You are either blocked, or have not activated your account. Please check your email."), 'error');
+        drupal_goto();
+      }
+    }
+    else {
+      $data = socialloginandsocialshare_check_exist_username($lrdata);
+      $username = $data['username'];
+      $fname = $data['fname'];
+      $lname = $data['lname'];
+      $form_state['redirect'] = NULL;
+      $form_state['values']['name'] = $username;
+      $form_state['values']['mail'] = $email;
+      $form_state['values']['pass'] = user_password();
+      if (variable_get('user_register') == 1 || (variable_get('socialloginandsocialshare_enable_user_registration') == 1 && variable_get('user_register') == 0)) {
+        $form_state['values']['status'] = 1;
+      }
+      $form_state['values']['init'] = $email;
+      $form_state['values']['field_first_name'] = array(LANGUAGE_NONE => array(array('value' => $fname)));
+      $form_state['values']['field_last_name'] = array(LANGUAGE_NONE => array(array('value' => $lname)));
+      if (variable_get('user_register', 1) || variable_get('user_register', 2) || (variable_get('socialloginandsocialshare_enable_user_registration') == 1 && variable_get('user_register') == 0)) {
+        // Field module support.
+        module_load_include('inc', 'socialloginandsocialshare', 'socialloginandsocialshare.field');
+        if (!empty($lrdata['gender'])) {
+          if ($lrdata['gender'] == 'M') {
+            $lrdata['gender'] = 'Male';
+          }
+          elseif ($lrdata['gender'] == 'F') {
+            $lrdata['gender'] = 'Female';
+          }
+        }
+        socialloginandsocialshare_field_create_user($form_state['values'], $lrdata);
+        $account = user_save(NULL, $form_state['values']);
+        if (module_exists('profile2')) {
+          socialloginandsocialshare_field_create_profile_user($account, $lrdata, $form, $form_state);
+        }
+        if (variable_get('user_pictures') == 1 && !empty($lrdata['thumbnail'])) {
+          socialloginandsocialshare_insert_picture($lrdata, $account);
+        }
+        db_delete('authmap')
+          ->condition('authname', $lrdata['id'])
+          ->execute();
+        user_set_authmaps($account, array('authname_socialloginandsocialshare' => $lrdata['id']));
+        $aid = db_query('SELECT aid FROM {authmap} WHERE authname = :id', array('id' => $lrdata['id']))->fetchField();
+        $check_aid = db_query('SELECT aid FROM {socialloginandsocialshare_mapusers} WHERE aid = :id', array('id' => $aid))->fetchField();
+        if (!empty($check_aid)) {
+          $query2 = db_delete('socialloginandsocialshare_mapusers')
+            ->condition('aid', $aid)
+            ->execute();
+        }
+        db_insert('socialloginandsocialshare_mapusers')
+          ->fields(array(
+            'aid' => $aid,
+            'provider' => $lrdata['provider'],
+            'provider_id' => $lrdata['id'],
+          ))
+          ->execute();
+        if (!$account) {
+          drupal_set_message(t("Error saving user account."), 'error');
+          $form_state['redirect'] = '';
+          return;
+        }
+        $form_state['user'] = $account;
+        $form_state['values']['uid'] = $account->uid;
+        if ($account->status && !variable_get('user_verify', 1)) {
+          watchdog('socialloginandsocialshare', 'New user: %name (%email).', array(
+            '%name' => $username,
+            '%email' => $email
+          ), WATCHDOG_NOTICE, l(t('edit'), 'user/' . $account->uid . '/edit'));
+          if (variable_get('socialloginandsocialshare_send_user_credentials') == 1) {
+            $params = array(
+              'account' => $account,
+              'pass' => $form_state['values']['pass'],
+            );
+            drupal_mail('socialloginandsocialshare', 'newuser', $account->mail, language_default(), $params);
+          }
+          $form_state['uid'] = $account->uid;
+          user_login_submit(array(), $form_state);
+          unset($_SESSION['lrdata']);
+          $_SESSION['current_social_provider'] = $lrdata['id'];
+          socialloginandsocialshare_user_redirect($form, $account, 'socialloginandsocialshare_userregister_redirect');
+        }
+        elseif ($account->status || variable_get('user_verify', 1)) {
+          // Require email confirmation
+          _user_mail_notify('status_activated', $account);
+          drupal_set_message(t('Once you have verified your e-mail address, you may log in via Social Login.'));
+          variable_set('user_verify', 0);
+          drupal_goto();
+        }
+        else {
+          _user_mail_notify('register_pending_approval', $account);
+          drupal_set_message(t('Thank you for applying for an account. Your account is currently pending approval by the site administrator.<br />In the meantime, a welcome message with further instructions has been sent to your e-mail address.'));
+          drupal_goto();
+        }
+      }
+      else {
+        drupal_set_message(t('Only site administrators can create new user accounts.'), 'error');
+        drupal_goto();
+      }
+    }
+  }
+}
+
+/**
+ * Get Current Page Url after login/register
+ */
+function get_callback_url() {
+  $request_uri = request_uri();
+  if (strpos($request_uri, 'user/register')) {
+    variable_set('sociallogin_user_register_redirect', 1);
+  }
+  elseif (strpos($request_uri, 'socialloginandsocialshare/token_handler') == FALSE) {
+    variable_del('sociallogin_user_register_redirect');
+  }
+  $dest = drupal_get_destination();
+  $dest = $dest['destination'];
+  if (strpos($dest, 'ajax') !== FALSE) {
+    if (isset($_SESSION['redirect_url'])) {
+      return $_SESSION['redirect_url'];
+    }
+    else {
+      $dest = 'user';
+    }
+  }
+  $query[] = array('destination' => $dest);
+  $url = url('socialloginandsocialshare/token_handler', array('query' => $query, 'absolute' => TRUE));
+  if (module_exists('ajax_register') || module_exists('modal_forms')) {
+    $_SESSION['redirect_url'] = $url;
+  }
+  return $url;
+}
+
+/**
+ * Function getting social user profile data.
+ *
+ * @param array $userprofile
+ *   An array containing all userprofile data keys:
+ *
+ * @return array
+ */
+function socialloginandsocialshare_getuser_data($userprofile) {
+  $lrdata['fullname'] = (!empty($userprofile->FullName) ? trim($userprofile->FullName) : '');
+  $lrdata['profilename'] = (!empty($userprofile->ProfileName) ? trim($userprofile->ProfileName) : '');
+  $lrdata['nickname'] = (!empty($userprofile->NickName) ? trim($userprofile->NickName) : '');
+  $lrdata['fname'] = (!empty($userprofile->FirstName) ? trim($userprofile->FirstName) : '');
+  $lrdata['lname'] = (!empty($userprofile->LastName) ? trim($userprofile->LastName) : '');
+  $lrdata['id'] = (!empty($userprofile->ID) ? $userprofile->ID : '');
+  $lrdata['provider'] = (!empty($userprofile->Provider) ? $userprofile->Provider : '');
+  $lrdata['nickname'] = (!empty($userprofile->NickName) ? trim($userprofile->NickName) : '');
+  $lrdata['email'] = (sizeof($userprofile->Email) > 0 ? $userprofile->Email[0]->Value : '');
+  $lrdata['thumbnail'] = (!empty($userprofile->ImageUrl) ? trim($userprofile->ImageUrl) : '');
+  if (empty($lrdata['thumbnail']) && $lrdata['provider'] == 'facebook') {
+    $lrdata['thumbnail'] = "http://graph.facebook.com/" . $lrdata['id'] . "/picture?type=square";
+  }
+  $lrdata['dob'] = (!empty($userprofile->BirthDate) ? $userprofile->BirthDate : '');
+  $lrdata['gender'] = (!empty($userprofile->Gender) ? $userprofile->Gender : '');
+  $lrdata['company'] = (!empty($userprofile->Positions[1]->Company->Name) ? $userprofile->Positions[1]->Company->Name : '');
+  if (empty($lrdata['company'])) {
+    $lrdata['company'] = (!empty($userprofile->Industry) ? $userprofile->Industry : '');
+  }
+  $lrdata['address'] = (!empty($userprofile->Addresses) ? $userprofile->MainAddress : '');
+  if (empty($lrdata['address'])) {
+    $lrdata['address'] = (!empty($userprofile->HomeTown) ? $userprofile->HomeTown : '');
+  }
+  $lrdata['aboutme'] = (!empty($userprofile->About) ? $userprofile->About : '');
+  $lrdata['website'] = (!empty($userprofile->ProfileUrl) ? $userprofile->ProfileUrl : '');
+  $lrdata['state'] = (!empty($userprofile->State) ? $userprofile->State : '');
+  $lrdata['city'] = (!empty($userprofile->City) ? $userprofile->City : '');
+  if (empty($lrdata['city']) || $lrdata['city'] == 'unknown') {
+    $lrdata['city'] = (!empty($userprofile->LocalCity) && $userprofile->LocalCity != 'unknown' ? $userprofile->LocalCity : '');
+  }
+  $lrdata['country'] = (!empty($userprofile->Country) ? $userprofile->Country : '');
+  if (empty($lrdata['country'])) {
+    $lrdata['country'] = (!empty($userprofile->LocalCountry) ? $userprofile->LocalCountry : '');
+  }
+  $lrdata['positions'] = "";
+  if (!empty($userprofile->Positions)) {
+    for ($i = 0; $i < sizeof($userprofile->Positions); $i++) {
+      $lrdata['positions'] .= $userprofile->Positions[$i]->Position . ",";
+    }
+  }
+  $lrdata['educations'] = "";
+  if (!empty($userprofile->Educations)) {
+    for ($i = 0; $i < sizeof($userprofile->Educations); $i++) {
+      $lrdata['educations'] .= ($i + 1) . ". " . $userprofile->Educations[$i]->School . " ";
+    }
+  }
+  $lrdata['languages'] = "";
+  if (!empty($userprofile->Languages)) {
+    for ($i = 0; $i < sizeof($userprofile->Languages); $i++) {
+      $lrdata['languages'] .= $userprofile->Languages[$i]->Name . ",";
+    }
+  }
+  $lrdata['favoritethings'] = "";
+  if (!empty($userprofile->FavoriteThings)) {
+    for ($i = 0; $i < sizeof($userprofile->FavoriteThings); $i++) {
+      $lrdata['favoritethings'] .= $userprofile->FavoriteThings[$i]->Name . ",";
+    }
+  }
+  return $lrdata;
+}
+
+/**
+ * Function that redircts user after login/registration..
+ */
+function socialloginandsocialshare_user_redirect($form, $account, $variable_path = '') {
+  $variable_path = (!empty($variable_path) ? $variable_path : 'socialloginandsocialshare_userlogin_redirect');
+  $variable_custom_path = (($variable_path == 'socialloginandsocialshare_userlogin_redirect') ? 'socialloginandsocialshare_custom_redirection' : 'socialloginandsocialshare_custom_register_redirection');
+  $custom_url = variable_get($variable_custom_path);
+  $request_uri = request_uri();
+  if (variable_get('sociallogin_user_register_redirect') == 1) {
+    variable_del('sociallogin_user_register_redirect');
+    $variable_path = 'socialloginandsocialshare_userregister_redirect';
+  }
+  if (strpos($request_uri, 'user/register') && $variable_path != 'socialloginandsocialshare_userregister_redirect') {
+    $variable_path = 'socialloginandsocialshare_userregister_redirect';
+    socialloginandsocialshare_user_redirect($form, $account, $variable_path);
+  }
+  else {
+    if (variable_get($variable_path) == 1) {
+      unset($_GET['destination']);
+      // Redirect to profile.
+      drupal_goto('user/' . $account->uid . '/edit');
+    }
+    elseif (variable_get($variable_path) == 2) {
+      // Redirect to custom page.
+      $custom_url = variable_get($variable_custom_path);
+      if (!empty($custom_url)) {
+        unset($_GET['destination']);
+        drupal_goto($custom_url);
+      }
+      else {
+        drupal_redirect_form($form, $redirect = NULL);
+      }
+    }
+    else {
+      // Redirect to same page.
+      drupal_redirect_form($form, $redirect = NULL);
+    }
+  }
+}
+
+/**
+ * Function that insert social user picture.
+ */
+function socialloginandsocialshare_user_delete($account) {
+  $aid = db_query('SELECT aid FROM {authmap} WHERE uid = :id', array('id' => $account->uid))->fetchField();
+  db_delete('socialloginandsocialshare_mapusers')
+    ->condition('aid', $aid)
+    ->execute();
+}
+
+/**
+ * Function that insert social user picture.
+ */
+function socialloginandsocialshare_get_username($lrdata) {
+  if (!empty($lrdata['fullname'])) {
+    $username = $lrdata['fullname'];
+  }
+  elseif (!empty($lrdata['profilename'])) {
+    $username = $lrdata['profilename'];
+  }
+  elseif (!empty($lrdata['nickname'])) {
+    $username = $lrdata['nickname'];
+  }
+  elseif (!empty($lrdata['email'])) {
+    $user_name = explode('@', $lrdata['email']);
+    $username = $user_name[0];
+  }
+  else {
+    $username = $lrdata['id'];
+  }
+  return $username;
+}
+
+/**
+ * Function that insert social user picture.
+ */
+function socialloginandsocialshare_insert_picture($lrdata, $account) {
+  if ($account->uid) {
+    $uri = (!empty($account->picture->uri) ? $account->picture->uri : '');
+    $fid = (!empty($account->picture->fid) ? $account->picture->fid : 0);
+    if (empty($uri)) {
+      $fid = (!empty($account->picture) ? $account->picture : 0);
+      $picture = file_load($fid);
+      $uri = (!empty($picture->uri) ? $picture->uri : '');
+    }
+    if (file_exists($uri) && !empty($uri)) {
+      $picture = $account->picture;
+      file_delete(file_load($fid), TRUE);
+    }
+    $image_directory = file_default_scheme() . '://' . variable_get('user_picture_path', 'pictures');
+    if (file_prepare_directory($image_directory, FILE_CREATE_DIRECTORY)) {
+      $image_result = drupal_http_request($lrdata['thumbnail']);
+      $picture_path = file_stream_wrapper_uri_normalize($image_directory . '/picture-' . $account->uid . '-' . REQUEST_TIME . '.jpg');
+      if (!empty($image_result->data)) {
+        $picture_file = file_save_data($image_result->data, $picture_path, FILE_EXISTS_REPLACE);
+        $max_dimensions = variable_get('user_picture_dimensions', '85x85');
+        file_validate_image_resolution($picture_file, $max_dimensions);
+        $picture_file->uid = $account->uid;
+        $picture_file = file_save($picture_file);
+        file_usage_add($picture_file, 'user', 'user', $account->uid);
+        db_update('users')
+          ->fields(array(
+            'picture' => $picture_file->fid,
+          ))
+          ->condition('uid', $account->uid)
+          ->execute();
+        $account->picture = $picture_file->fid;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function socialloginandsocialshare_block_info() {
+  $blocks['login'] = array(
+    'info' => t('Social login'),
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function socialloginandsocialshare_block_view($delta) {
+  $block = array();
+  if (user_is_logged_in()) {
+    $block['content'] = "";
+  }
+  else {
+    $block['content'] = theme('socialloginandsocialshare_links');
+  }
+  return $block;
+
+}
+
+/*
+ * Function that remove unescaped char from string.
+ */
+function socialloginandsocialshare_remove_unescapedChar($str) {
+  $in_str = str_replace(array('<', '>', '&', '{', '}', '*', '/', '(', '[', ']' , '!', ')', '&', '*', '#', '$', '%', '^', '|', '?', '+', '=', '"', ','), array(''), $str);
+  $cur_encoding = mb_detect_encoding($in_str) ;
+  if ($cur_encoding == "UTF-8" && mb_check_encoding($in_str, "UTF-8"))
+    return $in_str;
+  else
+    return utf8_encode($in_str);
+}
+
+/*
+ * Function that check username exist or not.
+ */
+function socialloginandsocialshare_check_exist_username($lrdata) {
+  $value = socialloginandsocialshare_username_option($lrdata);
+  $data['username'] = $value['username'];
+  $data['fname'] = $value['fname'];
+  $data['lname'] = $value['lname'];
+  // Look for user with username match.
+  $nameexists = TRUE;
+  $index = 0;
+  $user_name = $data['username'];
+  while ($nameexists == TRUE) {
+    if (user_load_by_name($user_name)) {
+      $index++;
+      $user_name = $data['username'] . $index;
+    }
+    else {
+      $nameexists = FALSE;
+    }
+  }
+  $data['username'] = socialloginandsocialshare_remove_unescapedChar($user_name);
+  return $data;
+}
+
+/*
+ * Get username as per admin setting save.
+ */
+function socialloginandsocialshare_username_option($lrdata) {
+  if (!empty($lrdata['fname']) && !empty($lrdata['lname']) && variable_get('socialloginandsocialshare_display_username') != 2) {
+    if (variable_get('socialloginandsocialshare_display_username') == 1) {
+      $data['username'] = $lrdata['fname'] . '-' . $lrdata['lname'];
+    }
+    else {
+      $data['username'] = $lrdata['fname'] . ' ' . $lrdata['lname'];
+    }
+    $data['fname'] = $lrdata['fname'];
+    $data['lname'] = $lrdata['lname'];
+  }
+  elseif (variable_get('socialloginandsocialshare_display_username') == 2 && !empty($lrdata['email'])) {
+    $data['username'] = $lrdata['email'];
+    if (!empty($lrdata['fname']) && !empty($lrdata['lname'])) {
+      $data['fname'] = $lrdata['fname'];
+      $data['lname'] = $lrdata['lname'];
+    }
+    else {
+      $data['fname'] = socialloginandsocialshare_get_username($lrdata);
+      $data['lname'] = socialloginandsocialshare_get_username($lrdata);
+    }
+  }
+  else {
+    $data['username'] = socialloginandsocialshare_get_username($lrdata);
+    $data['fname'] = socialloginandsocialshare_get_username($lrdata);
+    $data['lname'] = socialloginandsocialshare_get_username($lrdata);
+  }
+  return $data;
+}
