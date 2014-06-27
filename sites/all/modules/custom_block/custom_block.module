@@ -652,13 +652,25 @@ function custom_permission(){
 
 function custom_block_menu() {
 $items=array();
-        $items['pie_chart_ajax'] = array(
-                'title'=>'Pie_Chart',
-                'page callback'=>'pie_chart_ajax',
-                'access arguments'=>array('access custom'),
-                'type' => MENU_NORMAL_ITEM,
-        );
+     $items['pie_chart_ajax'] = array(
+	  'title'=>'Pie_Chart',
+	  'page callback'=>'pie_chart_ajax',
+	  'access arguments'=>array('access custom'),
+	  'type' => MENU_NORMAL_ITEM,
+     );
+     $items['edit'] = array(
+	  'title' => 'Setting',
+	  'page callback' => 'page_creator_function',
+	  'access callback' => TRUE,
+	  'menu_name' => 'main-menu',  // This is the changed line.
+	  'type' => MENU_NORMAL_ITEM,
+     );
 return $items;
+}
+function page_creator_function(){
+     global $user;
+     $user_edit= 'user/'.$user->uid.'/edit';
+     drupal_goto($user_edit);
 }
 //craete pie chart ajax page
 function pie_chart_ajax(){
