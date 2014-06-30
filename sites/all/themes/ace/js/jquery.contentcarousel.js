@@ -224,20 +224,20 @@
 							aux.navigate( 1, $el, $wrapper, settings, cache );
 						});
 						
-						// adds events to the mouse
-						$el.bind('mousewheel.contentcarousel', function(e, delta) {
-							if(delta > 0) {
-								if( cache.isAnimating ) return false;
-								cache.isAnimating	= true;
-								aux.navigate( -1, $el, $wrapper, settings, cache );
-							}	
-							else {
-								if( cache.isAnimating ) return false;
-								cache.isAnimating	= true;
-								aux.navigate( 1, $el, $wrapper, settings, cache );
-							}	
-							return false;
-						});
+						//// adds events to the mouse
+						//$el.bind('mousewheel.contentcarousel', function(e, delta) {
+						//	if(delta > 0) {
+						//		if( cache.isAnimating ) return false;
+						//		cache.isAnimating	= true;
+						//		aux.navigate( -1, $el, $wrapper, settings, cache );
+						//	}	
+						//	else {
+						//		if( cache.isAnimating ) return false;
+						//		cache.isAnimating	= true;
+						//		aux.navigate( 1, $el, $wrapper, settings, cache );
+						//	}	
+						//	return false;
+						//});
 						
 					});
 				}
