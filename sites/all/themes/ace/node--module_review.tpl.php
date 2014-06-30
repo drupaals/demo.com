@@ -135,6 +135,10 @@ if(arg(0) ==  "node"){
 		->execute();
 	    foreach($comment_result as $key=>$cid){
 		$comment_load=comment_load($cid->cid);
+		//echo "<pre>";
+		//print_r($comment_load);
+		//echo "</pre>";
+		//
 		$comment_description=$comment_load->comment_body['und'][0]['value'];
 		$user_profile=user_load($comment_load->uid);
 		if(!empty($user_profile->picture)){
@@ -160,7 +164,7 @@ if(arg(0) ==  "node"){
 		}else{$rating1='<div class="fivestar-widget clearfix fivestar-widget-5"><div class="star star-1 odd star-first"><a title="Give it 1/5" href="#20">Give it 1/5</a></div><div class="star star-2 even"><a title="Give it 2/5" href="#40">Give it 2/5</a></div><div class="star star-3 odd"><a title="Give it 3/5" href="#60">Give it 3/5</a></div><div class="star star-4 even"><a title="Give it 4/5" href="#80">Give it 4/5</a></div><div class="star star-5 odd star-last"><a title="Give it 5/5" href="#100">Give it 5/5</a></div></div>';}
 		$review_comm_description.='<div id="review-comment">
 					    <div class="author">'.$user_img.'</div>
-					    <div class="review-cooment-desc"> <span class="author-name"><b>'.ucfirst($user_profile->name).'</b></span> <div class="featured-review-star-rating">'.$rating1.'</div>'.$comment_description.'</div>
+					    <div class="review-cooment-desc"> <span class="author-name"><b>'.ucfirst($user_profile->name).'</b></span><span style="margin-left: 2em;">'.l('reply','comment/reply/'.$node->nid.'/'.$cid->cid).'</span><div class="featured-review-star-rating">'.$rating1.'</div>'.$comment_description.'</div>
 					</div>';
 	    }
 	}else{$review_comm_description="";}
@@ -170,9 +174,14 @@ if(arg(0) ==  "node"){
 	}else{
 		$node_url=drupal_get_destination();
 		$output_url=$node_url['destination'];
+		if (module_exists('hybridauth') && !user_is_logged_in()) {
+		    $element['#type'] = 'hybridauth_widget';
+		    $social_login=drupal_render($element);
+		  }else{$social_login="";}
 		$comment_link=' <a href="#" class="big-link" data-reveal-id="myModal" data-animation="none">Write a Review </a>
 				<div id="myModal" class="reveal-modal">
 				    <div id="anno-user" style="text-align: center;">'.l('Login', 'user' , array('query' => array('destination' => $output_url))).'  |  '.l('Register', 'user/register' , array('query' => array('destination' => $output_url))).'</div>
+				    '.$social_login.'
 				<a class="close-reveal-modal">&#215;</a>
 				</div>';
 	    }

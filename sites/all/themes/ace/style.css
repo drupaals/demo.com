@@ -90,3 +90,4 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 #edit-socialloginandsocialshare-links label{color: rgb(66, 139, 202);}
 #edit-socialloginandsocialshare-links{ max-height: 5em;}
 .lr-secured-linkbox{display:none;}
+#myModal .hybridauth-widget-wrapper{text-align: center;}
