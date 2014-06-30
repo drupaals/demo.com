@@ -32,4 +32,9 @@ function form_override_form_alter(&$form, &$form_state, $form_id) {
     //$form['account']['pass']['#type'] = ""; 
     $form['account']['pass']['#description'] = "";
   }
+  //change comment button name
+  if($form_id == 'comment_node_module_review_form') {
+     $form['actions']['submit']['#value'] = t('Post'); // We have changed the label of the "Save" button on the comment form
+  }
+  
 }
