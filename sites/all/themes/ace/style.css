@@ -44,12 +44,11 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 #review-comment .author{ display: inline-block;float: left;position: absolute;text-align: center;}
 .review-cooment-desc{left: 8%;  width: 90%; position: relative;border-bottom: 1px solid #CECECE;}
 #review-comment .author-name{position: relative;right: 0;}
-#review-comment .featured-review-star-rating{float: right;}
 #review-comment-section{float: right;margin: 0 auto;width: 70%;}
 .review-cooment-desc p {width: auto;}
 .big-link{float: right; width: 15%;  -moz-user-select: none;background-color: #FFFFFF;border: 1px solid rgba(0, 0, 0, 0.17);border-radius: 2px; box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);    box-sizing: border-box;    color: #737373;    cursor: pointer;    display: inline-block;    font-family: "Roboto",sans-serif;    font-size: 14px;    font-style: normal;    font-weight: 500;    height: 36px;    line-height: 34px;    min-width: 40px;    padding: 0 20px;    position: relative;    text-align: center;    text-decoration: none;    transition: all 0.2s ease 0s;    vertical-align: middle;    white-space: nowrap;}
 .big-link:hover {border: 1px solid rgba(0, 0, 0, 0.27);box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.27);color: #333333;cursor: pointer;}
-#module-comment{border-bottom: 1px solid #CCCCCC;margin-top: 5%;}
+#module-comment{border-bottom: 1px solid #CCCCCC;margin-top: 5%;margin-bottom: 5%;}
 .views-field-nid.headerSortUp , .views-field-nid.up{ background-clip: border-box;background-color: rgba(0, 0, 0, 0);  background-image: url("images/sort_down_green.png");    background-origin: padding-box;    background-position: 60px 1px;    background-repeat: no-repeat;    background-size: auto auto;}
 .views-field-nid.headerSortDown{ background-clip: border-box;background-color: rgba(0, 0, 0, 0);background-image: url("images/sort_up_green.png");    background-origin: padding-box;    background-position: 60px 8px;    background-repeat: no-repeat;    background-size: auto auto;}
 #review-inner{ clear: both;height: auto; overflow: hidden; width: auto;}
@@ -89,5 +88,5 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 #user-login .form-text{width: 100%;}
 #edit-socialloginandsocialshare-links label{color: rgb(66, 139, 202);}
 #edit-socialloginandsocialshare-links{ max-height: 5em;}
-.lr-secured-linkbox, .profile .form-item-hybridauth{display:none;}
+.lr-secured-linkbox, .profile .form-item-hybridauth, #module-comment #review-comment{display:none;}
 #myModal .hybridauth-widget-wrapper{text-align: center;}
