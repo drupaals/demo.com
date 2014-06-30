@@ -89,5 +89,5 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 #user-login .form-text{width: 100%;}
 #edit-socialloginandsocialshare-links label{color: rgb(66, 139, 202);}
 #edit-socialloginandsocialshare-links{ max-height: 5em;}
-.lr-secured-linkbox{display:none;}
+.lr-secured-linkbox, .profile .form-item-hybridauth{display:none;}
 #myModal .hybridauth-widget-wrapper{text-align: center;}
