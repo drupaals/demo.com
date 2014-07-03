@@ -33,7 +33,7 @@ foreach($rows as $output){
 	  $num = explode(',',$version_result); $j=2; $tgs='';
 	  foreach($num as $nums){if($j<count($num)) $comma = ', '; else $comma = '';  $tgs .= $nums.$comma; $j++;}
           $rohit.='<tr class="even tablesorter">
-                  <td>'.$output['title'].' </td>
+                  <td class="view-module-name">'.$output['title'].' </td>
                   <td class="views-field views-field-nid">'.$tgs.'</td>
               </tr>';
               $version_result="";
@@ -59,4 +59,3 @@ foreach($rows as $output){
     <?php print $rohit; ?>
   </tbody>
 </table>
-

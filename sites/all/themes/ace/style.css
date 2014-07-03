@@ -27,7 +27,7 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .views-field-title.headerSortUp , .views-field-title.up{ background-clip: border-box;background-color: rgba(0, 0, 0, 0);  background-image: url("images/sort_down_green.png");    background-origin: padding-box;    background-position: 110px 1px;    background-repeat: no-repeat;    background-size: auto auto;}
 .views-field-title.headerSortDown{ background-clip: border-box;background-color: rgba(0, 0, 0, 0);background-image: url("images/sort_up_green.png");    background-origin: padding-box;    background-position: 110px 8px;    background-repeat: no-repeat;    background-size: auto auto;}
 .view-recent-modules thead .views-field-nid{float:right;width: 83px;}
-.view-recent-modules td.views-field-nid{float: right;width: 90px;}
+.view-recent-modules td.views-field-nid{ text-align: right;width: 90px;}
 .btn-minier {font-size:12px !important; padding:0 4px !important;}
 .rating{ float: right;font-size: 12px;margin-right: 60px;position: relative;}
 .rating span.on{background: url("images/druplicon.gif") no-repeat scroll 0 -32px rgba(0, 0, 0, 0);display: block; height: 100%; width: 100%;}
@@ -90,3 +90,4 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 #edit-socialloginandsocialshare-links{ max-height: 5em;}
 .lr-secured-linkbox, .profile .form-item-hybridauth, #module-comment #review-comment{display:none;}
 #myModal .hybridauth-widget-wrapper{text-align: center;}
+.view-module-name{float: left; width: 350px;}
