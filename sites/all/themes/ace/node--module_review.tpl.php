@@ -67,11 +67,12 @@ if(arg(0) ==  "node"){
 		    </div>
 		    <div><b>Module Category: </b>'.$tgs.'</div>
 		    <hr>
-		    <div style="width: 50%;">
+		    <div style="width: 50%; float: left;">
 			'.$rating.'
 			<div class="stars-count"> (<span class="reviewers-small"></span>  '.$result.') </div>
 			 <span style="float: right;" class="st_sharethis" displayText="Share this"  st_image= "'.$themepath.'/images/project.png"></span> 
-		    </div><br><br>
+		    </div>
+		    <div style="float: right; width: 25%;"><span><i>Source-<span><a href="http://drupal.org/" target="_blank">Visit drupal.org!</a></i></span></span></div><br><br>
 		</span>
 	    </div>';
 	//screenshots image slider for d6
