@@ -164,18 +164,20 @@ function user_profile_block(){
 }
 //information_block like comment ,pageviews , no. new modules demo we added  and much more
 function information_block(){
+     $last_week=date('Y-m-d',strtotime("-1 week"));
+     
      $query = new EntityFieldQuery;// total number of modules we have demo ready
      $count = $query->entityCondition('entity_type', 'node')
 	       ->entityCondition('bundle', 'module_review')
 	       ->propertyCondition('status', 1) 
 	       ->count()
 	       ->execute();
-     
-     $count1 = $query->entityCondition('entity_type', 'node')//Number new modules demo we added in week
-	       ->entityCondition('bundle', 'module_review')
-	       ->propertyCondition('created', strtotime("-1 week"), '>=') 
-	       ->count()
-	       ->execute();	       
+      $count1 = db_query("SELECT node.title AS node_title, node.nid AS nid, node.created AS node_created
+			 FROM 
+			 {node} node
+			 WHERE (( (node.status = '1') AND (node.type IN  ('module_review')) AND (DATE_FORMAT(ADDTIME(FROM_UNIXTIME(node.created), SEC_TO_TIME(19800)), '%Y-%m-%d') >= '".$last_week."') ))
+			 ORDER BY node_created DESC")->rowCount();
+  
      //get total no. pageviews
      $pageviews=db_query("SELECT node_counter.totalcount AS node_counter_totalcount
 	       FROM 
