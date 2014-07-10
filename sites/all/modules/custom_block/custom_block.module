@@ -173,10 +173,9 @@ function information_block(){
      
      $count1 = $query->entityCondition('entity_type', 'node')//Number new modules demo we added in week
 	       ->entityCondition('bundle', 'module_review')
-	       ->propertyCondition('created', strtotime("last week"), '>=') 
+	       ->propertyCondition('created', strtotime("-1 week"), '>=') 
 	       ->count()
-	       ->execute();
-	       
+	       ->execute();	       
      //get total no. pageviews
      $pageviews=db_query("SELECT node_counter.totalcount AS node_counter_totalcount
 	       FROM 
