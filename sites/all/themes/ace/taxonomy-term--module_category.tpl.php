@@ -60,7 +60,7 @@ foreach($db_query as $key=>$result){
 	  
     $output.='<span id="grid">
                 <h3>'.l($node->title, 'node/'.$node->nid).'</h3>
-                <div class="user-name">by <b>'.ucfirst(user_load($node->uid)->name).'</b>  -  '.date("F j,  Y",$node->created).'</div>
+                <div class="user-name"> -  '.date("F j,  Y",$node->created).'</div>
                 <div class="available-version"><b>Available version: </b>'.$tgss.'</div>
                 <div class="module-catagory"><b>Module Category: </b><span>'.$tgs.'</span></div>
                 <div class="rating-star">'.$rating.'</div>
