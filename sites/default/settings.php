@@ -215,7 +215,7 @@ $databases = array (
   array (
     'default' => 
     array (
-      'database' => 'drupaals',
+      'database' => 'demo_drupaals',
       'username' => 'root',
       'password' => '',
       'host' => 'localhost',
