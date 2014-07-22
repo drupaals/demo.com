@@ -65,35 +65,36 @@ function hybridauth_window_start($provider_id) {
  * Close the popup (if used) and redirect if there was no error.
  */
 function _hybridauth_window_close($redirect = TRUE) {
-  global $user;
-  // Prevent devel module from spewing.
-  $GLOBALS['devel_shutdown'] = FALSE;
+ /*
+ global $user;
+ // Prevent devel module from spewing.
+ $GLOBALS['devel_shutdown'] = FALSE;
 
-  $destination = drupal_get_destination();
-  $destination = token_replace($destination['destination'], array('user' => $user), array('clear' => TRUE));
-  $destination_error = $_GET['destination_error'];
+ $destination = drupal_get_destination();
+ $destination = token_replace($destination['destination'], array('user' => $user), array('clear' => TRUE));
+ $destination_error = $_GET['destination_error'];
 
-  $destination_options = drupal_parse_url($destination) + array('absolute' => TRUE);
-  $destination_error_options = drupal_parse_url($destination_error) + array('absolute' => TRUE);
+ $destination_options = drupal_parse_url($destination) + array('absolute' => TRUE);
+ $destination_error_options = drupal_parse_url($destination_error) + array('absolute' => TRUE);
 
-  $destination = url($destination_options['path'], $destination_options);
-  $destination_error = url($destination_error_options['path'], $destination_error_options);
-
-  drupal_add_js(array(
-    'hybridauth'=> array(
-      'redirect' => $redirect ? 1 : 0,
-      'destination' => $destination,
-      'destination_error' => $destination_error,
-    )
-  ), 'setting');
-  drupal_add_js(drupal_get_path('module', 'hybridauth') . '/js/hybridauth.close.js');
-  $page = element_info('page');
-  // Don't show messages on this closing page, show them later.
-  $page['#show_messages'] = FALSE;
-  $page['#children'] = t('Closing...');
-  print theme('html', array('page' => $page));
-  drupal_exit();
-}
+ $destination = url($destination_options['path'], $destination_options);
+ $destination_error = url($destination_error_options['path'], $destination_error_options);
+ drupal_add_js(array(
+ 'hybridauth'=> array(
+ 'redirect' => $redirect ? 1 : 0,
+ 'destination' => $destination,
+ 'destination_error' => $destination_error,
+ )
+ ), 'setting');
+ drupal_add_js(drupal_get_path('module', 'hybridauth') . '/js/hybridauth.close.js');
+ $page = element_info('page');
+ // Don't show messages on this closing page, show them later.
+ $page['#show_messages'] = FALSE;
+ $page['#children'] = t('Closing...');
+ print theme('html', array('page' => $page));*/
+ drupal_goto('<front>');
+ drupal_exit();
+ }
 
 function _hybridauth_window_auth($hybridauth, $provider_id) {
   $error_code = NULL;
