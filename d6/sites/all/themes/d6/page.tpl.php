@@ -52,7 +52,19 @@
         <?php if (isset($secondary_links)) : ?>
           <?php print theme('links', $secondary_links, array('class' => 'links secondary-links')) ?>
         <?php endif; ?>
-
+    <div class='popup1'>
+<div class='content1'>
+<a href='#close' class='x' id='x'>x</a>
+<h2 style="margin-top: 30px;">Too see this demo, please login...</h2>
+<?php
+if (module_exists('hybridauth') && !user_is_logged_in()) {
+		    $element['#type'] = 'hybridauth_widget';
+		    $social_login=drupal_render($element);
+		    print $social_login;
+		  }
+		  ?>
+</div>
+</div> 
       </div> <!-- /header -->
 
       <?php if ($left): ?>
@@ -73,6 +85,97 @@
           <?php print $help; ?>
           <div class="clear-block">
             <?php print $content ?>
+<style type="text/css">
+#overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: #000;
+filter:alpha(opacity=70);
+-moz-opacity:0.7;
+-khtml-opacity: 0.7;
+opacity: 0.7;
+z-index: 100;
+display: none;
+}
+.content1 a{
+text-decoration: none;
+}
+.popup1{
+width: 100%;
+margin: 0 auto;
+display: none;position: fixed;
+z-index: 101;
+}
+.content1{
+min-width: 600px;
+width: 600px;
+min-height: 150px;
+margin: 100px auto;
+background: #f3f3f3;
+position: relative;
+z-index: 103;
+padding: 10px;
+border-radius: 5px;
+box-shadow: 0 2px 5px #000;
+}
+.content1 p{
+clear: both;
+color: #555555;
+text-align: justify;margin-top: 2em;
+}
+.content1 p a{
+color: #d91900;
+font-weight: bold;
+}
+.content1 .x{
+background: none repeat scroll 0 0 #f3f3f3;
+    border-radius: 50%;
+    color: #000;
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    height: 26px;
+    line-height: 22px;
+    position: absolute;
+    right: 9px;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: none !important;
+    top: 9px;
+    width: 26px;
+    z-index: 2002;
+}
+.content1 .x:hover{
+cursor: pointer; background: none repeat scroll 0 0 #eee !important;}
+</style>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script type='text/javascript'>
+$(function(){
+var overlay = $('<div id="overlay"></div>');
+$('.close').click(function(){
+$('.popup1').hide();
+overlay.appendTo(document.body).remove();
+return false;
+});
+
+$('.x').click(function(){
+$('.popup1').hide();
+overlay.appendTo(document.body).remove();
+return false;
+});
+
+$('.click').click(function(){
+overlay.show();
+overlay.appendTo(document.body);
+$('.popup1').show();
+return false;
+});
+});
+</script>      
+
           </div>
           <?php print $feed_icons ?>
           <div id="footer"><?php print $footer_message . $footer ?></div>
@@ -90,16 +193,5 @@
 <!-- /layout -->
 
   <?php print $closure ?>
-  <div id="Rohit-rajput" class="reveal-modal">
-  <h1>Too see this demo, please login...</h1>
-<?php     
-	if (module_exists('hybridauth') && !user_is_logged_in()) {
-            $element['#type'] = 'hybridauth_widget';
-            $social_login=drupal_render($element);
-	  }else{$social_login="";}
-    print $social_login;
-?>
-                  <a class="close-reveal-modal">&#215;</a>
-		</div>
   </body>
 </html>
