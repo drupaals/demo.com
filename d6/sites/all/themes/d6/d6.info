@@ -1,0 +1,15 @@
+name = Drupal 6 module demo
+description = Drupal 6 Modules Demo.
+version = VERSION
+core = 6.x
+engine = phptemplate
+stylesheets[all][] = style.css
+stylesheets[print][] = print.css
+stylesheets[all][] = reveal.css
+scripts[] = jquery.reveal.js
+
+; Information added by drupal.org packaging script on 2013-01-16
+version = "6.28"
+project = "drupal"
+datestamp = "1358370963"
+
