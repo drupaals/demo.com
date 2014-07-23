@@ -1,11 +1,11 @@
 <?php
 function form_override_form_alter(&$form, &$form_state, $form_id) {
-if (!user_is_logged_in() && $form_id != 'user_login') { 
- $form['reset'] = array(
-    '#type' => 'markup',
-    '#markup' => '<a data-reveal-id="Rohit-rajput" href="#" class="anno-login">Submit</a>',
-    '#weight' => 2000,
-);
+if (!user_is_logged_in() && $form_id != 'user_login') {
+$form['reset'] = array(
+      '#type' => 'markup',
+      '#value' => '<a data-reveal-id="Rohit-rajput" href="#" class="anno-login">Submit</a>',
+      '#weight' => 2000,
+     );
  unset($form['actions']['submit']);
 }
 }
