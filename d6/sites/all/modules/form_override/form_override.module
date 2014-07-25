@@ -8,5 +8,6 @@ $form['reset'] = array(
      );
  unset($form['actions']['submit']);
  unset ($form['preview']);
+  unset($form['submit']);
 }
 }
