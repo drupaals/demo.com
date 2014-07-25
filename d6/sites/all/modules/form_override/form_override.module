@@ -1,14 +1,20 @@
 <?php
 function form_override_form_alter(&$form, &$form_state, $form_id) {
+ echo "<pre>";
+ print_r($form_id);
+ echo "</pre>";
 if (!user_is_logged_in() && $form_id != 'user_login') {
 $form['reset'] = array(
       '#type' => 'markup',
-      '#value' => '<a class="click anno-login" href="#" >Submit</a>',
+      '#value' => '<input type="submit" class="click anno-login form-submit" name="op" id="edit-submit" value="Submit">',
+      
       '#weight' => 20000,
      );
  unset($form['actions']['submit']);
  unset ($form['preview']);
-  unset($form['submit']);
-  unset($form['actions']['preview']);
+ unset($form['submit']);
+ unset($form['action']['preview']);
+ unset ($form['buttons']['preview']);
+ unset ($form['buttons']['submit']);
 }
 }
