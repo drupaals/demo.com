@@ -1,8 +1,5 @@
 <?php
 function form_override_form_alter(&$form, &$form_state, $form_id) {
- echo "<pre>";
- print_r($form_id);
- echo "</pre>";
 if (!user_is_logged_in() && $form_id != 'user_login') {
 $form['reset'] = array(
       '#type' => 'markup',
