@@ -1077,21 +1077,3 @@ table.system-status-report tr.ok, table.system-status-report tr.ok th {
   background-color: #dfd;
   border-color: #beb;
 }
-.anno-login:hover, .anno-login:focus{color: #000;text-decoration: none;background: none repeat scroll 0 0 #dedede;}
-.anno-login{-moz-border-bottom-colors: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    background: url("images/buttons.png") repeat-x scroll 0 0 #fff;
-    border-color: #e4e4e4 #d2d2d2 #b4b4b4;
-    border-image: none;
-    border-style: solid;
-    border-width: 1px;
-    color: #3a3a3a !important;border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.929em;
-    font-weight: normal;
-    margin-bottom: 1em;
-    margin-right: 0.6em;
-    padding: 4px 17px;
-    text-align: center;}
