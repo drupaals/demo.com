@@ -7,6 +7,8 @@ if (!user_is_logged_in() && $form_id != 'user_login') {
     '#weight' => 2000,
 );
  unset($form['actions']['submit']);
-  unset ($form['preview']);
+ unset ($form['preview']);
+  unset($form['submit']);
+  unset($form['actions']['preview']);
 }
 }
