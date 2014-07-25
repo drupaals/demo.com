@@ -1,0 +1,13 @@
+name = HybridAuth
+description = "Provides HybridAuth social sign-on."
+package = "User interface"
+core = 6.x
+php = 5.2
+dependencies[] = ctools
+
+; Information added by  packaging script on 2013-11-25
+version = "6.x-2.0+26-dev"
+core = "6.x"
+project = "hybridauth"
+datestamp = "1385418224"
+
