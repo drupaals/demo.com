@@ -82,11 +82,12 @@ function phptemplate_comment_submitted($comment) {
  * Returns the themed submitted-by string for the node.
  */
 function phptemplate_node_submitted($node) {
-  return t('!datetime — !username',
-    array(
-      '!username' => theme('username', $node),
-      //'!datetime' => format_date($node->created),
-    ));
+  //return t('!datetime — !username',
+  //  array(
+  //    '!username' => theme('username', $node),
+  //    //'!datetime' => format_date($node->created),
+  //  ));
+  return false;
 }
 
 /**
