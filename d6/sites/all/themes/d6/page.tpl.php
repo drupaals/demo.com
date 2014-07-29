@@ -151,7 +151,6 @@ background: none repeat scroll 0 0 #f3f3f3;
 .content1 .x:hover{
 cursor: pointer; background: none repeat scroll 0 0 #eee !important;}
 </style>
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.js"></script>
 <script type='text/javascript'>
 $(function(){
 var overlay = $('<div id="overlay"></div>');
