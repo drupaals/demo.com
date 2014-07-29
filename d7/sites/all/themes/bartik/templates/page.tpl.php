@@ -245,7 +245,7 @@
 </div></div> <!-- /#page, /#page-wrapper -->
 <!--show social login---->
 <div id="Rohit-rajput" class="reveal-modal">
-  <h1>Too see this demo, please login...</h1>
+  <h1>Please login...</h1>
 <?php
     drupal_add_js(drupal_get_path('theme', 'bartik') .'/js/jquery.reveal.js', 'file');
     drupal_add_css(drupal_get_path('theme', 'bartik') .'/css/reveal.css', 'file');

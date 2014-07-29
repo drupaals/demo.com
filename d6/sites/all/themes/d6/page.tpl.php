@@ -55,7 +55,7 @@
     <div class='popup1'>
 <div class='content1'>
 <a href='#close' class='x' id='x'>x</a>
-<h2 style="margin-top: 30px;">Too see this demo, please login...</h2>
+<h2 style="margin-top: 30px;">Please login...</h2>
 <?php
 if (module_exists('hybridauth') && !user_is_logged_in()) {
 		    $element['#type'] = 'hybridauth_widget';
