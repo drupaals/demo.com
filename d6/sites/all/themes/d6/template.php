@@ -85,7 +85,7 @@ function phptemplate_node_submitted($node) {
   return t('!datetime — !username',
     array(
       '!username' => theme('username', $node),
-      '!datetime' => format_date($node->created),
+      //'!datetime' => format_date($node->created),
     ));
 }
 
