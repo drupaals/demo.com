@@ -84,7 +84,7 @@ function gmap_location_menu() {
   );
   $items['map/node'] = array(
     'type' => MENU_NORMAL_ITEM,
-    'title' => 'Node locations',
+    'title' => 'Gmap demo',
     'access arguments' => array('view node map'),
     'page callback' => 'gmap_location_node_page',
   );
