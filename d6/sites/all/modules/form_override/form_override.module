@@ -4,8 +4,7 @@ if (!user_is_logged_in() && $form_id != 'user_login') {
 $form['reset'] = array(
       '#type' => 'markup',
       '#value' => '<input type="submit" class="click anno-login form-submit" name="op" id="edit-submit" value="Submit">',
-      
-      '#weight' => 20000,
+      '#weight' => 2000,
      );
  unset($form['actions']['submit']);
  unset ($form['preview']);
