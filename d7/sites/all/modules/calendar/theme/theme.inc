@@ -64,13 +64,6 @@ function template_preprocess_calendar_month(&$vars) {
           $month_rows[$weekno][$day]['data'] = '<div class="inner">' . $data . '</div>';
          }
         }
-        $data .= $cell['link'];
-      }
-      if ($view->date_info->mini) {
-        $month_rows[$weekno][$day]['data'] = $data;
-      }
-      else {
-        $month_rows[$weekno][$day]['data'] = '<div class="inner">' . $data . '</div>';
       }
     }
   }
