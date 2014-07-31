@@ -1649,3 +1649,4 @@ div.admin-panel .description {
   background-color: #ddd;
 }
 .anno-login:hover, .anno-login:focus{color: #000;text-decoration: none;}
+.ui-state-default .ui-icon{float: left !important;}
