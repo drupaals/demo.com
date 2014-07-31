@@ -1,4 +1,5 @@
 <?php
+// $Id: views_handler_field_user.inc,v 1.1 2008/09/03 19:21:30 merlinofchaos Exp $
 
 /**
  * Field handler to provide simple renderer that allows linking to a user.
@@ -27,22 +28,21 @@ class views_handler_field_user extends views_handler_field {
     parent::options_form($form, $form_state);
     $form['link_to_user'] = array(
       '#title' => t('Link this field to its user'),
-      '#description' => t('This will override any other link you have set.'),
       '#type' => 'checkbox',
       '#default_value' => $this->options['link_to_user'],
     );
   }
 
   function render_link($data, $values) {
-    if (!empty($this->options['link_to_user']) && user_access('access user profiles') && ($uid = $this->get_value($values, 'uid')) && $data !== NULL && $data !== '') {
-      $this->options['alter']['make_link'] = TRUE;
-      $this->options['alter']['path'] = "user/" . $uid;
+    if (!empty($this->options['link_to_user']) && user_access('access user profiles') && $values->{$this->aliases['uid']}) {
+      return l($data, "user/" . $values->{$this->aliases['uid']}, array('html' => TRUE));
     }
-    return $data;
+    else {
+      return $data;
+    }
   }
 
   function render($values) {
-    $value = $this->get_value($values);
-    return $this->render_link($this->sanitize_value($value), $values);
+    return $this->render_link(check_plain($values->{$this->field_alias}), $values);
   }
 }

@@ -1,4 +1,5 @@
 <?php
+//$Id: user.views.inc,v 1.52 2008/10/08 20:56:02 merlinofchaos Exp $
 /**
  * @file
  * Provide views data and handlers for user.module
@@ -61,15 +62,6 @@ function user_views_data() {
     'sort' => array(
       'handler' => 'views_handler_sort',
     ),
-    'relationship' => array(
-      'title' => t('Nodes authored'),
-      'help' => t('Relate nodes to the user who created it. This relationship will create one record for every node created by the user.'),
-      'handler' => 'views_handler_relationship',
-      'base' => 'node',
-      'base field' => 'uid',
-      'field' => 'uid',
-      'label' => t('nodes'),
-    ),
   );
 
   // uid
@@ -79,7 +71,6 @@ function user_views_data() {
     'help' => t('Filter the view to the currently logged in user.'),
     'filter' => array(
       'handler' => 'views_handler_filter_user_current',
-      'type' => 'yes-no',
     ),
   );
 
@@ -97,18 +88,13 @@ function user_views_data() {
     'argument' => array(
       'handler' => 'views_handler_argument_string',
     ),
-    'filter' => array(
-      'handler' => 'views_handler_filter_string',
-      'title' => t('Name (raw)'),
-      'help' => t('The user or author name. This filter does not check if the user exists and allows partial matching. Does not utilize autocomplete.')
-    ),
   );
 
   // mail
   // Note that this field implements field level access control.
   $data['users']['mail'] = array(
     'title' => t('E-mail'), // The item it appears as on the UI,
-    'help' => t('Email address for a given user. This field is normally not shown to users, so be cautious when using it.'), // The help that appears on the UI,
+    'help' => t('Email address for a given user. This field is not normally shown to users, so be cautious when using it.'), // The help that appears on the UI,
     'field' => array(
       'handler' => 'views_handler_field_user_mail',
       'click sortable' => TRUE,
@@ -118,28 +104,6 @@ function user_views_data() {
     ),
     'filter' => array(
       'handler' => 'views_handler_filter_string',
-    ),
-    'argument' => array(
-      'handler' => 'views_handler_argument_string',
-    ),
-  );
-
-  // language
-  $data['users']['language'] = array(
-    'title' => t('Language'), // The item it appears as on the UI,
-    'help' => t('Language of the user'),
-    'field' => array(
-      'handler' => 'views_handler_field_user_language',
-      'click sortable' => TRUE,
-    ),
-    'sort' => array(
-      'handler' => 'views_handler_sort',
-    ),
-    'filter' => array(
-      'handler' => 'views_handler_filter_node_language',
-    ),
-    'argument' => array(
-      'handler' => 'views_handler_argument_node_language',
     ),
   );
 
@@ -152,17 +116,9 @@ function user_views_data() {
       'handler' => 'views_handler_field_user_picture',
       'click sortable' => TRUE,
     ),
-    'sort' => array(
-      'handler' => 'views_handler_sort',
-    ),
-    'filter' => array(
-      'handler' => 'views_handler_filter_boolean_operator_string',
-      'label' => t('Has Avatar'),
-      'type' => 'yes-no',
-    ),
   );
 
-  // created field
+    // created field
   $data['users']['created'] = array(
     'title' => t('Created date'), // The item it appears as on the UI,
     'help' => t('The date the user was created.'), // The help that appears on the UI,
@@ -175,60 +131,6 @@ function user_views_data() {
     ),
     'filter' => array(
       'handler' => 'views_handler_filter_date',
-    ),
-  );
-
-  $data['users']['created_fulldate'] = array(
-    'title' => t('Created date'),
-    'help' => t('Date in the form of CCYYMMDD.'),
-    'argument' => array(
-      'field' => 'created',
-      'handler' => 'views_handler_argument_node_created_fulldate',
-    ),
-  );
-
-  $data['users']['created_year_month'] = array(
-    'title' => t('Created year + month'),
-    'help' => t('Date in the form of YYYYMM.'),
-    'argument' => array(
-      'field' => 'created',
-      'handler' => 'views_handler_argument_node_created_year_month',
-    ),
-  );
-
-  $data['users']['timestamp_year'] = array(
-    'title' => t('Created year'),
-    'help' => t('Date in the form of YYYY.'),
-    'argument' => array(
-      'field' => 'created',
-      'handler' => 'views_handler_argument_node_created_year',
-    ),
-  );
-
-  $data['users']['created_month'] = array(
-    'title' => t('Created month'),
-    'help' => t('Date in the form of MM (01 - 12).'),
-    'argument' => array(
-      'field' => 'created',
-      'handler' => 'views_handler_argument_node_created_month',
-    ),
-  );
-
-  $data['users']['created_day'] = array(
-    'title' => t('Created day'),
-    'help' => t('Date in the form of DD (01 - 31).'),
-    'argument' => array(
-      'field' => 'created',
-      'handler' => 'views_handler_argument_node_created_day',
-    ),
-  );
-
-  $data['users']['created_week'] = array(
-    'title' => t('Created week'),
-    'help' => t('Date in the form of WW (01 - 53).'),
-    'argument' => array(
-      'field' => 'timestamp',
-      'handler' => 'views_handler_argument_node_created_week',
     ),
   );
 
@@ -264,7 +166,7 @@ function user_views_data() {
     ),
   );
 
-  // active status
+  // published status
   $data['users']['status'] = array(
     'title' => t('Active'), // The item it appears as on the UI,
     'help' => t('Whether a user is active or blocked.'), // The help that appears on the UI,
@@ -276,7 +178,6 @@ function user_views_data() {
     'filter' => array(
       'handler' => 'views_handler_filter_boolean_operator',
       'label' => t('Active'),
-      'type' => 'yes-no',
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',
@@ -289,9 +190,8 @@ function user_views_data() {
     'help' => t("The user's signature."), // The help that appears on the UI,
      // Information for displaying a title as a field
     'field' => array(
-      'handler' => 'views_handler_field_markup',
-      'format' => FILTER_FORMAT_DEFAULT,
-    ),
+      'handler' => 'views_handler_field_xss',
+     ),
     'filter' => array(
       'handler' => 'views_handler_filter_string',
     ),
@@ -310,14 +210,6 @@ function user_views_data() {
       'title' => t('Delete link'),
       'help' => t('Provide a simple link to delete the user.'),
       'handler' => 'views_handler_field_user_link_delete',
-    ),
-  );
-
-  $data['users']['data'] = array(
-    'title' => t('Data'),
-    'help' => t('Provide serialized data of the user'),
-    'field' => array(
-      'handler' => 'views_handler_field_serialized',
     ),
   );
 
@@ -349,7 +241,6 @@ function user_views_data() {
     'help' => t('Roles that a user belongs to.'),
     'field' => array(
       'handler' => 'views_handler_field_user_roles',
-      'no group by' => TRUE,
     ),
     'filter' => array(
       'handler' => 'views_handler_filter_user_roles',
@@ -360,7 +251,6 @@ function user_views_data() {
       'name table' => 'role',
       'name field' => 'name',
       'empty field name' => t('No role'),
-      'zero is null' => TRUE,
       'numeric' => TRUE,
     ),
   );
@@ -392,64 +282,6 @@ function user_views_data() {
     ),
   );
 
-  // ----------------------------------------------------------------------
-  // authmap table
-
-  $data['authmap']['table']['group']  = t('User');
-  $data['authmap']['table']['join'] = array(
-     // Directly links to users table.
-    'users' => array(
-      'left_field' => 'uid',
-      'field' => 'uid',
-    ),
-    'node' => array(
-      'left_table' => 'users',
-      'left_field' => 'uid',
-      'field' => 'uid',
-    ),
-  );
-  $data['authmap']['aid'] = array(
-    'title' => t('Authmap ID'),
-    'help' => t('The Authmap ID.'),
-    'field' => array(
-      'handler' => 'views_handler_field_numeric',
-    ),
-    'filter' => array(
-      'handler' => 'views_handler_filter_numeric',
-      'numeric' => TRUE,
-    ),
-    'argument' => array(
-      'handler' => 'views_handler_argument_numeric',
-      'numeric' => TRUE,
-    ),
-  );
-  $data['authmap']['authname'] = array(
-    'title' => t('Authentication name'),
-    'help' => t('The unique authentication name.'),
-    'field' => array(
-      'handler' => 'views_handler_field',
-    ),
-    'filter' => array(
-      'handler' => 'views_handler_filter_string',
-    ),
-    'argument' => array(
-      'handler' => 'views_handler_argument_string',
-    ),
-  );
-  $data['authmap']['module'] = array(
-    'title' => t('Authentication module'),
-    'help' => t('The name of the module managing the authentication entry.'),
-    'field' => array(
-      'handler' => 'views_handler_field',
-    ),
-    'filter' => array(
-      'handler' => 'views_handler_filter_string',
-    ),
-    'argument' => array(
-      'handler' => 'views_handler_argument_string',
-    ),
-  );
-
   return $data;
 }
 
@@ -471,13 +303,6 @@ function user_views_plugins() {
         'handler' => 'views_plugin_argument_default_current_user',
         'path' => drupal_get_path('module', 'views') . '/modules/user', // not necessary for most modules
         'parent' => 'fixed', // so that the parent class is included
-      ),
-    ),
-    'argument validator' => array(
-      'user' => array(
-        'title' => t('User'),
-        'handler' => 'views_plugin_argument_validate_user',
-        'path' => drupal_get_path('module', 'views') . '/modules/user', // not necessary for most modules
       ),
     ),
   );
@@ -512,9 +337,6 @@ function user_views_handlers() {
         'parent' => 'views_handler_field_user_link',
       ),
       'views_handler_field_user_mail' => array(
-        'parent' => 'views_handler_field_user',
-      ),
-      'views_handler_field_user_language' => array(
         'parent' => 'views_handler_field_user',
       ),
       'views_handler_field_user_picture' => array(

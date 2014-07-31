@@ -1,4 +1,5 @@
 <?php
+// $Id: views_plugin_style_rss.inc,v 1.1 2008/09/03 19:21:30 merlinofchaos Exp $
 /**
  * @file
  * Contains the RSS style plugin.
@@ -49,8 +50,6 @@ class views_plugin_style_rss extends views_plugin_style {
   }
 
   function options_form(&$form, &$form_state) {
-    parent::options_form($form, $form_state);
-
     $form['mission_description'] = array(
       '#type' => 'checkbox',
       '#default_value' => !empty($this->options['mission_description']),
@@ -66,16 +65,6 @@ class views_plugin_style_rss extends views_plugin_style {
     );
   }
 
-  /**
-   * Return an array of additional XHTML elements to add to the channel.
-   *
-   * @return
-   *   An array that can be passed to format_xml_elements().
-   */
-  function get_channel_elements() {
-    return array();
-  }
-
   function render() {
     if (empty($this->row_plugin)) {
       vpr('views_plugin_style_default: Missing row plugin');
@@ -87,23 +76,10 @@ class views_plugin_style_rss extends views_plugin_style {
     // theming output.
     $this->namespaces = array();
 
-    // Fetch any additional elements for the channel and merge in their
-    // namespaces.
-    $this->channel_elements = $this->get_channel_elements();
-    foreach ($this->channel_elements as $element) {
-      if (isset($element['namespace'])) {
-        $this->namespaces = array_merge($this->namespaces, $element['namespace']);
-      }
-    }
-
-    foreach ($this->view->result as $row_index => $row) {
-      $this->view->row_index = $row_index;
+    foreach ($this->view->result as $row) {
       $rows .= $this->row_plugin->render($row);
     }
 
-    $output = theme($this->theme_functions(), $this->view, $this->options, $rows);
-    unset($this->view->row_index);
-
-    return $output;
+    return theme($this->theme_functions(), $this->view, $this->options, $rows);
   }
 }

@@ -1,19 +1,21 @@
 <?php
+// $Id: statistics.views_default.inc,v 1.5 2008/07/21 21:05:12 merlinofchaos Exp $
 /**
  * @file
  * Contains default views on behalf of the statistics module.
  */
 
 /**
- * Implementation of hook_views_default_views().
+ * Implementation of hook_default_view_views().
  */
 function statistics_views_default_views() {
   $view = new view;
   $view->name = 'popular';
   $view->description = 'Shows the most-viewed nodes on the site. This requires the statistics to be enabled at administer >> reports >> access log settings.';
   $view->tag = 'default';
+  $view->view_php = '';
   $view->base_table = 'node';
-  $view->human_name = 'Popular content';
+  $view->is_cacheable = '0';
   $view->api_version = 2;
   $view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
@@ -248,6 +250,7 @@ function statistics_views_default_views() {
     ),
     'separator' => '',
   ));
+  $handler->override_option('block_description', 'Popular content');
   $handler = $view->new_display('block', 'Today (block)', 'block_1');
   $handler->override_option('fields', array(
     'title' => array(
@@ -295,6 +298,7 @@ function statistics_views_default_views() {
     ),
     'separator' => '',
   ));
+  $handler->override_option('block_description', 'Today\'s popular content');
   $views[$view->name] = $view;
 
   return $views;

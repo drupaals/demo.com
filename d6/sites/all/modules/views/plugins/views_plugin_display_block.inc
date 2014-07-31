@@ -1,4 +1,5 @@
 <?php
+// $Id: views_plugin_display_block.inc,v 1.1 2008/09/03 19:21:30 merlinofchaos Exp $
 /**
  * @file
  * Contains the block display plugin.
@@ -30,12 +31,7 @@ class views_plugin_display_block extends views_plugin_display {
       $desc = $this->get_option('block_description');
 
       if (empty($desc)) {
-        if ($this->display->display_title == $this->definition['title']) {
-          $desc = t('View: @view', array('@view' => $this->view->get_human_name()));
-        }
-        else {
-          $desc = t('View: @view: @display', array('@view' => $this->view->get_human_name(), '@display' => $this->display->display_title));
-        }
+        $desc = $this->view->name;
       }
       return array(
         $delta => array(
@@ -54,7 +50,6 @@ class views_plugin_display_block extends views_plugin_display {
     // display, and arguments should be set on the view.
     $info['content'] = $this->view->render();
     $info['subject'] = filter_xss_admin($this->view->get_title());
-    $info['view'] = $this->view;
     if (!empty($this->view->result) || $this->get_option('empty') || !empty($this->view->style_plugin->definition['even empty'])) {
       return $info;
     }
@@ -73,13 +68,13 @@ class views_plugin_display_block extends views_plugin_display {
       'title' => t('Block settings'),
     );
 
-    $block_description = strip_tags($this->get_option('block_description'));
+    $block_description = $this->get_option('block_description');
     if (empty($block_description)) {
       $block_description = t('None');
     }
 
     if (strlen($block_description) > 16) {
-      $block_description = drupal_substr($block_description, 0, 16) . '...';
+      $block_description = substr($block_description, 0, 16) . '...';
     }
 
     $options['block_description'] = array(
@@ -88,6 +83,7 @@ class views_plugin_display_block extends views_plugin_display {
       'value' => $block_description,
     );
 
+/* -- removed until core fixes this.
     $cache_type = $this->get_option('block_caching');
     if (empty($cache_type)) {
       $cache_type = BLOCK_NO_CACHE;
@@ -99,6 +95,7 @@ class views_plugin_display_block extends views_plugin_display {
       'title' => t('Caching'),
       'value' => $types[$this->get_cache_type()],
     );
+*/
   }
 
   /**
@@ -170,7 +167,6 @@ class views_plugin_display_block extends views_plugin_display {
         break;
       case 'block_caching':
         $this->set_option('block_caching', $form_state['values']['block_caching']);
-        $this->save_block_cache($form_state['view']->name.'-'.$form_state['display_id'], $form_state['values']['block_caching']);
         break;
     }
   }
@@ -184,18 +180,5 @@ class views_plugin_display_block extends views_plugin_display {
     }
 
     return FALSE;
-  }
-
-  /**
-   * Save the block cache setting in the blocks table if this block allready
-   * exists in the blocks table. Dirty fix untill http://drupal.org/node/235673 gets in.
-   */
-  function save_block_cache($delta, $cache_setting) {
-    if (strlen($delta) >= 32) {
-      $delta = md5($delta);
-    }
-    if ($bid = db_fetch_object(db_query("SELECT bid, cache FROM {blocks} WHERE module = 'views' AND delta = '%s'", $delta))) {
-      db_query("UPDATE {blocks} set cache = %d WHERE module = 'views' AND delta = '%s'", $cache_setting, $delta);
-    }
   }
 }

@@ -1,4 +1,5 @@
 <?php
+// $Id: views.module,v 1.317 2008/10/16 17:21:36 merlinofchaos Exp $
 /**
  * @file
  * Primarily Drupal hooks and global API functions to manipulate views.
@@ -12,62 +13,17 @@
  * Advertise the current views api version
  */
 function views_api_version() {
-  return '3.0';
-}
-
-/**
- * Implements hook_forms().
- *
- * To provide distinct form IDs for Views forms, the View name and
- * specific display name are appended to the base ID,
- * views_form_views_form. When such a form is built or submitted, this
- * function will return the proper callback function to use for the given form.
- */
-function views_forms($form_id, $args) {
-  if (strpos($form_id, 'views_form_') === 0) {
-    return array(
-      $form_id => array(
-        'callback' => 'views_form',
-      ),
-    );
-  }
-}
-
-/**
- * Returns a form ID for a Views form using the name and display of the View.
- */
-function views_form_id($view) {
-  $parts = array(
-    'views_form',
-    $view->name,
-    $view->current_display,
-  );
-
-  return implode('_', $parts);
-}
-
-/**
- * Views will not load plugins advertising a version older than this.
- */
-function views_api_minimum_version() {
-  return '2';
-}
-
-/**
- * Implementation of hook_init().
- */
-function views_init() {
-  drupal_add_css(drupal_get_path('module', 'views') . '/css/views.css');
+  return 2.0;
 }
 
 /**
  * Implementation of hook_theme(). Register views theming functions.
  */
-function views_theme($existing, $type, $theme, $path) {
+function views_theme() {
   $path = drupal_get_path('module', 'views');
   require_once "./$path/theme/theme.inc";
 
-  // Some quasi clever array merging here.
+    // Some quasi clever array merging here.
   $base = array(
     'file' => 'theme.inc',
     'path' => "$path/theme",
@@ -82,12 +38,7 @@ function views_theme($existing, $type, $theme, $path) {
   $arguments = array(
     'display' => array('view' => NULL),
     'style' => array('view' => NULL, 'options' => NULL, 'rows' => NULL, 'title' => NULL),
-    'row' => array('view' => NULL, 'options' => NULL, 'row' => NULL, 'field_alias' => NULL),
-    'exposed_form' => array('view' => NULL, 'options' => NULL),
-    'pager' => array(
-      'view' => NULL, 'options' => NULL,
-      'tags' => array(), 'quantity' => 10, 'element' => 0, 'parameters' => array()
-    ),
+    'row' => array('view' => NULL, 'options' => NULL, 'row' => NULL),
   );
 
   // Default view themes
@@ -108,12 +59,6 @@ function views_theme($existing, $type, $theme, $path) {
           'path' => $def['theme path'],
           'arguments' => $arguments[$type],
         );
-
-        $include = './' . $def['theme path'] . '/' . $def['theme file'];
-        if (file_exists($include)) {
-          require_once $include;
-        }
-
         if (!function_exists('theme_' . $def['theme'])) {
           $hooks[$def['theme']]['template'] = views_css_safe($def['theme']);
         }
@@ -131,7 +76,6 @@ function views_theme($existing, $type, $theme, $path) {
             'path' => $def['theme path'],
             'arguments' => $arguments[$theme_type],
           );
-
           if (!function_exists('theme_' . $theme)) {
             $hooks[$theme]['template'] = views_css_safe($theme);
           }
@@ -139,8 +83,6 @@ function views_theme($existing, $type, $theme, $path) {
       }
     }
   }
-
-  $hooks['views_form_views_form'] = $base;
 
   $hooks['views_exposed_form'] = $base + array(
     'template' => 'views-exposed-form',
@@ -151,86 +93,9 @@ function views_theme($existing, $type, $theme, $path) {
   $hooks['views_more'] = $base + array(
     'template' => 'views-more',
     'pattern' => 'views_more__',
-    'arguments' => array('more_url' => NULL, 'link_text' => 'more'),
+    'arguments' => array('more_url' => NULL),
   );
-
-  // Add theme suggestions which are part of modules.
-  foreach (views_get_module_apis() as $info) {
-    if (isset($info['template path'])) {
-      $hooks += _views_find_module_templates($hooks, $info['template path']);
-    }
-  }
   return $hooks;
-}
-
-/**
- * Scans a directory of a module for template files.
- *
- * @param $cache
- *   The existing cache of theme hooks to test against.
- * @param $path
- *   The path to search.
- *
- * @see drupal_find_theme_templates
- */
-function _views_find_module_templates($cache, $path) {
-  $templates = array();
-  $regex = '\.tpl\.php' . '$';
-
-  // Because drupal_system_listing works the way it does, we check for real
-  // templates separately from checking for patterns.
-  $files = drupal_system_listing($regex, $path, 'name', 0);
-  foreach ($files as $template => $file) {
-    // Chop off the remaining extensions if there are any. $template already
-    // has the rightmost extension removed, but there might still be more,
-    // such as with .tpl.php, which still has .tpl in $template at this point.
-    if (($pos = strpos($template, '.')) !== FALSE) {
-      $template = substr($template, 0, $pos);
-    }
-    // Transform - in filenames to _ to match function naming scheme
-    // for the purposes of searching.
-    $hook = strtr($template, '-', '_');
-    if (isset($cache[$hook])) {
-      $templates[$hook] = array(
-        'template' => $template,
-        'path' => dirname($file->filename),
-        'include files' => $cache[$hook]['include files'],
-      );
-    }
-    // Ensure that the pattern is maintained from base themes to its sub-themes.
-    // Each sub-theme will have their templates scanned so the pattern must be
-    // held for subsequent runs.
-    if (isset($cache[$hook]['pattern'])) {
-      $templates[$hook]['pattern'] = $cache[$hook]['pattern'];
-    }
-  }
-
-  $patterns = array_keys($files);
-
-  foreach ($cache as $hook => $info) {
-    if (!empty($info['pattern'])) {
-      // Transform _ in pattern to - to match file naming scheme
-      // for the purposes of searching.
-      $pattern = strtr($info['pattern'], '_', '-');
-
-      $matches = preg_grep('/^'. $pattern .'/', $patterns);
-      if ($matches) {
-        foreach ($matches as $match) {
-          $file = substr($match, 0, strpos($match, '.'));
-          // Put the underscores back in for the hook name and register this pattern.
-          $templates[strtr($file, '-', '_')] = array(
-            'template' => $file,
-            'path' => dirname($files[$match]->filename),
-            'arguments' => $info['arguments'],
-            'original hook' => $hook,
-            'include files' => $info['include files'],
-          );
-        }
-      }
-    }
-  }
-
-  return $templates;
 }
 
 /**
@@ -247,7 +112,7 @@ function views_preprocess_node(&$vars) {
     $vars['view'] = &$vars['node']->view;
     $vars['template_files'][] = 'node-view-' . $vars['node']->view->name;
     if(!empty($vars['node']->view->current_display)) {
-      $vars['template_files'][] = 'node-view-' . $vars['node']->view->name . '-' . $vars['node']->view->current_display;
+      $vars['template_files'][] = 'node-view-' . $vars['node']->view->name . '-'. $vars['node']->view->current_display;
     }
   }
 }
@@ -256,27 +121,13 @@ function views_preprocess_node(&$vars) {
  * A theme preprocess function to automatically allow view-based node
  * templates if called from a view.
  */
-function views_preprocess_comment(&$vars) {
+function views_preprocess_comment_view(&$vars) {
   // The 'view' attribute of the node is added in template_preprocess_views_view_row_comment()
   if (!empty($vars['node']->view) && !empty($vars['node']->view->name)) {
     $vars['view'] = &$vars['node']->view;
     $vars['template_files'][] = 'comment-view-' . $vars['node']->view->name;
     if(!empty($vars['node']->view->current_display)) {
-      $vars['template_files'][] = 'comment-view-' . $vars['node']->view->name . '-' . $vars['node']->view->current_display;
-    }
-  }
-}
-
-/**
- * A theme preprocess function to automatically allow blocks with view-based
- * block templates if called from a view.
- */
-function views_preprocess_block($vars) {
-  if (!empty($vars['block']->view)) {
-    $vars['view'] = &$vars['block']->view;
-    $vars['template_files'][] = 'block-view-' . $vars['view']->name;
-    if(!empty($vars['view']->current_display)) {
-      $vars['template_files'][] = 'block-view-' . $vars['view']->name . '-' . $vars['view']->current_display;
+      $vars['template_files'][] = 'comment-view-' . $vars['node']->view->name . '-'. $vars['node']->view->current_display;
     }
   }
 }
@@ -284,8 +135,8 @@ function views_preprocess_block($vars) {
 /*
  * Implementation of hook_perm()
  */
-function views_perm() {
-  return array('access all views', 'administer views');
+function views_ui_perm() {
+  return array('access all views');
 }
 
 /**
@@ -299,7 +150,8 @@ function views_menu() {
   $items['views/ajax'] = array(
     'title' => 'Views',
     'page callback' => 'views_ajax',
-    'access callback' => TRUE,
+    'access callback' => 'user_access',
+    'access arguments' => array('access content'),
     'description' => 'Ajax callback for view loading.',
     'file' => 'includes/ajax.inc',
     'type' => MENU_CALLBACK,
@@ -324,7 +176,7 @@ function views_menu_alter(&$callbacks) {
   $views = views_get_applicable_views('uses hook menu');
   foreach ($views as $data) {
     list($view, $display_id) = $data;
-    $result = $view->execute_hook_menu($display_id, $callbacks);
+    $result = $view->execute_hook_menu($display_id);
     if (is_array($result)) {
       // The menu system doesn't support having two otherwise
       // identical paths with different placeholders.  So we
@@ -386,21 +238,10 @@ function views_menu_alter(&$callbacks) {
  * @param $name
  *   The name of the view. This needs to be specified in the 'load function'
  *   of the menu entry.
- * @param $display_id
- *   The display id that will be loaded for this menu item.
  * @param $index
  *   The menu argument index. This counts from 1.
  */
 function views_arg_load($value, $name, $display_id, $index) {
-  static $views = array();
-
-  // Make sure we haven't already loaded this views argument for a similar menu
-  // item elsewhere.
-  $key = $name . ':' . $display_id . ':' . $value . ':' . $index;
-  if (isset($views[$key])) {
-    return $views[$key];
-  }
-
   if ($view = views_get_view($name)) {
     $view->set_display($display_id);
     $view->init_handlers();
@@ -420,9 +261,6 @@ function views_arg_load($value, $name, $display_id, $index) {
       if (isset($view->argument[$indexes[$index]])) {
         $arg = $view->argument[$indexes[$index]]->validate_argument($value) ? $value : FALSE;
         $view->destroy();
-
-        // Store the output in case we load this same menu item again.
-        $views[$key] = $arg;
         return $arg;
       }
     }
@@ -454,21 +292,9 @@ function views_page() {
 function views_block($op = 'list', $delta = 0, $edit = array()) {
   switch ($op) {
     case 'list':
-      // Try to avoid instantiating all the views just to get the blocks info.
-      views_include('cache');
-      $cache = views_cache_get('views_block_items', TRUE);
-      if ($cache && is_array($cache->data)) {
-        return $cache->data;
-      }
-
       $items = array();
       $views = views_get_all_views();
       foreach ($views as $view) {
-        // disabled views get nothing.
-        if (!empty($view->disabled)) {
-          continue;
-        }
-
         $view->init_display();
         foreach ($view->display as $display_id => $display) {
 
@@ -505,20 +331,15 @@ function views_block($op = 'list', $delta = 0, $edit = array()) {
         }
       }
 
-      // Only save hashes if they have changed.
-      $old_hashes = variable_get('views_block_hashes', array());
-      if ($hashes != $old_hashes) {
-        variable_set('views_block_hashes', $hashes);
-      }
+      variable_set('views_block_hashes', $hashes);
       // Save memory: Destroy those views.
       foreach ($views as $view) {
         $view->destroy();
       }
 
-      views_cache_set('views_block_items', $items, TRUE);
-
       return $items;
     case 'view':
+      $start = microtime();
       // if this is 32, this should be an md5 hash.
       if (strlen($delta) == 32) {
         $hashes = variable_get('views_block_hashes', array());
@@ -550,6 +371,7 @@ function views_block($op = 'list', $delta = 0, $edit = array()) {
       if ($view = views_get_view($name)) {
         if ($view->access($display_id)) {
           $output = $view->execute_display($display_id);
+          vpr("Block $view->name execute time: " . (microtime() - $start) * 1000 . "ms");
           $view->destroy();
           return $output;
         }
@@ -559,40 +381,11 @@ function views_block($op = 'list', $delta = 0, $edit = array()) {
   }
 }
 
- /**
-+ * Returns an array of language names.
-+ *
-+ * This is a one to one copy of locale_language_list because we can't rely on enabled locale module.
-+ *
-+ * @param $field
-+ *   'name' => names in current language, localized
-+ *   'native' => native names
-+ * @param $all
-+ *   Boolean to return all languages or only enabled ones
-+ *
-+ * @see locale_language_list
-+ */
-function views_language_list($field = 'name', $all = FALSE) {
-  if ($all) {
-    $languages = language_list();
-  }
-  else {
-    $languages = language_list('enabled');
-    $languages = $languages[1];
-  }
-  $list = array();
-  foreach ($languages as $language) {
-    $list[$language->language] = ($field == 'name') ? t($language->name) : $language->$field;
-  }
-  return $list;
-}
-
-
 /**
  * Implementation of hook_flush_caches().
  */
 function views_flush_caches() {
-  return array('cache_views', 'cache_views_data');
+  return array('cache_views');
 }
 
 /**
@@ -600,16 +393,6 @@ function views_flush_caches() {
  */
 function views_invalidate_cache() {
   cache_clear_all('*', 'cache_views', true);
-}
-
-/**
- * Access callback to determine if the user can import Views.
- *
- * View imports require an additional access check because they are PHP
- * code and PHP is more locked down than administer views.
- */
-function views_import_access() {
-  return user_access('administer views') && user_access('use PHP for block visibility');
 }
 
 /**
@@ -622,6 +405,10 @@ function views_import_access() {
  * is accessible, then the view is accessible.
  */
 function views_access() {
+  if (user_access('access all views')) {
+    return TRUE;
+  }
+
   $args = func_get_args();
   foreach ($args as $arg) {
     if ($arg === TRUE) {
@@ -633,13 +420,6 @@ function views_access() {
     }
 
     list($callback, $arguments) = $arg;
-    $arguments = $arguments ? $arguments : array();
-    // Bring dynamic arguments to the access callback.
-    foreach ($arguments as $key => $value) {
-      if (is_int($value) && isset($args[$value])) {
-        $arguments[$key] = $args[$value];
-      }
-    }
     if (function_exists($callback) && call_user_func_array($callback, $arguments)) {
       return TRUE;
     }
@@ -649,29 +429,17 @@ function views_access() {
 }
 
 /**
- * Access callback for the views_plugin_access_perm access plugin.
+ * Access callback to determine if the logged in user has any of the
+ * requested roles.
  *
- * Determine if the specified user has access to a view on the basis of
- * permissions. If the $account argument is omitted, the current user
- * is used.
+ * This must be in views.module as it is called by menu access callback
+ * and can be called often.
  */
-function views_check_perm($perm, $account = NULL) {
-  return user_access($perm, $account) || user_access('access all views', $account);
-}
-
-/**
- * Access callback for the views_plugin_access_role access plugin.
-
- * Determine if the specified user has access to a view on the basis of any of
- * the requested roles. If the $account argument is omitted, the current user
- * is used.
- */
-function views_check_roles($rids, $account = NULL) {
+function views_check_roles($rids) {
   global $user;
-  $account = isset($account) ? $account : $user;
-  $roles = array_keys($account->roles);
-  $roles[] = $account->uid ? DRUPAL_AUTHENTICATED_RID : DRUPAL_ANONYMOUS_RID;
-  return user_access('access all views', $account) || array_intersect(array_filter($rids), $roles);
+  $roles = array_keys($user->roles);
+  $roles[] = $user->uid ? DRUPAL_AUTHENTICATED_RID : DRUPAL_ANONYMOUS_RID;
+  return array_intersect(array_filter($rids), $roles);
 }
 // ------------------------------------------------------------------
 // Functions to help identify views that are running or ran
@@ -738,8 +506,9 @@ function views_include($file) {
 /**
  * Load views files on behalf of modules.
  */
-function views_module_include($file, $reset = FALSE) {
-  foreach (views_get_module_apis($reset) as $module => $info) {
+function views_module_include($file) {
+  $views_path = drupal_get_path('module', 'views') . '/modules';
+  foreach (views_get_module_apis() as $module => $info) {
     if (file_exists("./$info[path]/$module.$file")) {
       require_once "./$info[path]/$module.$file";
     }
@@ -749,15 +518,14 @@ function views_module_include($file, $reset = FALSE) {
 /**
  * Get a list of modules that support the current views API.
  */
-function views_get_module_apis($reset = FALSE) {
+function views_get_module_apis() {
   static $cache = NULL;
-  if (!isset($cache) || $reset) {
+  if (!isset($cache)) {
     $cache = array();
     foreach (module_implements('views_api') as $module) {
       $function = $module . '_views_api';
       $info = $function();
-      if (version_compare($info['api'], views_api_minimum_version(), '>=') &&
-          version_compare($info['api'], views_api_version(), '<=')) {
+      if (isset($info['api']) && $info['api'] == 2.000) {
         if (!isset($info['path'])) {
           $info['path'] = drupal_get_path('module', $module);
         }
@@ -773,11 +541,7 @@ function views_get_module_apis($reset = FALSE) {
  * Include views .css files.
  */
 function views_add_css($file) {
-  // We set preprocess to FALSE because we are adding the files conditionally,
-  // and we don't want to generate duplicate cache files.
-  // TODO: at some point investigate adding some files unconditionally and
-  // allowing preprocess.
-  drupal_add_css(drupal_get_path('module', 'views') . "/css/$file.css", 'module', 'all', FALSE);
+  drupal_add_css(drupal_get_path('module', 'views') . "/css/$file.css");
 }
 
 /**
@@ -800,10 +564,10 @@ function views_add_js($file) {
 /**
  * Load views files on behalf of modules.
  */
-function views_include_handlers($reset = FALSE) {
+function views_include_handlers() {
   static $finished = FALSE;
   // Ensure this only gets run once.
-  if ($finished && !$reset) {
+  if ($finished) {
     return;
   }
 
@@ -811,26 +575,26 @@ function views_include_handlers($reset = FALSE) {
   views_include('handlers');
   views_include('cache');
   views_include('plugins');
-  _views_include_handlers($reset);
+  _views_include_handlers();
   $finished = TRUE;
 }
 
 /**
  * Load default views files on behalf of modules.
  */
-function views_include_default_views($reset = FALSE) {
+function views_include_default_views() {
   static $finished = FALSE;
   // Ensure this only gets run once.
-  if ($finished && !$reset) {
+  if ($finished) {
     return;
   }
 
   // Default views hooks may be in the normal handler file,
   // or in a separate views_default file at the discretion of
   // the module author.
-  views_include_handlers($reset);
+  views_include_handlers();
 
-  _views_include_default_views($reset);
+  _views_include_default_views();
   $finished = TRUE;
 }
 
@@ -846,35 +610,20 @@ function views_include_default_views($reset = FALSE) {
  *   The name of the field this handler is from.
  * @param $key
  *   The type of handler. i.e, sort, field, argument, filter, relationship
- * @param $override
- *   Override the actual handler object with this class. Used for
- *   aggregation when the handler is redirected to the aggregation
- *   handler.
  *
- * @return views_handler
+ * @return
  *   An instance of a handler object. May be views_handler_broken.
  */
-function views_get_handler($table, $field, $key, $override = NULL) {
+function views_get_handler($table, $field, $key) {
   $data = views_fetch_data($table);
-  $handler = NULL;
-
   if (isset($data[$field][$key])) {
     // Set up a default handler:
     if (empty($data[$field][$key]['handler'])) {
       $data[$field][$key]['handler'] = 'views_handler_' . $key;
     }
-
-    if ($override) {
-      $data[$field][$key]['override handler'] = $override;
-    }
-
-    $handler = _views_prepare_handler($data[$field][$key], $data, $field, $key);
+    return _views_prepare_handler($data[$field][$key], $data, $field);
   }
-
-  if ($handler) {
-    return $handler;
-  }
-
+  // DEBUG -- identify missing handlers
   vpr("Missing handler: $table $field $key");
   $broken = array(
     'title' => t('Broken handler @table.@field', array('@table' => $table, '@field' => $field)),
@@ -882,15 +631,15 @@ function views_get_handler($table, $field, $key, $override = NULL) {
     'table' => $table,
     'field' => $field,
   );
-  return _views_create_handler($broken, 'handler', $key);
+  return _views_create_handler($broken);
 }
 
 /**
  * Fetch Views' data from the cache
  */
-function views_fetch_data($table = NULL, $reset = FALSE) {
+function views_fetch_data($table = NULL) {
   views_include('cache');
-  return _views_fetch_data($table, $reset);
+  return _views_fetch_data($table);
 }
 
 // -----------------------------------------------------------------------
@@ -899,43 +648,19 @@ function views_fetch_data($table = NULL, $reset = FALSE) {
 /**
  * Fetch the plugin data from cache.
  */
-function views_fetch_plugin_data($type = NULL, $plugin = NULL, $reset = FALSE) {
+function views_fetch_plugin_data($type = NULL, $plugin = NULL) {
   views_include('cache');
-  return _views_fetch_plugin_data($type, $plugin, $reset);
+  return _views_fetch_plugin_data($type, $plugin);
 }
 
 /**
  * Get a handler for a plugin
- *
- * @return views_plugin
- *
- * The created plugin object.
  */
-function views_get_plugin($type, $plugin, $reset = FALSE) {
-  $definition = views_fetch_plugin_data($type, $plugin, $reset);
+function views_get_plugin($type, $plugin) {
+  $definition = views_fetch_plugin_data($type, $plugin);
   if (!empty($definition)) {
     return _views_create_handler($definition, $type);
   }
-}
-
-/**
- * Load the current enabled localization plugin.
- *
- * @return The name of the localization plugin.
- */
-function views_get_localization_plugin() {
-  $plugin = variable_get('views_localization_plugin', '');
-  // Provide sane default values for the localization plugin.
-  if (empty($plugin)) {
-    if (module_exists('locale')) {
-      $plugin = 'core';
-    }
-    else {
-      $plugin = 'none';
-    }
-  }
-
-  return $plugin;
 }
 
 // -----------------------------------------------------------------------
@@ -952,20 +677,10 @@ function views_get_localization_plugin() {
  * @return
  *   A view object or NULL if it is not available.
  */
-function &views_get_default_view($view_name, $reset = FALSE) {
+function &views_get_default_view($view_name) {
   $null = NULL;
+  $cache = views_discover_default_views();
 
-  // Attempt to load individually cached view from cache.
-  views_include('cache');
-  if (!$reset) {
-    $data = views_cache_get("views_default:{$view_name}", TRUE);
-    if (isset($data->data) && is_object($data->data)) {
-      return $data->data;
-    }
-  }
-
-  // Otherwise, allow entire cache to be rebuilt.
-  $cache = views_discover_default_views($reset);
   if (isset($cache[$view_name])) {
     return $cache[$view_name];
   }
@@ -975,7 +690,7 @@ function &views_get_default_view($view_name, $reset = FALSE) {
 /**
  * Create an empty view to work with.
  *
- * @return view
+ * @return
  *   A fully formed, empty $view object. This object must be populated before
  *   it can be successfully saved.
  */
@@ -993,12 +708,12 @@ function views_new_view() {
  *
  * @return An associative array of all known default views.
  */
-function views_discover_default_views($reset = FALSE) {
+function views_discover_default_views() {
   static $cache = array();
 
-  if (empty($cache) || $reset) {
+  if (empty($cache)) {
     views_include('cache');
-    $cache = _views_discover_default_views($reset);
+    $cache = _views_discover_default_views();
   }
   return $cache;
 }
@@ -1041,7 +756,7 @@ function views_get_applicable_views($type) {
         // This view uses hook menu. Clone it so that different handlers
         // don't trip over each other, and add it to the list.
         $v = $view->clone_view();
-        if ($v->set_display($id) && $v->display_handler->get_option('enabled')) {
+        if ($v->set_display($id)) {
           $result[] = array($v, $id);
         }
         // In PHP 4.4.7 and presumably earlier, if we do not unset $v
@@ -1056,16 +771,11 @@ function views_get_applicable_views($type) {
 
 /**
  * Return an array of all views as fully loaded $view objects.
- *
- * @param $reset
- *   If TRUE, reset the static cache forcing views to be reloaded.
  */
-function views_get_all_views($reset = FALSE) {
+function views_get_all_views() {
   static $views = array();
 
-  if (empty($views) || $reset) {
-    $views = array();
-
+  if (empty($views)) {
     // First, get all applicable views.
     views_include('view');
     $views = view::load_views();
@@ -1073,7 +783,7 @@ function views_get_all_views($reset = FALSE) {
     // Get all default views.
     $status = variable_get('views_defaults', array());
 
-    foreach (views_discover_default_views($reset) as $view) {
+    foreach (views_discover_default_views() as $view) {
       // Determine if default view is enabled or disabled.
       if (isset($status[$view->name])) {
         $view->disabled = $status[$view->name];
@@ -1104,35 +814,29 @@ function views_get_all_views($reset = FALSE) {
  *   The name of the view.
  * @param $reset
  *   If TRUE, reset this entry in the load cache.
- * @return view
+ * @return $view
  *   A reference to the $view object. Use $reset if you're sure you want
  *   a fresh one.
  */
 function views_get_view($name, $reset = FALSE) {
   views_include('view');
   $view = view::load($name, $reset);
-  $default_view = views_get_default_view($name, $reset);
+  $default_view = views_get_default_view($name);
 
-   // The view does not exist.
   if (empty($view) && empty($default_view)) {
     return;
   }
-  // The view is defined in code.
   elseif (empty($view) && !empty($default_view)) {
-    $status = variable_get('views_defaults', array());
-    if (isset($status[$default_view->name])) {
-      $default_view->disabled = $status[$default_view->name];
-    }
     $default_view->type = t('Default');
     return $default_view->clone_view();
   }
-  // The view is overriden/defined in the database.
   elseif (!empty($view) && !empty($default_view)) {
     $view->type = t('Overridden');
   }
 
   return $view->clone_view();
 }
+
 
 // ------------------------------------------------------------------
 // Views debug helper functions
@@ -1148,12 +852,7 @@ function views_debug($message) {
     else {
       $output = var_export($message, TRUE);
     }
-    if (variable_get('views_devel_region', 'footer') != 'watchdog') {
-      drupal_set_content(variable_get('views_devel_region', 'footer'), '<pre>' . $output . '</pre>');
-    }
-    else {
-      watchdog('views_logging', '<pre>' . $output . '</pre>');
-    }
+    drupal_set_content(variable_get('views_devel_region', 'footer'), '<pre>' . $output . '</pre>');
   }
 }
 
@@ -1192,192 +891,6 @@ function vpr_trace() {
 }
 
 // ------------------------------------------------------------------
-// Views form (View with form elements)
-
-/**
- * Returns TRUE if the passed-in view contains handlers with views form
- * implementations, FALSE otherwise.
- */
-function views_view_has_form_elements($view) {
-  foreach ($view->field as $field) {
-    if (property_exists($field, 'views_form_callback') || method_exists($field, 'views_form')) {
-      return TRUE;
-    }
-  }
-  $area_handlers = array_merge(array_values($view->header), array_values($view->footer));
-  $empty = empty($view->result);
-  foreach ($area_handlers as $area) {
-    if (method_exists($area, 'views_form') && !$area->views_form_empty($empty)) {
-      return TRUE;
-    }
-  }
-  return FALSE;
-}
-
-/**
- * This is the entry function. Just gets the form for the current step.
- * The form is always assumed to be multistep, even if it has only one
- * step (the default 'views_form_views_form' step). That way it is actually
- * possible for modules to have a multistep form if they need to.
- */
-function views_form(&$form_state, $view, $output) {
-  $form_state['storage']['step'] = isset($form_state['storage']['step']) ? $form_state['storage']['step'] : 'views_form_views_form';
-
-  $form = array();
-  $form['#validate'] = array('views_form_validate');
-  $form['#submit'] = array('views_form_submit');
-  // Tell the preprocessor whether it should hide the header, footer, pager...
-  $view->show_view_elements = ($form_state['storage']['step'] == 'views_form_views_form') ? TRUE : FALSE;
-
-  $form = $form_state['storage']['step']($form, $form_state, $view, $output);
-  return $form;
-}
-
-/**
- * The basic form validate handler.
- * Fires the hook_views_form_validate() function.
- */
-function views_form_validate($form, &$form_state) {
-  // Fire the hook. Doesn't use module_invoke_all() because $form_state needs
-  // to be passed by reference.
-  foreach (module_implements('views_form_validate') as $module) {
-    $function = $module . '_views_form_validate';
-    $function($form, $form_state);
-  }
-}
-
-/**
- * The basic form submit handler.
- * Fires the hook_views_form_submit() function.
- */
-function views_form_submit($form, &$form_state) {
-  // Fire the hook. Doesn't use module_invoke_all() because $form_state needs
-  // to be passed by reference.
-  foreach (module_implements('views_form_submit') as $module) {
-    $function = $module . '_views_form_submit';
-    $function($form, $form_state);
-  }
-}
-
-/**
- * Callback for the main step of a Views form.
- * Invoked by views_form().
- */
-function views_form_views_form($form, &$form_state, $view, $output) {
-  $form['#prefix'] = '<div class="views-form">';
-  $form['#suffix'] = '</div>';
-  $form['#theme'] = 'views_form_views_form';
-  $form['#validate'][] = 'views_form_views_form_validate';
-  $form['#submit'][] = 'views_form_views_form_submit';
-
-  // Add the output markup to the form array so that it's included when the form
-  // array is passed to the theme function.
-  $form['output'] = array(
-    '#value' => $output,
-    // This way any additional form elements will go before the view
-    // (below the exposed widgets).
-    '#weight' => 50,
-  );
-
-  $substitutions = array();
-  foreach ($view->field as $field_name => $field) {
-    $has_form = FALSE;
-    // If the field provides a views form, allow it to modify the $form array.
-    if (property_exists($field, 'views_form_callback')) {
-      $callback = $field->views_form_callback;
-      $callback($view, $field, $form, $form_state);
-      $has_form = TRUE;
-    }
-    elseif (method_exists($field, 'views_form')) {
-      $field->views_form($form, $form_state);
-      $has_form = TRUE;
-    }
-
-    // Build the substitutions array for use in the theme function.
-    if ($has_form) {
-      foreach ($view->result as $row_id => $row) {
-        $substitutions[] = array(
-         'placeholder' => '<!--form-item-' . $field_name . '--' . $row_id . '-->',
-          'field_name' => $field_name,
-          'row_id' => $row_id,
-        );
-      }
-    }
-  }
-
-  // Give the area handlers a chance to extend the form.
-  $area_handlers = array_merge(array_values($view->header), array_values($view->footer));
-  $empty = empty($view->result);
-  foreach ($area_handlers as $area) {
-    if (method_exists($area, 'views_form') && !$area->views_form_empty($empty)) {
-      $area->views_form($form, $form_state);
-    }
-  }
-
-  $form['#substitutions'] = array(
-    '#type' => 'value',
-    '#value' => $substitutions,
-  );
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Save'),
-    '#weight' => 100,
-  );
-
-  return $form;
-}
-
-/**
- * Validate handler for the first step of the views form.
- * Calls any existing views_form_validate functions located
- * on the views fields.
- */
-function views_form_views_form_validate($form, &$form_state) {
-  $view = $form['#parameters'][2];
-
-  // Call the validation method on every field handler that has it.
-  foreach ($view->field as $field_name => $field) {
-    if (method_exists($field, 'views_form_validate')) {
-      $field->views_form_validate($form, $form_state);
-    }
-  }
-
-  // Call the validate method on every area handler that has it.
-  foreach (array('header', 'footer') as $area) {
-    foreach ($view->{$area} as $area_name => $area_handler) {
-      if (method_exists($area_handler, 'views_form_validate')) {
-        $area_handler->views_form_validate($form, $form_state);
-      }
-    }
-  }
-}
-
-/**
- * Submit handler for the first step of the views form.
- * Calls any existing views_form_submit functions located
- * on the views fields.
- */
-function views_form_views_form_submit($form, &$form_state) {
-  $view = $form['#parameters'][2];
-
-  // Call the submit method on every field handler that has it.
-  foreach ($view->field as $field_name => $field) {
-    if (method_exists($field, 'views_form_submit')) {
-      $field->views_form_submit($form, $form_state);
-    }
-  }
-
-  // Call the submit method on every area handler that has it.
-  foreach (array('header', 'footer') as $area) {
-    foreach ($view->{$area} as $area_name => $area_handler) {
-      if (method_exists($area_handler, 'views_form_submit')) {
-        $area_handler->views_form_submit($form, $form_state);
-      }
-    }
-  }
-}
-
-// ------------------------------------------------------------------
 // Exposed widgets form
 
 /**
@@ -1386,14 +899,6 @@ function views_form_views_form_submit($form, &$form_state) {
  * Be sure that $view and $display are references.
  */
 function views_exposed_form(&$form_state) {
-  // Don't show the form when batch operations are in progress.
-  if ($batch = batch_get() && isset($batch['current_set'])) {
-    return array(
-      // Set the theme callback to be nothing to avoid errors in template_preprocess_views_exposed_form().
-      '#theme' => '',
-    );
-  }
-
   // Make sure that we validate because this form might be submitted
   // multiple times per page.
   $form_state['must_validate'] = TRUE;
@@ -1404,10 +909,6 @@ function views_exposed_form(&$form_state) {
 
   // Let form plugins know this is for exposed widgets.
   $form_state['exposed'] = TRUE;
-  // Check if the form was already created
-  if ($cache = views_exposed_form_cache($view->name, $view->current_display)) {
-    return $cache;
-  }
 
   $form['#info'] = array();
 
@@ -1418,23 +919,20 @@ function views_exposed_form(&$form_state) {
     );
   }
 
-  // Go through each handler and let it generate its exposed widget.
-  foreach ($view->display_handler->handlers as $type => $value) {
-    foreach ($view->$type as $id => $handler) {
-      if ($handler->can_expose() && $handler->is_exposed()) {
-        $handler->exposed_form($form, $form_state);
-        if ($info = $handler->exposed_info()) {
-          $form['#info']["$type-$id"] = $info;
-        }
-      }
+  // Go through each filter and let it generate its info.
+  foreach ($view->filter as $id => $filter) {
+    $view->filter[$id]->exposed_form($form, $form_state);
+    if ($info = $view->filter[$id]->exposed_info()) {
+      $form['#info']['filter-' . $id] = $info;
     }
   }
+
+  // @todo deal with exposed sorts
 
   $form['submit'] = array(
     '#name' => '', // prevent from showing up in $_GET.
     '#type' => 'submit',
     '#value' => t('Apply'),
-    '#id' => form_clean_id('edit-submit-' . $view->name),
   );
 
   $form['#action'] = url($view->get_url());
@@ -1447,13 +945,6 @@ function views_exposed_form(&$form_state) {
     drupal_add_js('misc/jquery.form.js');
   }
   views_add_js('dependent');
-
-  $exposed_form_plugin = $form_state['exposed_form_plugin'];
-  $exposed_form_plugin->exposed_form_alter($form, $form_state);
-
-  // Save the form
-  views_exposed_form_cache($view->name, $view->current_display, $form);
-
   return $form;
 }
 
@@ -1467,8 +958,6 @@ function views_exposed_form_validate(&$form, &$form_state) {
       $handlers[$key]->exposed_validate($form, $form_state);
     }
   }
-  $exposed_form_plugin = $form_state['exposed_form_plugin'];
-  $exposed_form_plugin->exposed_form_validate($form, $form_state);
 }
 
 /**
@@ -1484,40 +973,11 @@ function views_exposed_form_submit(&$form, &$form_state) {
   $form_state['view']->exposed_data = $form_state['values'];
   $form_state['view']->exposed_raw_input = array();
 
-  $exclude = array('q', 'submit', 'form_build_id', 'form_id', 'form_token', 'exposed_form_plugin', '');
-  $exposed_form_plugin = $form_state['exposed_form_plugin'];
-  $exposed_form_plugin->exposed_form_submit($form, $form_state, $exclude);
-
   foreach ($form_state['values'] as $key => $value) {
-    if (!in_array($key, $exclude)) {
+    if (!in_array($key, array('q', 'submit', 'form_build_id', 'form_id', 'form_token', ''))) {
       $form_state['view']->exposed_raw_input[$key] = $value;
     }
   }
-}
-
-/**
- * Save the Views exposed form for later use.
- *
- * @param $views_name
- *   String. The views name.
- * @param $display_name
- *   String. The current view display name.
- * @param $form_output
- *   Array (optional). The form structure. Only needed when inserting the value.
- * @return
- *   Array. The form structure, if any. Otherwise, return FALSE.
- */
-function views_exposed_form_cache($views_name, $display_name, $form_output = NULL) {
-  static $views_exposed;
-
-  // Save the form output
-  if (!empty($form_output)) {
-    $views_exposed[$views_name][$display_name] = $form_output;
-    return;
-  }
-
-  // Return the form output, if any
-  return empty($views_exposed[$views_name][$display_name]) ? FALSE : $views_exposed[$views_name][$display_name];
 }
 
 // ------------------------------------------------------------------
@@ -1554,7 +1014,6 @@ function drupal_build_form($form_id, &$form_state) {
 function views_views_query_substitutions($view) {
   global $language;
   return array(
-    '***CURRENT_VERSION***' => VERSION,
     '***CURRENT_TIME***' => time(),
     '***CURRENT_LANGUAGE***' => $language->language,
     '***DEFAULT_LANGUAGE***' => language_default('language'),
@@ -1590,7 +1049,7 @@ function views_embed_view($name, $display_id = 'default') {
   }
 
   $view = views_get_view($name);
-  if (!$view || !$view->access($display_id)) {
+  if (!$view) {
     return;
   }
 
@@ -1598,54 +1057,9 @@ function views_embed_view($name, $display_id = 'default') {
 }
 
 /**
-* Get the result of a view.
-*
-* @param string $name
-*      The name of the view to retrieve the data from.
-* @param string $display_id
-*      The display id. On the edit page for the view in question, you'll find
-*      a list of displays at the left side of the control area. "Defaults"
-*      will be at the top of that list. Hover your cursor over the name of the
-*      display you want to use. An URL will appear in the status bar of your
-*      browser. This is usually at the bottom of the window, in the chrome.
-*      Everything after #views-tab- is the display ID, e.g. page_1.
- * @param ...
- *   Any additional parameters will be passed as arguments.
-* @return
-*      array
-*          An array containing an object for each view item.
-*/
-function views_get_view_result($name, $display_id = NULL) {
-  $args = func_get_args();
-  array_shift($args); // remove $name
-  if (count($args)) {
-    array_shift($args); // remove $display_id
-  }
-
-  $view = views_get_view($name);
-  if (is_object($view)) {
-    if (is_array($args)) {
-      $view->set_arguments($args);
-    }
-    if (is_string($display_id)) {
-      $view->set_display($display_id);
-    }
-    else {
-      $view->init_display();
-    }
-    $view->pre_execute();
-    $view->execute();
-    return $view->result;
-  }
-  else {
-    return array();
-  }
-}
-
-/**
  * Export a field.
  */
-function views_var_export($var, $prefix = '', $init = TRUE) {
+function views_var_export($var, $prefix = '') {
   if (is_array($var)) {
     if (empty($var)) {
       $output = 'array()';
@@ -1653,7 +1067,7 @@ function views_var_export($var, $prefix = '', $init = TRUE) {
     else {
       $output = "array(\n";
       foreach ($var as $key => $value) {
-        $output .= "  " . views_var_export($key, '', FALSE) . " => " . views_var_export($value, '  ', FALSE) . ",\n";
+        $output .= "  '$key' => " . views_var_export($value, '  ') . ",\n";
       }
       $output .= ')';
     }
@@ -1661,23 +1075,12 @@ function views_var_export($var, $prefix = '', $init = TRUE) {
   else if (is_bool($var)) {
     $output = $var ? 'TRUE' : 'FALSE';
   }
-  else if (is_string($var) && strpos($var, "\n") !== FALSE) {
-    // Replace line breaks in strings with a token for replacement
-    // at the very end. This protects multi-line strings from
-    // unintentional indentation.
-    $var = str_replace("\n", "***BREAK***", $var);
-    $output = var_export($var, TRUE);
-  }
   else {
     $output = var_export($var, TRUE);
   }
 
   if ($prefix) {
     $output = str_replace("\n", "\n$prefix", $output);
-  }
-
-  if ($init) {
-    $output = str_replace("***BREAK***", "\n", $output);
   }
 
   return $output;
@@ -1716,9 +1119,6 @@ function views_views_exportables($op = 'list', $views = NULL, $name = 'foo') {
     $code .= " */\n";
     $code .= "function " . $name . "_views_default_views() {\n";
     foreach ($views as $view => $truth) {
-      $code .= "  /*\n";
-      $code .= "   * View ". var_export($all_views[$view]->name, TRUE) ."\n";
-      $code .= "   */\n";
       $code .= $all_views[$view]->export('  ');
       $code .= '  $views[$view->name] = $view;' . "\n\n";
     }
@@ -1727,52 +1127,4 @@ function views_views_exportables($op = 'list', $views = NULL, $name = 'foo') {
 
     return $code;
   }
-}
-
-/**
- * Microtime helper function to return a float time value (php4 & php5 safe).
- */
-function views_microtime() {
-  list($usec, $sec) = explode(' ', microtime());
-  return (float)$sec + (float)$usec;
-}
-
-/**
- * Trim the field down to the specified length.
- *
- * @param $alter
- *   - max_length: Maximum lenght of the string, the rest gets truncated.
- *   - word_boundary: Trim only on a word boundary.
- *   - ellipsis: Trim only on a word boundary.
- *   - html: Take sure that the html is correct.
- */
-function views_trim_text($alter, $value) {
-  if (drupal_strlen($value) > $alter['max_length']) {
-    $value = drupal_substr($value, 0, $alter['max_length']);
-    // TODO: replace this with cleanstring of ctools
-    if (!empty($alter['word_boundary'])) {
-      $regex = "(.*)\b.+";
-      if (function_exists('mb_ereg')) {
-        mb_regex_encoding('UTF-8');
-        $found = mb_ereg($regex, $value, $matches);
-      }
-      else {
-        $found = preg_match("/$regex/us", $value, $matches);
-      }
-      if ($found) {
-        $value = $matches[1];
-      }
-    }
-    // Remove scraps of HTML entities from the end of a strings
-    $value = rtrim(preg_replace('/(?:<(?!.+>)|&(?!.+;)).*$/us', '', $value));
-
-    if (!empty($alter['ellipsis'])) {
-      $value .= '...';
-    }
-  }
-  if (!empty($alter['html'])) {
-    $value = _filter_htmlcorrector($value);
-  }
-
-  return $value;
 }

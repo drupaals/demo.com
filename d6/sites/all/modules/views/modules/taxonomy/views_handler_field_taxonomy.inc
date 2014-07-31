@@ -1,4 +1,5 @@
 <?php
+// $Id: views_handler_field_taxonomy.inc,v 1.1 2008/09/03 19:21:30 merlinofchaos Exp $
 
 /**
  * Field handler to provide simple renderer that allows linking to a taxonomy
@@ -20,7 +21,6 @@ class views_handler_field_taxonomy extends views_handler_field {
   function option_definition() {
     $options = parent::option_definition();
     $options['link_to_taxonomy'] = array('default' => FALSE);
-    $options['convert_spaces'] = array('default' => FALSE);
     return $options;
   }
 
@@ -31,15 +31,8 @@ class views_handler_field_taxonomy extends views_handler_field {
     parent::options_form($form, $form_state);
     $form['link_to_taxonomy'] = array(
       '#title' => t('Link this field to its taxonomy term page'),
-      '#description' => t('This will override any other link you have set.'),
       '#type' => 'checkbox',
       '#default_value' => !empty($this->options['link_to_taxonomy']),
-    );
-    $form['convert_spaces'] = array(
-      '#title' => t('Convert spaces in term names to hyphens'),
-      '#description' => t('This allows links to work with Views taxonomy term arguments.'),
-      '#type' => 'checkbox',
-      '#default_value' => !empty($this->options['convert_spaces']),
     );
   }
 
@@ -49,24 +42,19 @@ class views_handler_field_taxonomy extends views_handler_field {
    * Data should be made XSS safe prior to calling this function.
    */
   function render_link($data, $values) {
-    $tid = $this->get_value($values, 'tid');
-    if (!empty($this->options['link_to_taxonomy']) && !empty($tid) && $data !== NULL && $data !== '') {
+    if (!empty($this->options['link_to_taxonomy']) && !empty($values->{$this->aliases['tid']})) {
       $term = new stdClass();
-      $term->tid = $tid;
-      $term->vid = $this->get_value($values, 'vid');
-      $this->options['alter']['make_link'] = TRUE;
-      $this->options['alter']['path'] = taxonomy_term_path($term);
-    }
+      $term->tid = $values->{$this->aliases['tid']};
+      $term->vid = $values->{$this->aliases['vid']};
 
-    if (!empty($this->options['convert_spaces'])) {
-      $data = str_replace(' ', '-', $data);
+      return l($data, taxonomy_term_path($term), array('html' => TRUE));
     }
-
-    return $data;
+    else {
+      return $data;
+    }
   }
 
   function render($values) {
-    $value = $this->get_value($values);
-    return $this->render_link($this->sanitize_value($value), $values);
+    return $this->render_link(check_plain($values->{$this->field_alias}), $values);
   }
 }

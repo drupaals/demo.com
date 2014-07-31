@@ -1,4 +1,5 @@
 <?php
+// $Id: views_plugin_argument_default_php.inc,v 1.1 2008/09/03 19:21:30 merlinofchaos Exp $
 /**
  * @file
  * Contains the php code argument default plugin.
@@ -8,30 +9,23 @@
  * Default argument plugin to provide a PHP code block.
  */
 class views_plugin_argument_default_php extends views_plugin_argument_default {
-  function option_definition() {
-    $options = parent::option_definition();
-    $options['code'] = array('default' => '');
+  var $option_name = 'default_argument_php';
 
-    return $options;
-  }
-
-  function options_form(&$form, &$form_state) {
-    $form['code'] = array(
+  function argument_form(&$form, &$form_state) {
+    $form[$this->option_name] = array(
       '#type' => 'textarea',
       '#title' => t('PHP argument code'),
-      '#default_value' => $this->options['code'],
+      '#default_value' => $this->get_argument(TRUE), // the true forces it raw.
       '#process' => array('views_process_dependency'),
-      '#description' => t('Enter PHP code that returns a value to use for this argument. Do not use &lt;?php ?&gt;. You must return only a single value for just this argument. Some variables are available: the view object will be "$view". The argument handler will be "$argument", for example you may change the title used for substitutions for this argument by setting "argument->validated_title"".'),
+      '#description' => t('Enter PHP code that returns a value to use for this argument. Do not use &lt;?php ?&gt;. You must return only a single value for just this argument.'),
+      '#dependency' => array(
+        'radio:options[default_action]' => array('default'),
+        'radio:options[default_argument_type]' => array($this->id)
+      ),
+      '#dependency_count' => 2,
     );
 
-    // Only do this if using one simple standard form gadget
-    $this->check_access($form, 'code');
-  }
-
-  function convert_options(&$options) {
-    if (!isset($options['code']) && isset($this->argument->options['default_argument_php'])) {
-      $options['code'] = $this->argument->options['default_argument_php'];
-    }
+    $this->check_access($form);
   }
 
   /**
@@ -42,12 +36,16 @@ class views_plugin_argument_default_php extends views_plugin_argument_default {
     return user_access('use PHP for block visibility');
   }
 
-  function get_argument() {
+  function get_argument($raw = FALSE) {
+    if ($raw) {
+      return parent::get_argument();
+    }
+
     // set up variables to make it easier to reference during the argument.
     $view = &$this->view;
     $argument = &$this->argument;
     ob_start();
-    $result = eval($this->options['code']);
+    $result = eval($this->argument->options[$this->option_name]);
     ob_end_clean();
     return $result;
   }

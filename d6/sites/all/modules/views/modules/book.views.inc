@@ -1,4 +1,5 @@
 <?php
+// $Id: book.views.inc,v 1.4 2008/07/02 17:42:57 merlinofchaos Exp $
 /**
  * @file
  * Provide views data and handlers for book.module
@@ -30,6 +31,7 @@ function book_views_data() {
     'help' => t('The book the node is in.'),
     'relationship' => array(
       'base' => 'node',
+      'field' => 'bid',
       'handler' => 'views_handler_relationship',
       'label' => t('Book'),
     ),
@@ -83,7 +85,7 @@ function book_views_data() {
 
   $data['book_menu_links']['p'] = array(
     'title' => t('Hierarchy'),
-    'help' => t('The order of pages in the book hierarchy.'),
+    'help' => t('The order of pages in the book hierarchy.  Remember to sort by weight too if you want exactly the right order.'),
     'sort' => array(
       'handler' => 'views_handler_sort_menu_hierarchy',
     ),
@@ -109,7 +111,7 @@ function book_views_data() {
     'help' => t('The parent book node.'),
     'relationship' => array(
       'base' => 'node',
-      'base field' => 'nid',
+      'field' => 'nid',
       'handler' => 'views_handler_relationship',
       'label' => t('Book parent'),
     ),

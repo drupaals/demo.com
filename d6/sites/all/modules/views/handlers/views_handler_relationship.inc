@@ -1,4 +1,5 @@
 <?php
+// $Id: views_handler_relationship.inc,v 1.1 2008/09/03 19:21:28 merlinofchaos Exp $
 /**
  * @file
  * Views' relationship handlers.
@@ -22,11 +23,11 @@
  * - base: The new base table this relationship will be adding. This does not
  *   have to be a declared base table, but if there are no tables that
  *   utilize this base table, it won't be very effective.
- * - base field: The field to use in the relationship; if left out this will be
+ * - base field: The field to use in the relationship; if left out this iwll be
  *   assumed to be the primary field.
  * - relationship table: The actual table this relationship operates against.
  *   This is analogous to using a 'table' override.
- * - relationship field: The actual field this relationship operates against.
+ * - relationship field: The actual field this relationsihp operates against.
  *   This is analogous to using a 'real field' override.
  * - label: The default label to provide for this relationship, which is
  *   shown in parentheses next to any field/sort/filter/argument that uses
@@ -43,9 +44,7 @@ class views_handler_relationship extends views_handler {
       $this->table = $this->definition['relationship table'];
     }
     if (isset($this->definition['relationship field'])) {
-      // Set both real_field and field so custom handler
-      // can rely on the old field value.
-      $this->real_field = $this->field = $this->definition['relationship field'];
+      $this->field = $this->definition['relationship field'];
     }
   }
 
@@ -62,15 +61,7 @@ class views_handler_relationship extends views_handler {
   function option_definition() {
     $options = parent::option_definition();
 
-
-    // Relationships definitions should define a default label, but if they aren't get another default value.
-    if (!empty($this->definition['label'])) {
-      $label = $this->definition['label'];
-    }
-    else {
-      $label = !empty($this->definition['field']) ? $this->definition['field'] : $this->definition['base field'];
-    }
-
+    $label = !empty($this->definition['label']) ? $this->definition['label'] : $this->definition['field'];
     $options['label'] = array('default' => $label, 'translatable' => TRUE);
     $options['required'] = array('default' => FALSE);
 
@@ -82,13 +73,11 @@ class views_handler_relationship extends views_handler {
    * should have.
    */
   function options_form(&$form, &$form_state) {
-    parent::options_form($form, $form_state);
     $form['label'] = array(
       '#type' => 'textfield',
       '#title' => t('Label'),
       '#default_value' => isset($this->options['label']) ? $this->options['label'] : '',
       '#description' => t('The label for this relationship that will be displayed only administratively.'),
-      '#required' => TRUE,
     );
 
     $form['required'] = array(
@@ -113,7 +102,7 @@ class views_handler_relationship extends views_handler {
     $def['table'] = $this->definition['base'];
     $def['field'] = $base_field;
     $def['left_table'] = $this->table_alias;
-    $def['left_field'] = $this->real_field;
+    $def['left_field'] = $this->field;
     if (!empty($this->options['required'])) {
       $def['type'] = 'INNER';
     }
@@ -126,7 +115,6 @@ class views_handler_relationship extends views_handler {
     }
 
     $join->definition = $def;
-    $join->options = $this->options;
     $join->construct();
     $join->adjusted = TRUE;
 
@@ -135,20 +123,13 @@ class views_handler_relationship extends views_handler {
 
     $this->alias = $this->query->add_relationship($alias, $join, $this->definition['base'], $this->relationship);
   }
-
-  /**
-   * You can't groupby a relationship.
-   */
-  function use_group_by() {
-    return FALSE;
-  }
 }
 
 /**
  * A special handler to take the place of missing or broken handlers.
  */
 class views_handler_relationship_broken extends views_handler_relationship {
-  function ui_name($short = FALSE) {
+  function ui_name() {
     return t('Broken/missing handler');
   }
 

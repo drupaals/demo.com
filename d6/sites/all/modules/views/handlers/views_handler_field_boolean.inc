@@ -1,53 +1,32 @@
 <?php
-
+// $Id: views_handler_field_boolean.inc,v 1.1 2008/09/03 19:21:28 merlinofchaos Exp $
 /**
- * A handler to provide proper displays for booleans.
+ * A handler to provide proper displays for dates.
  *
- * Allows for display of true/false, yes/no, on/off, enabled/disabled.
- *
- * Definition terms:
- *   - output formats: An array where the first entry is displayed on boolean true
- *      and the second is displayed on boolean false. An example for sticky is:
- *      @code
- *      'output formats' => array(
- *        'sticky' => array(t('Sticky'), ''),
- *      ),
- *      @endcode
+ * Allows for display of true/false, yes/no, on/off.
  *
  * @ingroup views_field_handlers
  */
 class views_handler_field_boolean extends views_handler_field {
   function option_definition() {
     $options = parent::option_definition();
+
     $options['type'] = array('default' => 'yes-no');
     $options['not'] = array('definition bool' => 'reverse');
 
     return $options;
   }
 
-  function init(&$view, $options) {
-    parent::init($view, $options);
-
-    $default_formats = array(
-      'yes-no' => array(t('Yes'), t('No')),
-      'true-false' => array(t('True'), t('False')),
-      'on-off' => array(t('On'), t('Off')),
-      'enabled-disabled' => array(t('Enabled'), t('Disabled')),
-    );
-    $output_formats = isset($this->definition['output formats']) ? $this->definition['output formats'] : array();
-    $this->formats = array_merge($default_formats, $output_formats);
-  }
-
   function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
-    foreach ($this->formats as $key => $item) {
-      $options[$key] = implode('/', $item);
-    }
-
     $form['type'] = array(
       '#type' => 'select',
       '#title' => t('Output format'),
-      '#options' => $options,
+      '#options' => array(
+        'yes-no' => t('Yes/No'),
+        'true-false' => t('True/False'),
+        'on-off' => t('On/Off'),
+      ),
       '#default_value' => $this->options['type'],
     );
     $form['not'] = array(
@@ -59,16 +38,19 @@ class views_handler_field_boolean extends views_handler_field {
   }
 
   function render($values) {
-    $value = $this->get_value($values);
+    $value = $values->{$this->field_alias};
     if (!empty($this->options['not'])) {
       $value = !$value;
     }
 
-    if (isset($this->formats[$this->options['type']])) {
-      return $value ? $this->formats[$this->options['type']][0] : $this->formats[$this->options['type']][1];
-    }
-    else {
-      return $value ? $this->formats['yes-no'][0] : $this->formats['yes-no'][1];
+    switch ($this->options['type']) {
+      case 'yes-no':
+      default:
+        return $value ? t('Yes') : t('No');
+      case 'true-false':
+        return $value ? t('True') : t('False');
+      case 'on-off':
+        return $value ? t('On') : t('Off');
     }
   }
 }

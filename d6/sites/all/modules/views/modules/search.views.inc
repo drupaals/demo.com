@@ -1,4 +1,5 @@
 <?php
+// $Id: search.views.inc,v 1.14 2008/09/25 00:39:18 merlinofchaos Exp $
 /**
  * @file
  * Provide views data and handlers for search.module
@@ -25,6 +26,10 @@ function search_views_data() {
   $data['search_index']['table']['join'] = array(
     'node' => array(
       'left_field' => 'nid',
+      'field' => 'sid',
+    ),
+    'users' => array(
+      'left_field' => 'uid',
       'field' => 'sid',
     ),
   );
@@ -64,16 +69,18 @@ function search_views_data() {
 
   // score
   $data['search_index']['score'] = array(
-    'title' => t('Score'),
-    'help' => t('The score of the search item. This will not be used if the search filter is not also present.'),
+    'title' => t('Score'), // The item it appears as on the UI,
+    'help' => t('The score of the search item.'), // The help that appears on the UI,
+     // Information for displaying a title as a field
     'field' => array(
-      'handler' => 'views_handler_field_search_score',
+      'field' => 'score', // the real field
+      'group' => t('Search'), // The group it appears in on the UI,
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
-      'float' => TRUE,
     ),
     // Information for sorting on a search score.
     'sort' => array(
-      'handler' => 'views_handler_sort_search_score',
+      'handler' => 'views_handler_sort',
     ),
   );
 
@@ -86,7 +93,7 @@ function search_views_data() {
   );
   $data['search_node_links_from']['sid'] = array(
     'title' => t('Links from'),
-    'help' => t('Other nodes that are linked from the node.'),
+    'help' => t('Nodes that link from the node.'),
     'argument' => array(
       'handler' => 'views_handler_argument_node_nid',
     ),
@@ -104,7 +111,7 @@ function search_views_data() {
   );
   $data['search_node_links_to']['nid'] = array(
     'title' => t('Links to'),
-    'help' => t('Other nodes that link to the node.'),
+    'help' => t('Nodes that link to the node.'),
     'argument' => array(
       'handler' => 'views_handler_argument_node_nid',
     ),
@@ -121,9 +128,6 @@ function search_views_data() {
     'filter' => array(
       'handler' => 'views_handler_filter_search',
     ),
-    'argument' => array(
-      'handler' => 'views_handler_argument_search',
-    ),
   );
 
   return $data;
@@ -139,17 +143,8 @@ function search_views_handlers() {
       'path' => drupal_get_path('module', 'views') . '/modules/search',
     ),
     'handlers' => array(
-      'views_handler_field_search_score' => array(
-        'parent' => 'views_handler_field_numeric',
-      ),
-      'views_handler_sort_search_score' => array(
-        'parent' => 'views_handler_sort',
-      ),
       'views_handler_filter_search' => array(
         'parent' => 'views_handler_filter',
-      ),
-      'views_handler_argument_search' => array(
-        'parent' => 'views_handler_argument',
       ),
     ),
   );

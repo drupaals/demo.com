@@ -1,4 +1,5 @@
 <?php
+// $Id: views_handler_field_comment.inc,v 1.2 2008/09/10 00:16:14 merlinofchaos Exp $
 /**
  * Field handler to allow linking to a comment
  */
@@ -6,7 +7,7 @@ class views_handler_field_comment extends views_handler_field {
   /**
    * Override init function to provide generic option to link to comment.
    */
-  function init(&$view, $options) {
+  function init(&$view, &$options) {
     parent::init($view, $options);
     if (!empty($this->options['link_to_comment'])) {
       $this->additional_fields['cid'] = 'cid';
@@ -27,24 +28,21 @@ class views_handler_field_comment extends views_handler_field {
     parent::options_form($form, $form_state);
     $form['link_to_comment'] = array(
       '#title' => t('Link this field to its comment'),
-      '#description' => t('This will override any other link you have set.'),
       '#type' => 'checkbox',
       '#default_value' => $this->options['link_to_comment'],
     );
   }
 
   function render_link($data, $values) {
-    if (!empty($this->options['link_to_comment']) && $data !== NULL && $data !== '') {
-      $this->options['alter']['make_link'] = TRUE;
-      $this->options['alter']['path'] = "node/". $this->get_value($values, 'nid');
-      $this->options['alter']['fragment'] = "comment-" . $this->get_value($values, 'cid');
+    if (!empty($this->options['link_to_comment'])) {
+      return l($data, "node/" . $values->{$this->aliases['nid']}, array('html' => TRUE, 'fragment' => "comment-" . $values->{$this->aliases['cid']}));
     }
-
-    return $data;
+    else {
+      return $data;
+    }
   }
 
   function render($values) {
-    $value = $this->get_value($values);
-    return $this->render_link($this->sanitize_value($value), $values);
+    return $this->render_link(check_plain($values->{$this->field_alias}), $values);
   }
 }

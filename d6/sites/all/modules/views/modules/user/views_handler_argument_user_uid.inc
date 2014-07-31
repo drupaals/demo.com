@@ -1,4 +1,5 @@
 <?php
+// $Id: views_handler_argument_user_uid.inc,v 1.1 2008/09/03 19:21:30 merlinofchaos Exp $
 /**
  * @file
  * Provide user uid argument handler.
@@ -26,3 +27,4 @@ class views_handler_argument_user_uid extends views_handler_argument_numeric {
     return $titles;
   }
 }
+

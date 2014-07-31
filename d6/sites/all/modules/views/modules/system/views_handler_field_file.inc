@@ -1,4 +1,5 @@
 <?php
+// $Id: views_handler_field_file.inc,v 1.1 2008/09/03 19:21:30 merlinofchaos Exp $
 /**
  * Field handler to provide simple renderer that allows linking to a file.
  */
@@ -6,7 +7,7 @@ class views_handler_field_file extends views_handler_field {
   /**
    * Constructor to provide additional field to add.
    */
-  function init(&$view, $options) {
+  function init(&$view, &$options) {
     parent::init($view, $options);
     if (!empty($options['link_to_file'])) {
       $this->additional_fields['filepath'] = 'filepath';
@@ -26,7 +27,6 @@ class views_handler_field_file extends views_handler_field {
     parent::options_form($form, $form_state);
     $form['link_to_file'] = array(
       '#title' => t('Link this field to download the file'),
-      '#description' => t('This will override any other link you have set.'),
       '#type' => 'checkbox',
       '#default_value' => !empty($this->options['link_to_file']),
     );
@@ -38,16 +38,15 @@ class views_handler_field_file extends views_handler_field {
    * Data should be made XSS safe prior to calling this function.
    */
   function render_link($data, $values) {
-    if (!empty($this->options['link_to_file']) && $data !== NULL && $data !== '') {
-      $this->options['alter']['make_link'] = TRUE;
-      $this->options['alter']['path'] = file_create_url($this->get_value($values, 'filepath'));
+    if (!empty($this->options['link_to_file'])) {
+      return l($data, file_create_url($values->{$this->aliases['filepath']}), array('html' => TRUE));
     }
-
-    return $data;
+    else {
+      return $data;
+    }
   }
 
   function render($values) {
-    $value = $this->get_value($values);
-    return $this->render_link($this->sanitize_value($value), $values);
+    return $this->render_link(check_plain($values->{$this->field_alias}), $values);
   }
 }

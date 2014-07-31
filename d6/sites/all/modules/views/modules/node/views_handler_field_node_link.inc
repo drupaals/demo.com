@@ -1,4 +1,5 @@
 <?php
+// $Id: views_handler_field_node_link.inc,v 1.1 2008/09/03 19:21:29 merlinofchaos Exp $
 /**
  * Field handler to present a link to the node.
  */
@@ -31,14 +32,8 @@ class views_handler_field_node_link extends views_handler_field {
   }
 
   function render($values) {
-    $value = $this->get_value($values, 'nid');
-    return $this->render_link($this->sanitize_value($value), $values);
-  }
-
-  function render_link($data, $values) {
-    $this->options['alter']['make_link'] = TRUE;
-    $this->options['alter']['path'] = "node/$data";
     $text = !empty($this->options['text']) ? $this->options['text'] : t('view');
-    return $text;
+    $nid = $values->{$this->aliases['nid']};
+    return l($text, "node/$nid");
   }
 }

@@ -1,4 +1,5 @@
 <?php
+// $Id: views_handler_field_comment_username.inc,v 1.1 2008/09/03 19:21:29 merlinofchaos Exp $
 /**
  * Field handler to allow linking to a user account or homepage
  */
@@ -28,11 +29,11 @@ class views_handler_field_comment_username extends views_handler_field {
   }
 
   function render_link($data, $values) {
-    if (!empty($this->options['link_to_user'])) {
-      $account->uid = $this->get_value($values, 'uid');
-      $account->name = $this->get_value($values);
-      $account->homepage = $this->get_value($values, 'homepage');
+    $account->uid = $values->{$this->aliases['uid']};
+    $account->name = $values->{$this->field_alias};
+    $account->homepage = $values->{$this->aliases['homepage']};
 
+    if (!empty($this->options['link_to_user'])) {
       return theme('username', $account);
     }
     else {
@@ -41,7 +42,7 @@ class views_handler_field_comment_username extends views_handler_field {
   }
 
   function render($values) {
-    $value = $this->get_value($values);
-    return $this->render_link($this->sanitize_value($value), $values);
+    return $this->render_link(check_plain($values->{$this->field_alias}), $values);
   }
+
 }
