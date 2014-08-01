@@ -66,12 +66,7 @@ class views_handler_field_math extends views_handler_field_numeric {
       return '';
     }
 
-    // Should we format as a plural.
-    if (!empty($this->options['format_plural']) && ($value != 0 || !$this->options['empty_zero'])) {
-      $value = format_plural($value, $this->options['format_plural_singular'], $this->options['format_plural_plural']);
-    }
-
-    return $this->sanitize_value($this->options['prefix'] . $value . $this->options['suffix']);
+    return check_plain($this->options['prefix'] . $value . $this->options['suffix']);
   }
 
   function query() { }

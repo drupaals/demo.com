@@ -27,12 +27,12 @@ class views_handler_field_url extends views_handler_field {
   }
 
   function render($values) {
-    $value = $this->get_value($values);
+    $value = $values->{$this->field_alias};
     if (!empty($this->options['display_as_link'])) {
-      return l($this->sanitize_value($value), $value, array('html' => TRUE));
+      return l(check_plain($value), $value, array('html' => TRUE));
     }
     else {
-      return $this->sanitize_value($value, 'url');
+      return check_url($value);
     }
   }
 }

@@ -34,12 +34,12 @@ class views_handler_field_ncs_last_comment_name extends views_handler_field {
   function render($values) {
     if (!empty($this->options['link_to_user'])) {
       $account = new stdClass();
-      $account->name = $this->get_value($values);
+      $account->name = $values->{$this->field_alias};
       $account->uid = $values->{$this->uid};
       return theme('username', $account);
     }
     else {
-      return $this->sanitize_value($this->get_value($values));
+      return check_plain($values->{$this->field_alias});
     }
   }
 }

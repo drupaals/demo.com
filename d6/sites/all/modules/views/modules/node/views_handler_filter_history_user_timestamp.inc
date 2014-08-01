@@ -68,3 +68,4 @@ class views_handler_filter_history_user_timestamp extends views_handler_filter {
     }
   }
 }
+

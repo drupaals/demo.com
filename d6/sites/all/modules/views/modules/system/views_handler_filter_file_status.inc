@@ -9,3 +9,4 @@ class views_handler_filter_file_status extends views_handler_filter_in_operator 
     }
   }
 }
+

@@ -27,12 +27,8 @@ class views_plugin_access_role extends views_plugin_access {
     }
   }
 
-
-  function option_definition() {
-    $options = parent::option_definition();
-    $options['role'] = array('default' => array());
-
-    return $options;
+  function option_defaults(&$options) {
+    $options['role'] = array();
   }
 
   function options_form(&$form, &$form_state) {

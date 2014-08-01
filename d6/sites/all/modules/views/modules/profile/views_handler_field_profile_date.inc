@@ -15,12 +15,11 @@ class views_handler_field_profile_date extends views_handler_field_date {
   /**
    * Display a profile field of type 'date'
    */
-  function render($values) {
-    $value = $this->get_value($values);
-    if (!$value) {
+  function render($value) {
+    if (!$value->{$this->field_alias}) {
       return;
     }
-    $value = unserialize($value);
+    $value = unserialize($value->{$this->field_alias});
     $format = $this->options['date_format'];
     switch ($format) {
       case 'custom':
@@ -42,7 +41,7 @@ class views_handler_field_profile_date extends views_handler_field_date {
     // birthdays.
 
     // But we *can* deal with non-year stuff:
-    $date = gmmktime(0, 0, 0, $value['month'], $value['day'], $value['year']);
+    $date = gmmktime(0, 0, 0, $value['month'], $value['day'], 1970);
     $replace = array(
       // day
       'd' => sprintf('%02d', $value['day']),
@@ -79,3 +78,4 @@ class views_handler_field_profile_date extends views_handler_field_date {
     return strtr($format, $replace);
   }
 }
+

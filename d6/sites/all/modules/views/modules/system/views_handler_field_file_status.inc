@@ -4,7 +4,7 @@
  */
 class views_handler_field_file_status extends views_handler_field {
   function render($values) {
-    $value = $this->get_value($values);
-    return _views_file_status($value);
+    return _views_file_status($values->{$this->field_alias});
   }
 }
+

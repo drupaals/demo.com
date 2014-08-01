@@ -22,18 +22,6 @@ Drupal.behaviors.viewsTabs = function (context) {
       $('#views-removed-' + id).attr('checked', true);
       return false;
     });
-  /**
-   * Here is to handle display deletion
-   * (checking in the hidden checkbox and hiding out the row)
-   */
-  $('a.display-remove-link')
-    .addClass('display-processed')
-    .click(function() {
-      var id = $(this).attr('id').replace('display-remove-link-', '');
-      $('#display-row-' + id).hide();
-      $('#display-removed-' + id).attr('checked', true);
-      return false;
-    });
 }
 
 /**
@@ -79,7 +67,7 @@ Drupal.Views.parseQueryString = function (query) {
       var pair = pairs[i].split('=');
       // Ignore the 'q' path argument, if present.
       if (pair[0] != 'q' && pair[1]) {
-        args[decodeURIComponent(pair[0].replace(/\+/g, ' '))] = decodeURIComponent(pair[1].replace(/\+/g, ' '));
+        args[pair[0]] = decodeURIComponent(pair[1].replace(/\+/g, ' '));
       }
     }
   }

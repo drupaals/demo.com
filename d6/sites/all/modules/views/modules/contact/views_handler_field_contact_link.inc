@@ -40,9 +40,9 @@ class views_handler_field_contact_link extends views_handler_field_user_link {
     return TRUE;
   }
 
-  function render_link($data, $values) {
+  function render($values) {
     global $user;
-    $uid = $this->get_value($values, 'uid');
+    $uid = $values->{$this->aliases['uid']};
 
     if (empty($uid)) {
       return;
@@ -60,18 +60,12 @@ class views_handler_field_contact_link extends views_handler_field_user_link {
       return;
     }
 
-    $this->options['alter']['path'] = 'user/'. $account->uid .'/contact';
-    $this->options['alter']['attributes'] = array('title' => t('Contact %user', array('%user' => $account->name)));
-
-
     if ($this->options['link_display'] == 'icon') {
-      $text = theme('image', 'misc/forum-new.png');
-      $this->options['alter']['html'] = TRUE;
+      return l(theme('image', 'misc/forum-new.png'), 'user/'. $account->uid .'/contact', array('html' => TRUE, 'attributes' => array('title' => t('Contact %user', array('%user' => $account->name)))));
     }
     else {
-      $text = $this->options['text'];
+      return l($this->options['text'], 'user/'. $account->uid .'/contact', array('attributes' => array('title' => t('Contact %user', array('%user' => $account->name)))));
     }
-
-    return $text;
   }
 }
+

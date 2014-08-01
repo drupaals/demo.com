@@ -40,9 +40,6 @@ function translation_views_data_alter(&$data) {
     'argument' => array(
       'handler' => 'views_handler_argument_node_language',
     ),
-    'sort' => array(
-      'handler' => 'views_handler_sort',
-    ),
   );
 
   // The translation ID (nid of the "source" translation)

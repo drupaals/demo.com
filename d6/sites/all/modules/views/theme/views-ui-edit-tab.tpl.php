@@ -32,11 +32,9 @@
         <div class="views-category">
           <div class="views-category-title"><?php print t('View settings'); ?></div>
           <div class="views-category-content">
-          <?php foreach ($details as $name => $detail): ?>
-            <div class="<?php $details_class[$name]; if (!empty($details_changed[$name])) { print ' changed'; }?>">
-              <?php print $detail ?>
+            <div class="<?php $details_class; if (!empty($details_changed)) { print ' changed'; }?>">
+              <?php print $details ?>
             </div>
-          <?php endforeach; ?>
           </div>
         </div>
       <?php endif; ?>
@@ -71,11 +69,12 @@
   <?php // middle section ?>
   <div class="middle tab-section">
     <div class="inside">
-      <?php foreach ($areas as $area): ?>
       <div class="views-category">
-        <?php print $area; ?>
+        <?php print $relationships; ?>
       </div>
-      <?php endforeach;?>
+      <div class="views-category">
+        <?php print $arguments; ?>
+      </div>
       <?php if (!empty($fields)): ?>
         <div class="views-category">
           <?php print $fields; ?>
@@ -87,12 +86,6 @@
   <?php // right section ?>
   <div class="right tab-section">
     <div class="inside">
-      <div class="views-category">
-        <?php print $relationships; ?>
-      </div>
-      <div class="views-category">
-        <?php print $arguments; ?>
-      </div>
       <div class="views-category">
         <?php print $sorts; ?>
       </div>

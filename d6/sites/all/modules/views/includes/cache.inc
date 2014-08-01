@@ -9,8 +9,8 @@
 /**
  * Load views files on behalf of modules.
  */
-function _views_include_handlers($reset) {
-  views_module_include('views.inc', $reset);
+function _views_include_handlers() {
+  views_module_include('views.inc');
 }
 
 /**
@@ -23,9 +23,9 @@ function _views_include_default_views() {
 /**
  * Fetch Views' data from the cache
  */
-function _views_fetch_data($table = NULL, $reset = FALSE) {
+function _views_fetch_data($table = NULL) {
   static $cache = NULL;
-  if (!isset($cache) || $reset) {
+  if (!isset($cache)) {
     $start = views_microtime();
     // NOTE: This happens whether we retrieve them from cache or otherwise.
     views_include_handlers();
@@ -62,9 +62,9 @@ function _views_fetch_data($table = NULL, $reset = FALSE) {
 /**
  * Fetch the plugin data from cache.
  */
-function _views_fetch_plugin_data($type = NULL, $plugin = NULL, $reset = FALSE) {
+function _views_fetch_plugin_data($type = NULL, $plugin = NULL) {
   static $cache = NULL;
-  if (!isset($cache) || $reset) {
+  if (!isset($cache)) {
     $start = views_microtime();
     views_include_handlers();
 
@@ -95,14 +95,14 @@ function _views_fetch_plugin_data($type = NULL, $plugin = NULL, $reset = FALSE) 
  *
  * @return An associative array of all known default views.
  */
-function _views_discover_default_views($reset = FALSE) {
+function _views_discover_default_views() {
   static $cache = NULL;
 
-  if (!isset($cache) || $reset) {
+  if (!isset($cache)) {
     $index = views_cache_get('views_default_views_index', TRUE);
 
     // Retrieve each cached default view
-    if (!$reset && isset($index->data) && is_array($index->data)) {
+    if (isset($index->data) && is_array($index->data)) {
       $cache = array();
       foreach ($index->data as $view_name) {
         $data = views_cache_get('views_default:' . $view_name, TRUE);
@@ -116,7 +116,7 @@ function _views_discover_default_views($reset = FALSE) {
       views_include_default_views();
       $cache = array();
 
-      foreach (module_implements('views_default_views') as $module) {
+      foreach(module_implements('views_default_views') as $module) {
         $results = call_user_func($module . "_views_default_views");
         if (!empty($results) && is_array($results)) {
           foreach($results as $name => $view) {

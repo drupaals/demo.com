@@ -35,3 +35,4 @@ class views_handler_filter_equality extends views_handler_filter {
     }
   }
 }
+

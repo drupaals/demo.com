@@ -32,7 +32,7 @@
             <em><?php print $view->displays; ?> </em><br />
           <?php endif; ?>
         </td>
-        <td colspan="1" class="description">
+        <td colspan="2" class="description">
           <?php print $view->description; ?>
         </td>
       </tr>

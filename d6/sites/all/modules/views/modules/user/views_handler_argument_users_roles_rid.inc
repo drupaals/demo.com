@@ -14,3 +14,4 @@ class views_handler_argument_users_roles_rid extends views_handler_argument_many
     return $titles;
   }
 }
+

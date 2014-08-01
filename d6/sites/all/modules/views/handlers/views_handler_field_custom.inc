@@ -15,7 +15,6 @@ class views_handler_field_custom extends views_handler_field {
 
     // Override the alter text option to always alter the text.
     $options['alter']['contains']['alter_text'] = array('default' => TRUE);
-    $options['hide_alter_empty'] = array('default' => FALSE);
     return $options;
   }
 
@@ -29,7 +28,7 @@ class views_handler_field_custom extends views_handler_field {
   }
 
   function render($values) {
-    // Return the text, so the code never thinks the value is empty.
-    return $this->options['alter']['text'];
+    // Nothing to render.
+    return '';
   }
 }

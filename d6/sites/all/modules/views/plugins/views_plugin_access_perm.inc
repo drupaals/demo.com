@@ -16,12 +16,8 @@ class views_plugin_access_perm extends views_plugin_access {
     return t($this->options['perm']);
   }
 
-
-  function option_definition() {
-    $options = parent::option_definition();
-    $options['perm'] = array('default' => 'access content');
-
-    return $options;
+  function option_defaults(&$options) {
+    $options['perm'] = 'access content';
   }
 
   function options_form(&$form, &$form_state) {

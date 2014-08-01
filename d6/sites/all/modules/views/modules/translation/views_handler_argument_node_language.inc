@@ -28,3 +28,4 @@ class views_handler_argument_node_language extends views_handler_argument {
     return isset($languages[$langcode]) ? $languages[$langcode] : t('Unknown language');
   }
 }
+
