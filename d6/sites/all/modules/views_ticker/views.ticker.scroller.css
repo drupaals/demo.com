@@ -79,4 +79,4 @@ ul.liScroll a {
 ul.liScroll span {
 	margin: 0 10px 0 0;
 }
-
+ul{list-style-type: none !important;margin: 0px !important;}
