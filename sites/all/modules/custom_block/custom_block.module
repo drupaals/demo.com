@@ -190,7 +190,7 @@ function information_block(){
      $usercount = db_select('users', 'u')->fields('u', array('uid'))->condition('u.status', 1, '=')->execute()->rowCount();
      //latest node
      $query = db_select('node', 'n')->distinct();
-     $query->fields('n', array('nid'))->condition('n.type', array('module_review'))
+     $query->fields('n', array('nid'))->condition('n.type', array('module_review'))->condition('n.status', 1, '=')
               ->range(0,1)->orderBy('n.created','DESC'); // Sort by 
      $result = $query->execute();
      foreach($result as $result){$node=node_load($result->nid);  }
