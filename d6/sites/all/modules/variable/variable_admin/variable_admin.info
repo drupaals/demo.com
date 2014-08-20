@@ -1,0 +1,9 @@
+name = Variable admin
+description = Variable API - Admin UI
+core = 6.x
+; Information added by Drupal.org packaging script on 2014-07-25
+version = "6.x-1.x-dev"
+core = "6.x"
+project = "variable"
+datestamp = "1406295528"
+

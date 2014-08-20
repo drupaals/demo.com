@@ -1,0 +1,357 @@
+<?php
+/**
+ * @file
+ * Variable API module
+ */
+
+/**
+ * Implementation of hook_boot()
+ *
+ * Though we don't do anything here, we ensure the module is loaded at boot stage
+ * for other modules (like variable_realm) to be able to use the API
+ */
+function variable_boot() {
+}
+
+/**
+ * Implementation of hook_elements().
+ */
+function variable_elements() {
+  $type['variable'] = array(
+    '#input' => TRUE,
+    '#pre_render' => array('variable_element_pre_render'),
+    '#post_render' => array('variable_element_post_render'),
+    '#after_build' => array('variable_element_after_build'),
+    '#process' => array('variable_element_process'),
+    '#element_validate' => array('variable_element_validate')
+  );
+  return $type;
+}
+
+/**
+ * Implementation of hook_flush_caches()
+ */
+function variable_flush_caches() {
+  return array('variable_cache');
+}
+
+/**
+ * Check access to variable
+ */
+function variable_access($name, $account = NULL) {
+  $account = $account ? $account : $GLOBALS['user'];
+  $variable = variable_info($name);
+  return $variable && (!empty($variable['access']) && user_access($variable['access'], $account) || user_access('administer site configuration', $account));
+}
+
+/**
+ * Build edit form for one or multiple variables
+ *
+ * @param $form_state
+ * @param $variable
+ *   Variable name or array of variable names
+ */
+function variable_edit_form(&$form_state, $variable_name) {
+  module_load_include('form.inc', 'variable');
+  $args = is_array($variable_name) ? $variable_name : array($variable_name);
+  foreach ($args as $name) {
+    if ($variable = variable_info($name)) {
+      $form[$name] = variable_form_element($variable);
+    }
+  }
+  return system_settings_form($form);
+}
+
+/**
+ * Form for module variables
+ */
+function variable_module_form(&$form_state, $module) {
+  $form = variable_edit_form($form_state, array_keys(variable_list_module($module)));
+  // Pass on the values on the form for further reference.
+  $form['#variable_module_form'] = $module;
+  return $form;
+}
+
+/**
+ * Form for group variables
+ */
+function variable_group_form(&$form_state, $group) {
+  $form = variable_edit_form($form_state, array_keys(variable_list_group($group)));
+  // Pass on the values on the form for further reference.
+  $form['#variable_group_form'] = $group;
+  return $form;
+}
+
+/**
+ * Get value for simple scalar variable
+ *
+ * @param $options
+ *   Options array, it may have the following elements
+ *   - language => Language object
+ *   - default => Default value if not set
+ */
+function variable_get_value($name, $options = array()) {
+  $options += variable_status();
+  $value = variable_get($name, NULL);
+  if (isset($value)) {
+    return $value;
+  }
+  else {
+    return isset($options['default']) ? $options['default'] : variable_get_default($name, $options);
+  }
+}
+
+/**
+ * Get variable default
+ */
+function variable_get_default($name, $options = array()) {
+  $options += variable_status();
+  if ($variable = variable_info($name, $options)) {
+    if (isset($variable['default_callback'])) {
+      return call_user_func($variable['default_callback'], $variable, $options);
+    }
+    elseif (isset($variable['default'])) {
+      return $variable['default'];
+    }
+  }
+  return NULL;
+}
+
+/**
+ * Get original global variable
+ */
+function variable_global_get($name) {
+  $original = &variable_static('variable_global', array());
+  if (isset($original[$name])) {
+    return $original[$name];
+  }
+  elseif (isset($GLOBALS[$name])) {
+    return $GLOBALS[$name];
+  }
+  else {
+    return NULL;
+  }
+}
+
+/**
+ * Switch global variable
+ *
+ * @param $name
+ *   Optional global variable name. If not set, it will reset all global variables to its original value.
+ * @param $value
+ *   Optional new value for global variable. If not set, it will reset the variable to its original value.
+ */
+function variable_global_set($name, $value = NULL) {
+  $original = &variable_static('variable_global', array());
+  if (!isset($original[$name])) {
+    $original[$name] = $GLOBALS[$name];
+  }
+  if (isset($value)) {
+    $GLOBALS[$name] = $value;
+  }
+}
+
+/**
+ * Reset global variables to original values
+ */
+function variable_global_reset($name = NULL) {
+  $original = &variable_static('variable_global', array());
+  if (!$name) {
+    foreach ($original as $key => $value) {
+      $GLOBALS[$key] = $value;
+    }
+  }
+  elseif (isset($original[$name])) {
+    $GLOBALS[$name] = $original[$name];
+  }
+}
+
+/**
+ * Get variable information
+ *
+ * Variable information is collected from modules and cached by language
+ */
+function variable_info($name = NULL, $options = array()) {
+  static $info;
+  $options += variable_status();
+  $language = $options['language'];
+  if (!isset($info)) {
+    $info = &variable_static('variable_info');
+  }
+  if (empty($info) || !isset($info[$language->language])) {
+    if ($cache = variable_cache_get('variable_info', $language->language)) {
+      $info[$language->language] = $cache->data;
+    }
+    else {
+      variable_include();
+      $info[$language->language] = variable_build_info($options);
+      variable_cache_set('variable_info', $info[$language->language], $language->language);
+    }
+  }
+  if ($name) {
+    return isset($info[$language->language][$name]) ? $info[$language->language][$name] : array();
+  }
+  else {
+    return $info[$language->language];
+  }
+}
+
+/**
+ * Get variable group information
+ */
+function variable_group($name = NULL) {
+  $groups = &variable_static('variable_group_info');
+  if (!isset($groups)) {
+    variable_include();
+    $groups = variable_build_groups();
+  }
+  if ($name) {
+    return isset($groups[$name]) ? $groups[$name] : NULL;
+  }
+  else {
+    return $groups;
+  }
+}
+
+/**
+ * Get value from variable cache
+ */
+function variable_cache_get($name, $langcode = 'default') {
+  return cache_get($name . ':' . $langcode, 'variable_cache');
+}
+
+/**
+ * Set value in cache
+ */
+function variable_cache_set($name, $data, $langcode = 'default') {
+  cache_set($name . ':' . $langcode, $data, 'variable_cache');
+}
+
+/**
+ * Clear cache
+ */
+function variable_cache_clear($name = NULL, $langcode = NULL) {
+  if ($name || $langcode) {
+    $cids = array(
+      $name ? $name : '%',
+      $langcode ? $langcode : '%',
+    );
+    db_query("DELETE FROM {variable_cache} WHERE cid LIKE '%s'", implode(':', $cids));
+  }
+  else {
+    db_query("TRUNCATE TABLE {variable_cache}");
+  }
+}
+
+/**
+ * Get global language object.
+ *
+ * Initialize the language system if needed as we absolutely need a language here
+ */
+function variable_language() {
+  global $language;
+  if (!isset($language)) {
+    drupal_bootstrap(DRUPAL_BOOTSTRAP_LANGUAGE);
+  }
+  return $language;
+}
+
+/**
+ * Central static variable storage, Drupal 7 core backport
+ *
+ * See http://api.drupal.org/api/function/drupal_static/7
+ */
+function &variable_static($name, $default_value = NULL, $reset = FALSE) {
+  static $data = array(), $default = array();
+  if (!isset($name)) {
+    // All variables are reset. This needs to be done one at a time so that
+    // references returned by earlier invocations of drupal_static() also get
+    // reset.
+    foreach ($default as $name => $value) {
+      $data[$name] = $value;
+    }
+    // As the function returns a reference, the return should always be a
+    // variable.
+    return $data;
+  }
+  if ($reset) {
+    // The reset means the default is loaded.
+    if (array_key_exists($name, $default)) {
+      $data[$name] = $default[$name];
+    }
+    else {
+      // Reset was called before a default is set and yet a variable must be
+      // returned.
+      return $data;
+    }
+  }
+  elseif (!array_key_exists($name, $data)) {
+    // Store the default value internally and also copy it to the reference to
+    // be returned.
+    $default[$name] = $data[$name] = $default_value;
+  }
+  return $data[$name];
+}
+
+/**
+ * Reset static variable. Drupal 7 core backport.
+ *
+ * See http://api.drupal.org/api/function/drupal_static_reset/7
+ *
+ * @param $name
+ *   Name of the static variable to reset. Omit to reset all variables.
+ */
+function variable_static_reset($name = NULL) {
+  variable_static($name, NULL, NULL, TRUE);
+}
+
+/**
+ * Get/set variable global status
+ */
+function variable_status($options = NULL) {
+  static $status;
+  if (!isset($status)) {
+    $status = &variable_static('variable_status', array());
+    $status += array('language' => variable_language());
+  }
+  if ($options) {
+    $status = array_merge($status, $options);
+  }
+  return $status;
+}
+
+/**
+ * Include extended API
+ */
+function variable_include($name = 'variable') {
+  static $included;
+  if (!isset($included[$name])) {
+    module_load_include('inc', 'variable', $name);
+  }
+}
+
+/**
+ * List variables for a group
+ */
+function variable_list_group($group) {
+  $list = array();
+  foreach (variable_info() as $name => $variable) {
+    if ($variable['group'] == $group) {
+      $list[$name] = $variable;
+    }
+  }
+  return $list;
+}
+
+/**
+ * List variables for a module
+ */
+function variable_list_module($module) {
+  $list = array();
+  foreach (variable_info() as $name => $variable) {
+    if ($variable['module'] == $module) {
+      $list[$name] = $variable;
+    }
+  }
+  return $list;
+}
