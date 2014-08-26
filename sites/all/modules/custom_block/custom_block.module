@@ -315,7 +315,7 @@ $q->join('popular_pages', 'p', 'p.nid = n.nid');
 $q->fields('n');
 $q->fields('p', array('date','lastday_count'));
 $q->orderBy('n.totalcount' , 'DESC');
-$q->range(0, 6);
+$q->range(0, 12);
 $result = $q->execute();
 	  $version_result="";
      foreach($result as $output){
