@@ -91,3 +91,5 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .lr-secured-linkbox, .profile .form-item-hybridauth, #module-comment #review-comment{display:none;}
 #myModal .hybridauth-widget-wrapper{text-align: center;}
 .view-module-name{float: left; width: 350px;}
+.views-field-field-release-file-hash{display:none !important;}
+.views-field-filesize{padding-left:50px !important;}
