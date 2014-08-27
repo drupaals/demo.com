@@ -193,7 +193,7 @@ if(arg(0) ==  "node"){
 		$cut_str=substr($substr[1],173);
 		$cut_str2 = substr($cut_str, 0,2505);
 		//Other releases
-		$cut_strr=substr($substr[1],173);
+		$cut_strr=substr($substr[2],173);
 		$cut_strr2 = substr($cut_strr, 0,2505);
 		$substr1=explode("view-project-release-files",$str);
 		$drupal_download='<div class="drupal-download"><h4>Recommended releases</h4>'.htmlspecialchars_decode($cut_str2).'</div>
