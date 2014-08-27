@@ -93,3 +93,4 @@ html{min-height:100%;position:relative}body{padding-bottom:0;background-color:#e
 .view-module-name{float: left; width: 350px;}
 .views-field-field-release-file-hash{display:none !important;}
 .drupal-download tbody tr td, .drupal-dev-download tbody tr td, .views-field-filesize{padding:2px 8px !important;}
+.last-updated{   float: left !important; width: 315px !important;}
