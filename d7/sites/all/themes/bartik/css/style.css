@@ -1650,3 +1650,4 @@ div.admin-panel .description {
 }
 .anno-login:hover, .anno-login:focus{color: #000;text-decoration: none;}
 .ui-state-default .ui-icon{float: left !important;}
+#messages .error{display: none;}
